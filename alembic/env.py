@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-from app.core.base import Base # this line was added to template file
+from app.core.base import Base, EntityBase # this line was added to template file
 
 load_dotenv('ENV/.env') # this line was added to template file
 
@@ -29,7 +29,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = Base.metadata # this line was modified
+target_metadata = [Base.metadata, EntityBase.metadata] # this line was modified
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

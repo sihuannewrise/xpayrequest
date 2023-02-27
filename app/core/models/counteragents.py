@@ -1,9 +1,9 @@
-from sqlalchemy import Column, DateTime, Integer, String, UniqueConstraint
+from sqlalchemy import Column, DateTime, String
 
-from app.core.db import PreEntityBase
+from app.core.db import EntityBase
 
 
-class CounterAgents(PreEntityBase):
+class CounterAgents(EntityBase):
     # name = Column(String(100), unique=True, nullable=False)
 
     # inn = Column(Integer, nullable=False)

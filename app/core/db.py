@@ -14,7 +14,13 @@ class PreBase:
     id = Column(Integer, primary_key=True)
 
 
-class PreEntityBase(PreBase):
+class PreEntityBase:
+
+    @declared_attr
+    def __tablename__(cls):
+        return cls.__name__.lower()
+
+    id = Column(Integer, primary_key=True)
     name = Column(String(150), unique=True, nullable=False)
     inn = Column(Integer)
     kpp = Column(Integer)
@@ -28,6 +34,7 @@ class PreEntityBase(PreBase):
 
 
 Base = declarative_base(cls=PreBase)
+
 EntityBase = declarative_base(cls=PreEntityBase)
 
 engine = create_async_engine(settings.database_url)
