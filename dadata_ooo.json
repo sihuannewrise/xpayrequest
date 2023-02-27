@@ -1,0 +1,371 @@
+{
+  "suggestions": [
+    {
+      "value": "ООО \"К.Н. ХОЛДИНГ\"",
+      "unrestricted_value": "ООО \"К.Н. ХОЛДИНГ\"",
+      "data": {
+        "kpp": "770701001",
+        "capital": {
+          "type": "УСТАВНЫЙ КАПИТАЛ",
+          "value": 2538221395
+        },
+        "invalid": null,
+        "management": {
+          "name": "Степанов Сергей Алексеевич",
+          "post": "ГЕНЕРАЛЬНЫЙ ДИРЕКТОР",
+          "disqualified": null
+        },
+        "founders": [
+          {
+            "ogrn": "1027700035769",
+            "inn": "7708004767",
+            "name": "ПУБЛИЧНОЕ АКЦИОНЕРНОЕ ОБЩЕСТВО \"НЕФТЯНАЯ КОМПАНИЯ \"ЛУКОЙЛ\"",
+            "hid": "cf2d0d3c0e77e4587b23fa3e172863dc532cb5fa0f73d04acd0a95060c3cc43b",
+            "type": "LEGAL",
+            "share": {
+              "value": 100,
+              "type": "PERCENT"
+            },
+            "invalidity": null
+          }
+        ],
+        "managers": [
+          {
+            "inn": "772902743820",
+            "fio": {
+              "surname": "Степанов",
+              "name": "Сергей",
+              "patronymic": "Алексеевич",
+              "gender": "MALE",
+              "source": "СТЕПАНОВ СЕРГЕЙ АЛЕКСЕЕВИЧ",
+              "qc": null
+            },
+            "post": "ГЕНЕРАЛЬНЫЙ ДИРЕКТОР",
+            "hid": "5eb06732cc93161c5c69891c8422cee64884ba5efa41c71924b55245c3967dd0",
+            "type": "EMPLOYEE",
+            "invalidity": null
+          }
+        ],
+        "predecessors": [
+          {
+            "ogrn": "1058600413299",
+            "inn": "8607100593",
+            "name": "ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ \"ТОРГОВЫЙ ДОМ \"ЛУКОЙЛ\""
+          }
+        ],
+        "successors": null,
+        "branch_type": "MAIN",
+        "branch_count": 0,
+        "source": null,
+        "qc": null,
+        "hid": "96d7fe38fa3765a45cc975cffb7dd89b35ea9262d9c556685c0c2cbed3e4a942",
+        "type": "LEGAL",
+        "state": {
+          "status": "ACTIVE",
+          "code": null,
+          "actuality_date": 1675036800000,
+          "registration_date": 1046390400000,
+          "liquidation_date": null
+        },
+        "opf": {
+          "type": "2014",
+          "code": "12300",
+          "full": "Общество с ограниченной ответственностью",
+          "short": "ООО"
+        },
+        "name": {
+          "full_with_opf": "ОБЩЕСТВО С ОГРАНИЧЕННОЙ ОТВЕТСТВЕННОСТЬЮ \"К.Н. ХОЛДИНГ\"",
+          "short_with_opf": "ООО \"К.Н. ХОЛДИНГ\"",
+          "latin": null,
+          "full": "К.Н. ХОЛДИНГ",
+          "short": "К.Н. ХОЛДИНГ"
+        },
+        "inn": "7706295292",
+        "ogrn": "1037706012046",
+        "okpo": "13584942",
+        "okato": "45286585000",
+        "oktmo": "45382000000",
+        "okogu": "4100615",
+        "okfs": "16",
+        "okved": "64.99.1",
+        "okveds": [
+          {
+            "main": true,
+            "type": "2014",
+            "code": "64.99.1",
+            "name": "Вложения в ценные бумаги"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "09.10.1",
+            "name": "Предоставление услуг по бурению, связанному с добычей нефти, газа и газового конденсата"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "09.10.9",
+            "name": "Предоставление прочих услуг в области добычи нефти и природного газа"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "64.20",
+            "name": "Деятельность холдинговых компаний"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "64.91",
+            "name": "Деятельность по финансовой аренде (лизингу/сублизингу)"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "64.99.2",
+            "name": "Деятельность дилерская"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "64.99.3",
+            "name": "Капиталовложения в уставные капиталы, венчурное инвестирование, в том числе посредством инвестиционных компаний"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "66.11.5",
+            "name": "Деятельность по определению взаимных обязательств (клиринг)"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "66.12.1",
+            "name": "Деятельность биржевых посредников и биржевых брокеров, совершающих товарные фьючерсные и опционные сделки в биржевой торговле"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "66.12.2",
+            "name": "Деятельность по управлению ценными бумагами"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "66.19.1",
+            "name": "Деятельность по предоставлению брокерских услуг по ипотечным операциям"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "68.10.23",
+            "name": "Покупка и продажа земельных участков"
+          }
+        ],
+        "authorities": {
+          "fts_registration": {
+            "type": "FEDERAL_TAX_SERVICE",
+            "code": "7746",
+            "name": "Межрайонная инспекция Федеральной налоговой службы № 46 по г. Москве",
+            "address": "125373, г.Москва, Походный проезд, домовладение 3, стр.2"
+          },
+          "fts_report": {
+            "type": "FEDERAL_TAX_SERVICE",
+            "code": "7707",
+            "name": "Инспекция Федеральной налоговой службы № 7 по г. Москве",
+            "address": null
+          },
+          "pf": {
+            "type": "PENSION_FUND",
+            "code": "087101",
+            "name": "Отделение Фонда пенсионного и социального страхования Российской Федерации по г. Москве и Московской области",
+            "address": null
+          },
+          "sif": {
+            "type": "SOCIAL_INSURANCE_FUND",
+            "code": "7718",
+            "name": "Отделение Фонда пенсионного и социального страхования Российской Федерации по г. Москве и Московской области",
+            "address": null
+          }
+        },
+        "documents": {
+          "fts_registration": {
+            "type": "FTS_REGISTRATION",
+            "series": "77",
+            "number": "001059934",
+            "issue_date": 1046390400000,
+            "issue_authority": "7706"
+          },
+          "fts_report": {
+            "type": "FTS_REPORT",
+            "series": null,
+            "number": null,
+            "issue_date": 1597104000000,
+            "issue_authority": "7707"
+          },
+          "pf_registration": {
+            "type": "PF_REGISTRATION",
+            "series": null,
+            "number": "087101162814",
+            "issue_date": 1597276800000,
+            "issue_authority": "087101"
+          },
+          "sif_registration": {
+            "type": "SIF_REGISTRATION",
+            "series": null,
+            "number": "771801063377181",
+            "issue_date": 1046995200000,
+            "issue_authority": "7718"
+          },
+          "smb": null
+        },
+        "licenses": null,
+        "finance": {
+          "tax_system": null,
+          "income": 147972000,
+          "expense": 103266000,
+          "debt": null,
+          "penalty": null,
+          "year": 2021
+        },
+        "address": {
+          "value": "г Москва, ул Сущёвский Вал, д 2, помещ 22",
+          "unrestricted_value": "127055, г Москва, Тверской р-н, ул Сущёвский Вал, д 2, помещ 22",
+          "invalidity": null,
+          "data": {
+            "postal_code": "127055",
+            "country": "Россия",
+            "country_iso_code": "RU",
+            "federal_district": "Центральный",
+            "region_fias_id": "0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+            "region_kladr_id": "7700000000000",
+            "region_iso_code": "RU-MOW",
+            "region_with_type": "г Москва",
+            "region_type": "г",
+            "region_type_full": "город",
+            "region": "Москва",
+            "area_fias_id": null,
+            "area_kladr_id": null,
+            "area_with_type": null,
+            "area_type": null,
+            "area_type_full": null,
+            "area": null,
+            "city_fias_id": "0c5b2444-70a0-4932-980c-b4dc0d3f02b5",
+            "city_kladr_id": "7700000000000",
+            "city_with_type": "г Москва",
+            "city_type": "г",
+            "city_type_full": "город",
+            "city": "Москва",
+            "city_area": "Центральный",
+            "city_district_fias_id": null,
+            "city_district_kladr_id": null,
+            "city_district_with_type": "Тверской р-н",
+            "city_district_type": "р-н",
+            "city_district_type_full": "район",
+            "city_district": "Тверской",
+            "settlement_fias_id": null,
+            "settlement_kladr_id": null,
+            "settlement_with_type": null,
+            "settlement_type": null,
+            "settlement_type_full": null,
+            "settlement": null,
+            "street_fias_id": "84dd3822-f006-435a-bdb3-314670c5812c",
+            "street_kladr_id": "77000000000060600",
+            "street_with_type": "ул Сущёвский Вал",
+            "street_type": "ул",
+            "street_type_full": "улица",
+            "street": "Сущёвский Вал",
+            "stead_fias_id": null,
+            "stead_cadnum": null,
+            "stead_type": null,
+            "stead_type_full": null,
+            "stead": null,
+            "house_fias_id": "52f0bb91-4cdd-468f-99d8-e066b6931915",
+            "house_kladr_id": "7700000000006060084",
+            "house_cadnum": "77:01:0004007:1030",
+            "house_type": "д",
+            "house_type_full": "дом",
+            "house": "2",
+            "block_type": null,
+            "block_type_full": null,
+            "block": null,
+            "entrance": null,
+            "floor": "6",
+            "flat_fias_id": null,
+            "flat_cadnum": null,
+            "flat_type": "помещ",
+            "flat_type_full": "помещение",
+            "flat": "22",
+            "flat_area": null,
+            "square_meter_price": null,
+            "flat_price": null,
+            "room_fias_id": null,
+            "room_cadnum": null,
+            "room_type": null,
+            "room_type_full": null,
+            "room": null,
+            "postal_box": null,
+            "fias_id": "52f0bb91-4cdd-468f-99d8-e066b6931915",
+            "fias_code": "77000000000000006060084",
+            "fias_level": "8",
+            "fias_actuality_state": "0",
+            "kladr_id": "7700000000006060084",
+            "geoname_id": "524901",
+            "capital_marker": "0",
+            "okato": "45286585000",
+            "oktmo": "45382000",
+            "tax_office": "7707",
+            "tax_office_legal": "7707",
+            "timezone": "UTC+3",
+            "geo_lat": "55.7912727",
+            "geo_lon": "37.5909713",
+            "beltway_hit": "IN_MKAD",
+            "beltway_distance": null,
+            "metro": [
+              {
+                "name": "Савёловская",
+                "line": "Большая кольцевая линия",
+                "distance": 0.3
+              },
+              {
+                "name": "Савёловская",
+                "line": "Серпуховско-Тимирязевская",
+                "distance": 0.4
+              },
+              {
+                "name": "Савёловская",
+                "line": "Белорусско-Савеловский",
+                "distance": 0.5
+              }
+            ],
+            "divisions": null,
+            "qc_geo": "0",
+            "qc_complete": null,
+            "qc_house": null,
+            "history_values": null,
+            "unparsed_parts": null,
+            "source": "127055, Г.Москва, ВН.ТЕР.Г. МУНИЦИПАЛЬНЫЙ ОКРУГ ТВЕРСКОЙ, УЛ СУЩЁВСКИЙ ВАЛ, Д. 2, ЭТАЖ 6, ПОМЕЩ. 22",
+            "qc": "0"
+          }
+        },
+        "phones": null,
+        "emails": [
+          {
+            "value": "ANNA.GUBINA@LUKOIL.COM",
+            "unrestricted_value": "ANNA.GUBINA@LUKOIL.COM",
+            "data": {
+              "local": "ANNA.GUBINA",
+              "domain": "LUKOIL.COM",
+              "type": null,
+              "source": "Anna.Gubina@lukoil.com, Lsavinova@lukoil.com, Lsavinova@lukoil.ru, Marija.Pershina@lukoil.com",
+              "qc": null
+            }
+          }
+        ],
+        "ogrn_date": 1046390400000,
+        "okved_type": "2014",
+        "employee_count": 17
+      }
+    }
+  ]
+}

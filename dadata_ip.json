@@ -1,0 +1,280 @@
+{
+  "suggestions": [
+    {
+      "value": "ИП Кузин Сергей Николаевич",
+      "unrestricted_value": "ИП Кузин Сергей Николаевич",
+      "data": {
+        "citizenship": {
+          "code": {
+            "numeric": 643,
+            "alpha_3": "RUS"
+          },
+          "name": {
+            "full": "Российская Федерация",
+            "short": "Россия"
+          }
+        },
+        "fio": {
+          "surname": "Кузин",
+          "name": "Сергей",
+          "patronymic": "Николаевич",
+          "gender": null,
+          "source": null,
+          "qc": null
+        },
+        "source": null,
+        "qc": null,
+        "hid": "20032604d0d636a78992e9964bd1691306381de7bc4dee231106891ea93e6e92",
+        "type": "INDIVIDUAL",
+        "state": {
+          "status": "ACTIVE",
+          "code": null,
+          "actuality_date": 1676505600000,
+          "registration_date": 1433289600000,
+          "liquidation_date": null
+        },
+        "opf": {
+          "type": "2014",
+          "code": "50102",
+          "full": "Индивидуальный предприниматель",
+          "short": "ИП"
+        },
+        "name": {
+          "full_with_opf": "Индивидуальный предприниматель Кузин Сергей Николаевич",
+          "short_with_opf": "ИП Кузин Сергей Николаевич",
+          "latin": null,
+          "full": "Кузин Сергей Николаевич",
+          "short": null
+        },
+        "inn": "212802282250",
+        "ogrn": "315501200005550",
+        "okpo": "0106240515",
+        "okato": "46464000000",
+        "oktmo": "46764000001",
+        "okogu": "4210015",
+        "okfs": "16",
+        "okved": "49.32",
+        "okveds": [
+          {
+            "main": true,
+            "type": "2014",
+            "code": "49.32",
+            "name": "Деятельность легкового такси и арендованных легковых автомобилей с водителем"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "59.20.1",
+            "name": "Издание аудиовизуальных произведений на магнитных, электронных и цифровых носителях"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "59.20.2",
+            "name": "Деятельность студий звукозаписи"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "62.02",
+            "name": "Деятельность консультативная и работы в области компьютерных технологий"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "82.99",
+            "name": "Деятельность по предоставлению прочих вспомогательных услуг для бизнеса, не включенная в другие группировки"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "93.29.3",
+            "name": "Организация обрядов (свадеб, юбилеев), в т.ч. музыкальное сопровождение"
+          },
+          {
+            "main": false,
+            "type": "2014",
+            "code": "93.29.9",
+            "name": "Деятельность зрелищно-развлекательная прочая, не включенная в другие группировки"
+          }
+        ],
+        "authorities": {
+          "fts_registration": {
+            "type": "FEDERAL_TAX_SERVICE",
+            "code": "7746",
+            "name": "Межрайонная инспекция Федеральной налоговой службы № 46 по г. Москве",
+            "address": "125373, г.Москва, Походный проезд, домовладение 3, стр.2"
+          },
+          "fts_report": {
+            "type": "FEDERAL_TAX_SERVICE",
+            "code": "7719",
+            "name": "Инспекция Федеральной налоговой службы № 19 по г.Москве",
+            "address": null
+          },
+          "pf": {
+            "type": "PENSION_FUND",
+            "code": "087414",
+            "name": "Отделение Фонда пенсионного и социального страхования Российской Федерации по г. Москве и Московской области",
+            "address": null
+          },
+          "sif": null
+        },
+        "documents": {
+          "fts_registration": {
+            "type": "FTS_REGISTRATION",
+            "series": "50",
+            "number": "013024240",
+            "issue_date": 1433289600000,
+            "issue_authority": "5012"
+          },
+          "fts_report": {
+            "type": "FTS_REPORT",
+            "series": null,
+            "number": null,
+            "issue_date": 1675728000000,
+            "issue_authority": "7719"
+          },
+          "pf_registration": {
+            "type": "PF_REGISTRATION",
+            "series": null,
+            "number": "087414016423",
+            "issue_date": 1676419200000,
+            "issue_authority": "087414"
+          },
+          "sif_registration": null,
+          "smb": {
+            "category": "MICRO",
+            "type": "SMB",
+            "series": null,
+            "number": null,
+            "issue_date": 1470009600000,
+            "issue_authority": null
+          }
+        },
+        "licenses": null,
+        "finance": null,
+        "address": {
+          "value": "Московская обл, г Реутов",
+          "unrestricted_value": "143960, Московская обл, г Реутов",
+          "invalidity": null,
+          "data": {
+            "postal_code": "143960",
+            "country": "Россия",
+            "country_iso_code": "RU",
+            "federal_district": "Центральный",
+            "region_fias_id": "29251dcf-00a1-4e34-98d4-5c47484a36d4",
+            "region_kladr_id": "5000000000000",
+            "region_iso_code": "RU-MOS",
+            "region_with_type": "Московская обл",
+            "region_type": "обл",
+            "region_type_full": "область",
+            "region": "Московская",
+            "area_fias_id": null,
+            "area_kladr_id": null,
+            "area_with_type": null,
+            "area_type": null,
+            "area_type_full": null,
+            "area": null,
+            "city_fias_id": "e0504cf6-4d81-401c-b18b-434457aaaa21",
+            "city_kladr_id": "5000001600000",
+            "city_with_type": "г Реутов",
+            "city_type": "г",
+            "city_type_full": "город",
+            "city": "Реутов",
+            "city_area": null,
+            "city_district_fias_id": null,
+            "city_district_kladr_id": null,
+            "city_district_with_type": null,
+            "city_district_type": null,
+            "city_district_type_full": null,
+            "city_district": null,
+            "settlement_fias_id": null,
+            "settlement_kladr_id": null,
+            "settlement_with_type": null,
+            "settlement_type": null,
+            "settlement_type_full": null,
+            "settlement": null,
+            "street_fias_id": null,
+            "street_kladr_id": null,
+            "street_with_type": null,
+            "street_type": null,
+            "street_type_full": null,
+            "street": null,
+            "stead_fias_id": null,
+            "stead_cadnum": null,
+            "stead_type": null,
+            "stead_type_full": null,
+            "stead": null,
+            "house_fias_id": null,
+            "house_kladr_id": null,
+            "house_cadnum": null,
+            "house_type": null,
+            "house_type_full": null,
+            "house": null,
+            "block_type": null,
+            "block_type_full": null,
+            "block": null,
+            "entrance": null,
+            "floor": null,
+            "flat_fias_id": null,
+            "flat_cadnum": null,
+            "flat_type": null,
+            "flat_type_full": null,
+            "flat": null,
+            "flat_area": null,
+            "square_meter_price": null,
+            "flat_price": null,
+            "room_fias_id": null,
+            "room_cadnum": null,
+            "room_type": null,
+            "room_type_full": null,
+            "room": null,
+            "postal_box": null,
+            "fias_id": "e0504cf6-4d81-401c-b18b-434457aaaa21",
+            "fias_code": "50000016000000000000000",
+            "fias_level": "4",
+            "fias_actuality_state": "0",
+            "kladr_id": "5000001600000",
+            "geoname_id": "502018",
+            "capital_marker": "0",
+            "okato": "46464000000",
+            "oktmo": "46764000001",
+            "tax_office": "5012",
+            "tax_office_legal": "5012",
+            "timezone": "UTC+3",
+            "geo_lat": "55.7582621",
+            "geo_lon": "37.8618553",
+            "beltway_hit": "OUT_MKAD",
+            "beltway_distance": "2",
+            "metro": null,
+            "divisions": null,
+            "qc_geo": "4",
+            "qc_complete": null,
+            "qc_house": null,
+            "history_values": null,
+            "unparsed_parts": null,
+            "source": "ОБЛАСТЬ МОСКОВСКАЯ, ГОРОД РЕУТОВ",
+            "qc": "0"
+          }
+        },
+        "phones": null,
+        "emails": [
+          {
+            "value": "6509588@MAIL.RU",
+            "unrestricted_value": "6509588@MAIL.RU",
+            "data": {
+              "local": "6509588",
+              "domain": "MAIL.RU",
+              "type": null,
+              "source": "6509588@MAIL.RU",
+              "qc": null
+            }
+          }
+        ],
+        "ogrn_date": 1433289600000,
+        "okved_type": "2014",
+        "employee_count": null
+      }
+    }
+  ]
+}
