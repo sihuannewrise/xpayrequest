@@ -4,11 +4,6 @@ from app.core.db import EntityBase
 
 
 class CounterAgents(EntityBase):
-    # name = Column(String(100), unique=True, nullable=False)
-
-    # inn = Column(Integer, nullable=False)
-    # kpp = Column(Integer, nullable=False)
-    # __table_args__ = (UniqueConstraint('inn', 'kpp', name='_inn_kpp_unique'),)
     ogrn = Column(String(20))
     ogrn_date = Column(DateTime)
     counteragent_type = Column(String(50))
@@ -22,8 +17,3 @@ class CounterAgents(EntityBase):
     management_post = Column(String(100))
     address_full_with_index = Column(String(300))
     address_egrul = Column(String(300))
-    # address = Column(String(200))
-    # actuality_date = Column(DateTime)
-    # registration_date = Column(DateTime)
-    # liquidation_date = Column(DateTime)
-    # status = Column(String(20))
