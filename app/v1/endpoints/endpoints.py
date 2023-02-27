@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Body
 
-from app.core.schemas import 
+from app.core.schemas import
 
 router = APIRouter()
 
