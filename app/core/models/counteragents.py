@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, UniqueConstraint
 from app.core.db import Base
 
 
-class CounterAgent(Base):
+class CounterAgents(Base):
     name = Column(String(100), nullable=False)
     full_name = Column(String(150))
 
