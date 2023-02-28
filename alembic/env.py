@@ -1,7 +1,7 @@
 import asyncio
 
-import os # this line was added to template file
-from dotenv import load_dotenv # this line was added to template file
+import os                       # MYMOD
+from dotenv import load_dotenv  # MYMOD
 
 from logging.config import fileConfig
 from sqlalchemy import pool
@@ -10,15 +10,15 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-from app.core.base import Base, EntityBase # this line was added to template file
+from app.core.base import Base, EntityBase  # MYMOD
 
-load_dotenv('ENV/.env') # this line was added to template file
+load_dotenv('ENV/.env')                     # MYMOD
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
 
-config.set_main_option('sqlalchemy.url', os.environ['DATABASE_URL']) # this line was added to template file
+config.set_main_option('sqlalchemy.url', os.environ['DATABASE_URL'])  # MYMOD
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -29,7 +29,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = [Base.metadata, EntityBase.metadata] # this line was modified
+target_metadata = [Base.metadata, EntityBase.metadata]  # MYMOD
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

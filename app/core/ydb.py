@@ -2,6 +2,7 @@ import ydb
 import asyncio
 from app.core.config import settings
 
+
 async def describe_database():
     endpoint = settings.ydb_endpoint
     database = settings.ydb_database

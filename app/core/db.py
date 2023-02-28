@@ -14,13 +14,7 @@ class PreBase:
     id = Column(Integer, primary_key=True)
 
 
-class PreEntityBase:
-
-    @declared_attr
-    def __tablename__(cls):
-        return cls.__name__.lower()
-
-    id = Column(Integer, primary_key=True)
+class PreEntityBase(PreBase):
     name = Column(String(150), unique=True, nullable=False)
     inn = Column(Integer)
     kpp = Column(Integer)
