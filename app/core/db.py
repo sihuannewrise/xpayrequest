@@ -31,6 +31,11 @@ Base = declarative_base(cls=PreBase)
 
 EntityBase = declarative_base(cls=PreEntityBase)
 
-engine = create_async_engine(settings.database_url)
+engine = create_async_engine(settings.database_url, echo=True)
 
 AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession)
+
+
+async def get_async_session():
+    async with AsyncSessionLocal() as async_session:
+        yield async_session

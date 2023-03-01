@@ -10,4 +10,5 @@ class CounterAgentType(str, Enum):
 
 class CounterAgentStatus(StatusBase):
     BANKRUPT = 'банкротство'
-    REORGANIZING = 'в процессе присоединения к другому юрлицу, с последующей ликвидацией'
+    REORGANIZING = ('в процессе присоединения к другому юрлицу, '
+                    'с последующей ликвидацией')
