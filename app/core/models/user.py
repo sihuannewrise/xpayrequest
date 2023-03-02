@@ -1,9 +1,9 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
 
-from app.core.db import Base
+# from app.core.db import Base
 
 
-class Payers(Base):
+class User(Base):
     ca_id = Column(
         Integer,
         ForeignKey(
