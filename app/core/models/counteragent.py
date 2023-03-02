@@ -1,16 +1,15 @@
 from sqlalchemy import Boolean, Column, DateTime, String
 from sqlalchemy.orm import relationship
 
-from app.core.db import EntityBase
+from app.core.models._common import EntityBase
 
 
 class CounterAgent(EntityBase):
-    is_payer = Column(Boolean, default=False)
+    on_behalf = Column(Boolean, default=False)  # we can act on CA behalf
     ogrn = Column(String(20))
     ogrn_date = Column(DateTime)
     counteragent_type = Column(String(50))
     opf_short = Column(String(10))
-    # name_full_without_opf = Column(String(200))
     name_short_with_opf = Column(String(150))
     ip_surname = Column(String(100))
     ip_name = Column(String(100))

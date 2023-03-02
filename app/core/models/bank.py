@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 
-from app.core.db import EntityBase
+from app.core.models._common import EntityBase
 
 
 class Bank(EntityBase):

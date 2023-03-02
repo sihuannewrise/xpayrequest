@@ -1,6 +1,6 @@
 from enum import Enum
 
-from app.core.schemas.common import StatusBase
+from app.core.schemas._common import StatusBase
 
 
 class OPFType(str, Enum):

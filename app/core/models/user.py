@@ -1,20 +1,7 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
 
-# from app.core.db import Base
+from app.core.db import Base
 
 
-class User(Base):
-    ca_id = Column(
-        Integer,
-        ForeignKey(
-            'counteragents.id',
-            ondelete='CASCADE',
-        ),
-        unique=True,
-        nullable=False,
-    )
-    name = Column(
-        String(20),
-        unique=True,
-        nullable=False,
-    )
+class User(SQLAlchemyBaseUserTable[int], Base):
+    pass
