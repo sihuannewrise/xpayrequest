@@ -14,4 +14,4 @@ class Bank(EntityBase):
     treasury_accounts = Column(String(20))
     opf_type = Column(String(50))
 
-    accounts = relationship('BankAccount', cascade='delete')
+    accounts = relationship('BankAccount')

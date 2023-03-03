@@ -19,3 +19,4 @@ class CounterAgent(EntityBase):
     address_full_with_index = Column(String(300))
     address_egrul = Column(String(300))
     bank_accounts = relationship('BankAccount', cascade='delete')
+    payments = relationship('PaymentRequest', cascade='delete')

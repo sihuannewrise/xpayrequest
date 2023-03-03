@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer
+from datetime import datetime
+from sqlalchemy import Boolean, Column, DateTime, Integer, String
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, declared_attr, sessionmaker
 
@@ -11,6 +12,10 @@ class PreBase:
         return cls.__name__.lower()
 
     id = Column(Integer, primary_key=True)
+    created_on = Column(DateTime, default=datetime.now)
+    updated_on = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    is_archived = Column(Boolean)
+    comment = Column(String(100))
 
 
 Base = declarative_base(cls=PreBase)
