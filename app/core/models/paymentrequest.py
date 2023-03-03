@@ -23,5 +23,9 @@ class PaymentRequest(Base):
     field_108 = Column(String(20))  # Номер документа-основания платежа
     field_109 = Column(String(20))  # Дата документа-основания платежа
 
-    project = Column(String(20))
-    
+    project = Column(String(50))
+    contract = Column(String(50))
+    contract_date = Column(DateTime)
+    sub_contract = Column(String(50))
+    sub_contract_date = Column(DateTime)
+    prepayment_id = Column(Integer, ForeignKey('prepayment.id'))

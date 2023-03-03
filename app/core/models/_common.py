@@ -22,6 +22,7 @@ class EntityBase(Base):
 class SupplementaryBase(Base):
     __abstract__ = True
     name = Column(String(50), nullable=False)
+    description = Column(String(150))
 
 
 class BankAccountType(SupplementaryBase):
@@ -38,29 +39,43 @@ class PaymentType(SupplementaryBase):
     payments = relationship('PaymentRequest')
 
 
-class KFP(PaymentType):
+class KFP(SupplementaryBase):
     """
     код финансовой позиции
     """
-    buh_account = Column(String(20), nullable=False)
+    payments = relationship('PaymentRequest')
 
 
-class PayerStatus(PaymentType):
+class PayerStatus(SupplementaryBase):
     """
     Статус плательщика
     """
-    description = Column(String(50))
+    payments = relationship('PaymentRequest')
 
 
-class KBK(PaymentType):
+class KBK(SupplementaryBase):
     """
     КБК
     """
-    description = Column(String(150))
+    payments = relationship('PaymentRequest')
 
 
-class OKTMO(PaymentType):
+class OKTMO(SupplementaryBase):
     """
     ОКТМО
     """
-    description = Column(String(150))
+    payments = relationship('PaymentRequest')
+
+
+class Prepayment(SupplementaryBase):
+    """
+    Платеж авансовый или по факту
+    """
+    payments = relationship('PaymentRequest')
+
+
+class PaymentStatus(SupplementaryBase):
+    """
+    статус платежа: у исполнителя, на подписи, на исполнении
+    """
+    payments = relationship('PaymentRegister')

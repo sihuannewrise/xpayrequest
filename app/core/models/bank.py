@@ -11,7 +11,7 @@ class Bank(EntityBase):
 
     swift = Column(String(11))
     registration_number = Column(Integer)
-    treasury_accounts = Column(String(20))
+    treasury_account = Column(String(20))
     opf_type = Column(String(50))
 
     accounts = relationship('BankAccount')
