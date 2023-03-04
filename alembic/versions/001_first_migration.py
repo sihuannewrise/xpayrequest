@@ -2,7 +2,7 @@
 
 Revision ID: 001
 Revises: 
-Create Date: 2023-03-03 20:11:56.607102
+Create Date: 2023-03-04 20:14:27.725003
 
 """
 from alembic import op
@@ -25,7 +25,7 @@ def upgrade() -> None:
     sa.Column('swift', sa.String(length=11), nullable=True),
     sa.Column('registration_number', sa.Integer(), nullable=True),
     sa.Column('treasury_account', sa.String(length=20), nullable=True),
-    sa.Column('opf_type', sa.String(length=50), nullable=True),
+    sa.Column('opf_type', sa.Enum('BANK', 'BANK_BRANCH', 'NKO', 'NKO_BRANCH', 'RKC', 'CBR', 'TREASURY', 'OTHER', name='bankopftype'), nullable=False),
     sa.Column('name', sa.String(length=150), nullable=False),
     sa.Column('inn', sa.Integer(), nullable=True),
     sa.Column('kpp', sa.Integer(), nullable=True),
@@ -35,10 +35,10 @@ def upgrade() -> None:
     sa.Column('liquidation_date', sa.DateTime(), nullable=True),
     sa.Column('status', sa.String(length=20), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_on', sa.DateTime(), nullable=True),
-    sa.Column('updated_on', sa.DateTime(), nullable=True),
-    sa.Column('is_archived', sa.Boolean(), nullable=True),
-    sa.Column('comment', sa.String(length=100), nullable=True),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('is_archived', sa.Boolean(), nullable=False),
+    sa.Column('comment', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('bic'),
     sa.UniqueConstraint('inn', 'kpp', name='_inn_kpp_unique'),
@@ -48,10 +48,10 @@ def upgrade() -> None:
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_on', sa.DateTime(), nullable=True),
-    sa.Column('updated_on', sa.DateTime(), nullable=True),
-    sa.Column('is_archived', sa.Boolean(), nullable=True),
-    sa.Column('comment', sa.String(length=100), nullable=True),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('is_archived', sa.Boolean(), nullable=False),
+    sa.Column('comment', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('counteragent',
@@ -77,10 +77,10 @@ def upgrade() -> None:
     sa.Column('liquidation_date', sa.DateTime(), nullable=True),
     sa.Column('status', sa.String(length=20), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_on', sa.DateTime(), nullable=True),
-    sa.Column('updated_on', sa.DateTime(), nullable=True),
-    sa.Column('is_archived', sa.Boolean(), nullable=True),
-    sa.Column('comment', sa.String(length=100), nullable=True),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('is_archived', sa.Boolean(), nullable=False),
+    sa.Column('comment', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('inn', 'kpp', name='_inn_kpp_unique'),
     sa.UniqueConstraint('name')
@@ -89,70 +89,70 @@ def upgrade() -> None:
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_on', sa.DateTime(), nullable=True),
-    sa.Column('updated_on', sa.DateTime(), nullable=True),
-    sa.Column('is_archived', sa.Boolean(), nullable=True),
-    sa.Column('comment', sa.String(length=100), nullable=True),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('is_archived', sa.Boolean(), nullable=False),
+    sa.Column('comment', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('kfp',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_on', sa.DateTime(), nullable=True),
-    sa.Column('updated_on', sa.DateTime(), nullable=True),
-    sa.Column('is_archived', sa.Boolean(), nullable=True),
-    sa.Column('comment', sa.String(length=100), nullable=True),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('is_archived', sa.Boolean(), nullable=False),
+    sa.Column('comment', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('oktmo',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_on', sa.DateTime(), nullable=True),
-    sa.Column('updated_on', sa.DateTime(), nullable=True),
-    sa.Column('is_archived', sa.Boolean(), nullable=True),
-    sa.Column('comment', sa.String(length=100), nullable=True),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('is_archived', sa.Boolean(), nullable=False),
+    sa.Column('comment', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('payerstatus',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_on', sa.DateTime(), nullable=True),
-    sa.Column('updated_on', sa.DateTime(), nullable=True),
-    sa.Column('is_archived', sa.Boolean(), nullable=True),
-    sa.Column('comment', sa.String(length=100), nullable=True),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('is_archived', sa.Boolean(), nullable=False),
+    sa.Column('comment', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('paymentstatus',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_on', sa.DateTime(), nullable=True),
-    sa.Column('updated_on', sa.DateTime(), nullable=True),
-    sa.Column('is_archived', sa.Boolean(), nullable=True),
-    sa.Column('comment', sa.String(length=100), nullable=True),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('is_archived', sa.Boolean(), nullable=False),
+    sa.Column('comment', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('paymenttype',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_on', sa.DateTime(), nullable=True),
-    sa.Column('updated_on', sa.DateTime(), nullable=True),
-    sa.Column('is_archived', sa.Boolean(), nullable=True),
-    sa.Column('comment', sa.String(length=100), nullable=True),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('is_archived', sa.Boolean(), nullable=False),
+    sa.Column('comment', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('prepayment',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_on', sa.DateTime(), nullable=True),
-    sa.Column('updated_on', sa.DateTime(), nullable=True),
-    sa.Column('is_archived', sa.Boolean(), nullable=True),
-    sa.Column('comment', sa.String(length=100), nullable=True),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('is_archived', sa.Boolean(), nullable=False),
+    sa.Column('comment', sa.String(length=50), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('bankaccount',
@@ -162,15 +162,28 @@ def upgrade() -> None:
     sa.Column('type_id', sa.Integer(), nullable=True),
     sa.Column('is_default', sa.Boolean(), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_on', sa.DateTime(), nullable=True),
-    sa.Column('updated_on', sa.DateTime(), nullable=True),
-    sa.Column('is_archived', sa.Boolean(), nullable=True),
-    sa.Column('comment', sa.String(length=100), nullable=True),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('is_archived', sa.Boolean(), nullable=False),
+    sa.Column('comment', sa.String(length=50), nullable=True),
     sa.ForeignKeyConstraint(['bank_id'], ['bank.id'], ),
     sa.ForeignKeyConstraint(['ca_id'], ['counteragent.id'], ),
     sa.ForeignKeyConstraint(['type_id'], ['bankaccounttype.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('account', 'bank_id', name='_account_bank_unique')
+    )
+    op.create_table('payer',
+    sa.Column('name', sa.String(), nullable=False),
+    sa.Column('ca_id', sa.Integer(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('is_archived', sa.Boolean(), nullable=False),
+    sa.Column('comment', sa.String(length=50), nullable=True),
+    sa.ForeignKeyConstraint(['ca_id'], ['counteragent.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('ca_id'),
+    sa.UniqueConstraint('name')
     )
     op.create_table('paymentrequest',
     sa.Column('type_id', sa.Integer(), nullable=False),
@@ -197,15 +210,15 @@ def upgrade() -> None:
     sa.Column('sub_contract_date', sa.DateTime(), nullable=True),
     sa.Column('prepayment_id', sa.Integer(), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_on', sa.DateTime(), nullable=True),
-    sa.Column('updated_on', sa.DateTime(), nullable=True),
-    sa.Column('is_archived', sa.Boolean(), nullable=True),
-    sa.Column('comment', sa.String(length=100), nullable=True),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('is_archived', sa.Boolean(), nullable=False),
+    sa.Column('comment', sa.String(length=50), nullable=True),
     sa.ForeignKeyConstraint(['field_101_id'], ['payerstatus.id'], ),
     sa.ForeignKeyConstraint(['field_104_id'], ['kbk.id'], ),
     sa.ForeignKeyConstraint(['field_105_id'], ['oktmo.id'], ),
     sa.ForeignKeyConstraint(['kfp_id'], ['kfp.id'], ),
-    sa.ForeignKeyConstraint(['payer_id'], ['counteragent.id'], ),
+    sa.ForeignKeyConstraint(['payer_id'], ['payer.id'], ),
     sa.ForeignKeyConstraint(['prepayment_id'], ['prepayment.id'], ),
     sa.ForeignKeyConstraint(['recipient_id'], ['counteragent.id'], ),
     sa.ForeignKeyConstraint(['type_id'], ['paymenttype.id'], ),
@@ -216,10 +229,10 @@ def upgrade() -> None:
     sa.Column('payment_status', sa.Integer(), nullable=False),
     sa.Column('fulfilled_date', sa.DateTime(), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('created_on', sa.DateTime(), nullable=True),
-    sa.Column('updated_on', sa.DateTime(), nullable=True),
-    sa.Column('is_archived', sa.Boolean(), nullable=True),
-    sa.Column('comment', sa.String(length=100), nullable=True),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
+    sa.Column('is_archived', sa.Boolean(), nullable=False),
+    sa.Column('comment', sa.String(length=50), nullable=True),
     sa.ForeignKeyConstraint(['payment_status'], ['paymentstatus.id'], ),
     sa.ForeignKeyConstraint(['pr_id'], ['paymentrequest.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -231,6 +244,7 @@ def downgrade() -> None:
     # ### commands auto generated by Alembic - please adjust! ###
     op.drop_table('paymentregister')
     op.drop_table('paymentrequest')
+    op.drop_table('payer')
     op.drop_table('bankaccount')
     op.drop_table('prepayment')
     op.drop_table('paymenttype')

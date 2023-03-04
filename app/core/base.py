@@ -2,7 +2,7 @@
 from app.core.db import Base  # noqa
 from app.core.models import (
     Bank, BankAccount, CounterAgent, PaymentRequest,
-    PaymentRegister,
+    PaymentRegister, Payer,
 )  # noqa
 from app.core.models._common import (
     BankAccountType, PaymentType, KFP,

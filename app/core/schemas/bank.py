@@ -3,7 +3,7 @@ from enum import Enum
 from app.core.schemas._common import StatusBase
 
 
-class OPFType(str, Enum):
+class BankOPFType(str, Enum):
     BANK = 'банк'
     BANK_BRANCH = 'филиал банка'
     NKO = 'небанковская кредитная организация (НКО)'

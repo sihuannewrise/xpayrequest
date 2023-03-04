@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class StatusBase(str, Enum):
+class EntityStatusBase(str, Enum):
     ACTIVE = 'действующая'
     LIQUIDATING = 'ликвидируется'
     LIQUIDATED = 'ликвидирована'

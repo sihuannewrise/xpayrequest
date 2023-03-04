@@ -1,6 +1,7 @@
-from sqlalchemy import Boolean, Column, DateTime, String
+from sqlalchemy import Boolean, Column, DateTime, Integer, ForeignKey, String
 from sqlalchemy.orm import relationship
 
+from app.core.db import Base
 from app.core.models._common import EntityBase
 
 
@@ -20,3 +21,8 @@ class CounterAgent(EntityBase):
     address_egrul = Column(String(300))
     bank_accounts = relationship('BankAccount', cascade='delete')
     payments = relationship('PaymentRequest', cascade='delete')
+
+
+class Payer(Base):
+    name = Column(String, unique=True, nullable=False)
+    ca_id = Column(Integer, ForeignKey('counteragent.id'), unique=True, nullable=False)

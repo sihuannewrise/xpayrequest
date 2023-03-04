@@ -1,12 +1,14 @@
 from sqlalchemy import Column, DateTime, ForeignKey, Float, Integer, String
+from sqlalchemy.orm import relationship
 
 from app.core.db import Base
 
 
 class PaymentRequest(Base):
     type_id = Column(Integer, ForeignKey('paymenttype.id'), nullable=False)
-    payer_id = Column(Integer, ForeignKey('counteragent.id'), nullable=False)
+    payer_id = Column(Integer, ForeignKey('payer.id'), nullable=False)
     recipient_id = Column(Integer, ForeignKey('counteragent.id'), nullable=False)
+
     kfp_id = Column(Integer, ForeignKey('kfp.id'))
     due_date = Column(DateTime, nullable=False)
     purpose = Column(String(50), nullable=False)
@@ -29,3 +31,5 @@ class PaymentRequest(Base):
     sub_contract = Column(String(50))
     sub_contract_date = Column(DateTime)
     prepayment_id = Column(Integer, ForeignKey('prepayment.id'))
+    
+    register = relationship('PaymentRegister')
