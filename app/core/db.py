@@ -18,7 +18,7 @@ class Base(DeclarativeBase):
     updated_on: Mapped[ans.timestamp] = mapped_column(
         server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
     is_archived: Mapped[bool]
-    comment: Mapped[ans.str_50] = mapped_column(nullable=True)
+    comment: Mapped[ans.str_50]
 
 
 engine = create_async_engine(settings.database_url, echo=True)

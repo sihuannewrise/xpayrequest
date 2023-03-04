@@ -13,7 +13,7 @@ class AnnonationSettings:
             nullable=False,
             server_default=func.CURRENT_TIMESTAMP()),
     ]
-    str_50 = Annotated[str, mapped_column(String(50), nullable=False)]
+    str_50 = Annotated[str, mapped_column(String(50), nullable=True)]
 
 
 ans = AnnonationSettings()

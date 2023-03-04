@@ -7,7 +7,7 @@ from app.core.models.aux.selectchoice import EntityStatus
 class EntityBase(Base):
     __abstract__ = True
 
-    name = Column(String(150), unique=True, nullable=False)
+    name: Mapped[str] = mapped_column(String(150), unique=True)
     inn = Column(Integer)
     kpp = Column(Integer)
     __table_args__ = (UniqueConstraint('inn', 'kpp', name='_inn_kpp_unique'),)
