@@ -17,16 +17,16 @@ class CounterAgentType(str, Enum):
     INDIVIDUAL = 'индивидуальный предприниматель'
 
 
-class StatusBase(str, Enum):
+class BankStatus(str, Enum):
     ACTIVE = 'действующая'
     LIQUIDATING = 'ликвидируется'
     LIQUIDATED = 'ликвидирована'
 
-class StatusBase(str, Enum):
-    pass
 
-
-class CounterAgentStatus(StatusBase):
+class CounterAgentStatus(str, Enum):
+    ACTIVE = 'действующая'
+    LIQUIDATING = 'ликвидируется'
+    LIQUIDATED = 'ликвидирована'
     BANKRUPT = 'банкротство'
     REORGANIZING = ('в процессе присоединения к другому юрлицу, '
                     'с последующей ликвидацией')
