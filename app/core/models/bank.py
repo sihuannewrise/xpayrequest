@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship, Mapped
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.core.models._common import EntityBase
 from app.core.models.aux.selectchoice import BankOPFType
@@ -13,6 +13,6 @@ class Bank(EntityBase):
     swift = Column(String(11))
     registration_number = Column(Integer)
     treasury_account = Column(String(20))
-    opf_type: Mapped[BankOPFType]
+    opf_type: Mapped[BankOPFType] = mapped_column(nullable=True)
 
     accounts = relationship('BankAccount')

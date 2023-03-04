@@ -1,15 +1,16 @@
 from sqlalchemy import Boolean, Column, DateTime, Integer, ForeignKey, String
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.core.db import Base
 from app.core.models._common import EntityBase
+from app.core.models.aux.selectchoice import CounterAgentType
 
 
 class CounterAgent(EntityBase):
     on_behalf = Column(Boolean, default=False)  # we can act on CA behalf
     ogrn = Column(String(20))
     ogrn_date = Column(DateTime)
-    counteragent_type = Column(String(50))
+    ca_type: Mapped[CounterAgentType] = mapped_column(nullable=True)
     opf_short = Column(String(10))
     name_short_with_opf = Column(String(150))
     ip_surname = Column(String(100))

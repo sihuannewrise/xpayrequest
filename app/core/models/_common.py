@@ -1,8 +1,8 @@
 from sqlalchemy import Column, DateTime, Integer, String, UniqueConstraint
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.core.db import Base
-
+from app.core.models.aux.selectchoice import EntityStatus
 
 class EntityBase(Base):
     __abstract__ = True
@@ -16,7 +16,7 @@ class EntityBase(Base):
     actuality_date = Column(DateTime)
     registration_date = Column(DateTime)
     liquidation_date = Column(DateTime)
-    status = Column(String(20))
+    status: Mapped[EntityStatus] = mapped_column(nullable=True)
 
 
 class SupplementaryBase(Base):

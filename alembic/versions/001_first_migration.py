@@ -2,7 +2,7 @@
 
 Revision ID: 001
 Revises: 
-Create Date: 2023-03-04 20:56:16.438319
+Create Date: 2023-03-04 21:14:57.433017
 
 """
 from alembic import op
@@ -25,7 +25,7 @@ def upgrade() -> None:
     sa.Column('swift', sa.String(length=11), nullable=True),
     sa.Column('registration_number', sa.Integer(), nullable=True),
     sa.Column('treasury_account', sa.String(length=20), nullable=True),
-    sa.Column('opf_type', sa.Enum('BANK', 'BANK_BRANCH', 'NKO', 'NKO_BRANCH', 'RKC', 'CBR', 'TREASURY', 'OTHER', name='bankopftype'), nullable=False),
+    sa.Column('opf_type', sa.Enum('BANK', 'BANK_BRANCH', 'NKO', 'NKO_BRANCH', 'RKC', 'CBR', 'TREASURY', 'OTHER', name='bankopftype'), nullable=True),
     sa.Column('name', sa.String(length=150), nullable=False),
     sa.Column('inn', sa.Integer(), nullable=True),
     sa.Column('kpp', sa.Integer(), nullable=True),
@@ -33,7 +33,7 @@ def upgrade() -> None:
     sa.Column('actuality_date', sa.DateTime(), nullable=True),
     sa.Column('registration_date', sa.DateTime(), nullable=True),
     sa.Column('liquidation_date', sa.DateTime(), nullable=True),
-    sa.Column('status', sa.String(length=20), nullable=True),
+    sa.Column('status', sa.Enum('ACTIVE', 'LIQUIDATING', 'LIQUIDATED', 'BANKRUPT', 'REORGANIZING', name='entitystatus'), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),
@@ -58,7 +58,7 @@ def upgrade() -> None:
     sa.Column('on_behalf', sa.Boolean(), nullable=True),
     sa.Column('ogrn', sa.String(length=20), nullable=True),
     sa.Column('ogrn_date', sa.DateTime(), nullable=True),
-    sa.Column('counteragent_type', sa.String(length=50), nullable=True),
+    sa.Column('ca_type', sa.Enum('LEGAL', 'INDIVIDUAL', name='counteragenttype'), nullable=True),
     sa.Column('opf_short', sa.String(length=10), nullable=True),
     sa.Column('name_short_with_opf', sa.String(length=150), nullable=True),
     sa.Column('ip_surname', sa.String(length=100), nullable=True),
@@ -75,7 +75,7 @@ def upgrade() -> None:
     sa.Column('actuality_date', sa.DateTime(), nullable=True),
     sa.Column('registration_date', sa.DateTime(), nullable=True),
     sa.Column('liquidation_date', sa.DateTime(), nullable=True),
-    sa.Column('status', sa.String(length=20), nullable=True),
+    sa.Column('status', sa.Enum('ACTIVE', 'LIQUIDATING', 'LIQUIDATED', 'BANKRUPT', 'REORGANIZING', name='entitystatus'), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('created_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
     sa.Column('updated_on', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)'), nullable=False),

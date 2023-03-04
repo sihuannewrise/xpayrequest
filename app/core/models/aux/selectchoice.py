@@ -17,13 +17,7 @@ class CounterAgentType(str, Enum):
     INDIVIDUAL = 'индивидуальный предприниматель'
 
 
-class BankStatus(str, Enum):
-    ACTIVE = 'действующая'
-    LIQUIDATING = 'ликвидируется'
-    LIQUIDATED = 'ликвидирована'
-
-
-class CounterAgentStatus(str, Enum):
+class EntityStatus(str, Enum):
     ACTIVE = 'действующая'
     LIQUIDATING = 'ликвидируется'
     LIQUIDATED = 'ликвидирована'
