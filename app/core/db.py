@@ -1,4 +1,5 @@
-from sqlalchemy import text
+from typing import Optional
+from sqlalchemy import String
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import (
     DeclarativeBase, declared_attr, Mapped, mapped_column, sessionmaker,
@@ -13,12 +14,12 @@ class Base(DeclarativeBase):
     def __tablename__(cls):
         return cls.__name__.lower()
 
-    id: Mapped[ans.intpk]
+    id: Mapped[int] = mapped_column(primary_key=True)
+    description: Mapped[Optional[str]] = mapped_column(String(150))
+
     created_on: Mapped[ans.timestamp]
-    updated_on: Mapped[ans.timestamp] = mapped_column(
-        server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
-    is_archived: Mapped[bool]
-    comment: Mapped[ans.str_50]
+    updated_on: Mapped[ans.timestamp_upd]
+    is_archived: Mapped[ans.bool_0]
 
 
 engine = create_async_engine(settings.database_url, echo=True)

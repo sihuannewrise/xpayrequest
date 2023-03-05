@@ -1,28 +1,30 @@
-from sqlalchemy import Column, DateTime, Integer, String, UniqueConstraint
+from datetime import datetime
+from typing import Optional
+from sqlalchemy import String, UniqueConstraint
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.core.db import Base
 from app.core.models.aux.selectchoice import EntityStatus
 
+
 class EntityBase(Base):
     __abstract__ = True
 
     name: Mapped[str] = mapped_column(String(150), unique=True)
-    inn = Column(Integer)
-    kpp = Column(Integer)
+    address: Mapped[Optional[str]] = mapped_column(String(200))
+    status: Mapped[Optional[EntityStatus]]
+    inn: Mapped[Optional[str]] = mapped_column(String(12))
+    kpp: Mapped[Optional[str]] = mapped_column(String(9))
     __table_args__ = (UniqueConstraint('inn', 'kpp', name='_inn_kpp_unique'),)
-    address = Column(String(200))
 
-    actuality_date = Column(DateTime)
-    registration_date = Column(DateTime)
-    liquidation_date = Column(DateTime)
-    status: Mapped[EntityStatus] = mapped_column(nullable=True)
+    actuality_date: Mapped[Optional[datetime]]
+    registration_date: Mapped[Optional[datetime]]
+    liquidation_date: Mapped[Optional[datetime]]
 
 
 class SupplementaryBase(Base):
     __abstract__ = True
-    name = Column(String(50), nullable=False)
-    description = Column(String(150))
+    name: Mapped[str] = mapped_column(String(50), unique=True)
 
 
 class BankAccountType(SupplementaryBase):
