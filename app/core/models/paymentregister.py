@@ -1,10 +1,13 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, UniqueConstraint
-from sqlalchemy.orm import relationship
+from datetime import datetime
+from typing import Optional
+
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.db import Base
 
 
 class PaymentRegister(Base):
-    pr_id = Column(Integer, ForeignKey('paymentrequest.id'), nullable=False)
-    payment_status = Column(Integer, ForeignKey('paymentstatus.id'), nullable=False)
-    fulfilled_date = Column(DateTime)
+    pr_id: Mapped[int] = mapped_column(ForeignKey('paymentrequest.id'))
+    payment_status: Mapped[int] = mapped_column(ForeignKey('paymentstatus.id'))
+    fulfilled_date: Mapped[Optional[datetime]]

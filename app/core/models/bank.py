@@ -1,4 +1,6 @@
-from sqlalchemy import Column, Integer, String
+from typing import Optional
+
+from sqlalchemy import String
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.core.models._common import EntityBase
@@ -6,13 +8,13 @@ from app.core.models.aux.selectchoice import BankOPFType
 
 
 class Bank(EntityBase):
-    bic = Column(Integer, unique=True, nullable=False)
-    correspondent_account = Column(String(20))
-    payment_city = Column(String(50), nullable=False)
+    bic: Mapped[str] = mapped_column(String(9), unique=True)
+    correspondent_account: Mapped[Optional[str]] = mapped_column(String(20))
+    payment_city: Mapped[Optional[str]] = mapped_column(String(50))
 
-    swift = Column(String(11))
-    registration_number = Column(Integer)
-    treasury_account = Column(String(20))
-    opf_type: Mapped[BankOPFType] = mapped_column(nullable=True)
+    swift: Mapped[Optional[str]] = mapped_column(String(11))
+    registration_number: Mapped[Optional[str]] = mapped_column(String(20))
+    treasury_accounts: Mapped[Optional[str]] = mapped_column(String(20))
+    opf_type: Mapped[Optional[BankOPFType]]
 
     accounts = relationship('BankAccount')

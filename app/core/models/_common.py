@@ -10,7 +10,7 @@ from app.core.models.aux.selectchoice import EntityStatus
 class EntityBase(Base):
     __abstract__ = True
 
-    name: Mapped[str] = mapped_column(String(150), unique=True)
+    name: Mapped[str] = mapped_column(String(160), unique=True)
     address: Mapped[Optional[str]] = mapped_column(String(200))
     status: Mapped[Optional[EntityStatus]]
     inn: Mapped[Optional[str]] = mapped_column(String(12))
