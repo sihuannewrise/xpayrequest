@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 from sqlalchemy import String, UniqueConstraint
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
@@ -31,53 +31,69 @@ class BankAccountType(SupplementaryBase):
     """
     основной, инвест, спецсчет
     """
-    accounts = relationship('BankAccount')
+    accounts: Mapped[List['BankAccount']] = relationship(
+        backref='bankaccounttype',
+    )
 
 
 class PaymentType(SupplementaryBase):
     """
     контрагенту, в бюджет, инвест
     """
-    payments = relationship('PaymentRequest')
+    pr: Mapped['PaymentRequest'] = relationship(
+        backref='paymenttype',
+    )
 
 
 class KFP(SupplementaryBase):
     """
     код финансовой позиции
     """
-    payments = relationship('PaymentRequest')
+    pr: Mapped['PaymentRequest'] = relationship(
+        backref='kfp',
+    )
 
 
 class PayerStatus(SupplementaryBase):
     """
     Статус плательщика
     """
-    payments = relationship('PaymentRequest')
+    pr: Mapped['PaymentRequest'] = relationship(
+        backref='payerstatus',
+    )
 
 
 class KBK(SupplementaryBase):
     """
     КБК
     """
-    payments = relationship('PaymentRequest')
+    pr: Mapped['PaymentRequest'] = relationship(
+        backref='kbk',
+    )
 
 
 class OKTMO(SupplementaryBase):
     """
     ОКТМО
     """
-    payments = relationship('PaymentRequest')
+    pr: Mapped['PaymentRequest'] = relationship(
+        backref='oktmo',
+    )
 
 
 class Prepayment(SupplementaryBase):
     """
     Платеж авансовый или по факту
     """
-    payments = relationship('PaymentRequest')
+    pr: Mapped['PaymentRequest'] = relationship(
+        backref='prepayment',
+    )
 
 
 class PaymentStatus(SupplementaryBase):
     """
     статус платежа: у исполнителя, на подписи, на исполнении
     """
-    payments = relationship('PaymentRegister')
+    pr: Mapped['PaymentRegister'] = relationship(
+        backref='paymentstatus',
+    )

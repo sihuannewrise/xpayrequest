@@ -1,3 +1,4 @@
+# файл не используется
 from datetime import datetime
 from typing_extensions import Annotated
 

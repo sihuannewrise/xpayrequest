@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from sqlalchemy import String
 from sqlalchemy.orm import relationship, Mapped, mapped_column
@@ -17,4 +17,4 @@ class Bank(EntityBase):
     treasury_accounts: Mapped[Optional[str]] = mapped_column(String(20))
     opf_type: Mapped[Optional[BankOPFType]]
 
-    accounts = relationship('BankAccount')
+    accounts: Mapped[List['BankAccount']] = relationship(backref='bank')
