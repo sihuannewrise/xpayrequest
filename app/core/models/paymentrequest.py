@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Optional
+from uuid import UUID
 
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import relationship, Mapped, mapped_column
@@ -8,6 +9,7 @@ from app.core.db import Base
 
 
 class PaymentRequest(Base):
+    author: Mapped[UUID] = mapped_column(ForeignKey('user.id'))
     type_id: Mapped[int] = mapped_column(ForeignKey('paymenttype.id'))
     payer_id: Mapped[int] = mapped_column(ForeignKey('payer.id'))
     recipient_id: Mapped[int] = mapped_column(ForeignKey('counteragent.id'))
@@ -43,4 +45,4 @@ class PaymentRequest(Base):
     prepayment_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey('prepayment.id'))
 
-    register: Mapped['PaymentRegister'] = relationship(back_populates='pr')
+    register: Mapped['PaymentRegister'] = relationship(backref='pr')

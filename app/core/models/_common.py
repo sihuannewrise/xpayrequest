@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List, Optional
-from sqlalchemy import String, UniqueConstraint
+from sqlalchemy import String, text, UniqueConstraint
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.core.db import Base
@@ -20,6 +20,10 @@ class EntityBase(Base):
     actuality_date: Mapped[Optional[datetime]]
     registration_date: Mapped[Optional[datetime]]
     liquidation_date: Mapped[Optional[datetime]]
+
+    is_archived: Mapped[bool] = mapped_column(
+        default=False,
+        server_default=text('FALSE'))
 
 
 class SupplementaryBase(Base):

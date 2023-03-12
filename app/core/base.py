@@ -1,10 +1,9 @@
 """Импорты класса Base и всех моделей для Alembic."""
-from app.core.db import Base  # noqa
-from app.core.models import (
+from app.core.db import Base                            # noqa
+from app.core.models import (                           # noqa
     Bank, BankAccount, CounterAgent, PaymentRequest,
-    PaymentRegister, Payer,
-)  # noqa
-from app.core.models._common import (
+    PaymentRegister, Payer, User,
     BankAccountType, PaymentType, KFP,
     PayerStatus, KBK, OKTMO, Prepayment, PaymentStatus,
-)  # noqa
+    AccessToken,
+)
