@@ -101,3 +101,12 @@ class PaymentStatus(SupplementaryBase):
     register: Mapped[List['PaymentRegister']] = relationship(
         backref='paymentstatus',
     )
+
+
+class PaymentVerdict(SupplementaryBase):
+    """
+    решение подписанта: согласовано, на доработку, отклонено
+    """
+    proc: Mapped[List['PaymentProcessing']] = relationship(
+        backref='paymentprocessing',
+    )

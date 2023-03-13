@@ -16,6 +16,8 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
 
     pr_list: Mapped[List['PaymentRequest']] = relationship(backref='user')
     register: Mapped[List['PaymentRegister']] = relationship(backref='user')
+    proc: Mapped[List['PaymentProcessing']] = relationship(
+        backref='user')
 
 
 class AccessToken(SQLAlchemyBaseAccessTokenTableUUID, Base):

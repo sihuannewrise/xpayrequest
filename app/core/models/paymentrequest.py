@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 from uuid import UUID
 
 from sqlalchemy import ForeignKey, String, text
@@ -54,3 +54,4 @@ class PaymentRequest(Base):
         ForeignKey('prepayment.id'))
 
     register: Mapped['PaymentRegister'] = relationship(backref='pr')
+    proc: Mapped[List['PaymentProcessing']] = relationship(backref='pr')
