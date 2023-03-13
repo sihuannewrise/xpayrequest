@@ -9,7 +9,7 @@ from app.core.db import Base
 
 
 class PaymentRegister(Base):
-    fulfilled_date: Mapped[Optional[datetime]]
+    fulfill_date: Mapped[Optional[datetime]]
     pr_id: Mapped[int] = mapped_column(ForeignKey('paymentrequest.id'))
 
     status_id: Mapped[int] = mapped_column(ForeignKey('paymentstatus.id'))
