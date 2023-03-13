@@ -4,7 +4,7 @@ from sqlalchemy import String
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.core.models._common import EntityBase
-from app.core.models.aux.selectchoice import BankOPFType
+from app.core.models._selectchoice import BankOPFType
 
 
 class Bank(EntityBase):

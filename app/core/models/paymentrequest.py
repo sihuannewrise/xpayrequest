@@ -2,7 +2,8 @@ from datetime import datetime
 from typing import Optional
 from uuid import UUID
 
-from sqlalchemy import ForeignKey, String
+from sqlalchemy import ForeignKey, String, text
+from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.core.db import Base
@@ -14,13 +15,20 @@ class PaymentRequest(Base):
     payer_id: Mapped[int] = mapped_column(ForeignKey('payer.id'))
     recipient_id: Mapped[int] = mapped_column(ForeignKey('counteragent.id'))
 
+    created_on: Mapped[datetime] = mapped_column(
+        default=datetime.now,
+        server_default=func.CURRENT_TIMESTAMP(),)
+    updated_on: Mapped[datetime] = mapped_column(
+        onupdate=func.now(),
+        server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"),)
+
     kfp_id: Mapped[Optional[int]] = mapped_column(ForeignKey('kfp.id'))
     due_date: Mapped[Optional[datetime]]
     purpose: Mapped[Optional[str]] = mapped_column(String(210))
     amount_netto: Mapped[Optional[float]]
     amount_vat: Mapped[Optional[float]]
     amount_total: Mapped[Optional[float]]
-    attachement: Mapped[Optional[str]] = mapped_column(String(150))
+    attach_url: Mapped[Optional[str]] = mapped_column(String(150))
 
     field_101_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey('payerstatus.id'))

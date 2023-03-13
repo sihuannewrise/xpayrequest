@@ -1,7 +1,5 @@
-from datetime import datetime
 from typing import AsyncGenerator, Optional
-from sqlalchemy import String, text
-from sqlalchemy.sql import func
+from sqlalchemy import String
 from sqlalchemy.ext.asyncio import (
     AsyncSession, async_sessionmaker, create_async_engine)
 from sqlalchemy.orm import (
@@ -18,15 +16,6 @@ class Base(DeclarativeBase):
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     description: Mapped[Optional[str]] = mapped_column(String(150))
-
-    created_on: Mapped[datetime] = mapped_column(
-        default=datetime.now,
-        server_default=func.CURRENT_TIMESTAMP(),
-    )
-    updated_on: Mapped[datetime] = mapped_column(
-        onupdate=func.now(),
-        server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"),
-    )
 
 
 engine = create_async_engine(settings.database_url, echo=True)

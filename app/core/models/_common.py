@@ -4,7 +4,7 @@ from sqlalchemy import String, text, UniqueConstraint
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.core.db import Base
-from app.core.models.aux.selectchoice import EntityStatus
+from ._selectchoice import EntityStatus
 
 
 class EntityBase(Base):
@@ -44,7 +44,7 @@ class PaymentType(SupplementaryBase):
     """
     контрагенту, в бюджет, инвест
     """
-    pr: Mapped['PaymentRequest'] = relationship(
+    pr_list: Mapped[List['PaymentRequest']] = relationship(
         backref='paymenttype',
     )
 
@@ -53,7 +53,7 @@ class KFP(SupplementaryBase):
     """
     код финансовой позиции
     """
-    pr: Mapped['PaymentRequest'] = relationship(
+    pr_list: Mapped[List['PaymentRequest']] = relationship(
         backref='kfp',
     )
 
@@ -62,7 +62,7 @@ class PayerStatus(SupplementaryBase):
     """
     Статус плательщика
     """
-    pr: Mapped['PaymentRequest'] = relationship(
+    pr_list: Mapped[List['PaymentRequest']] = relationship(
         backref='payerstatus',
     )
 
@@ -71,7 +71,7 @@ class KBK(SupplementaryBase):
     """
     КБК
     """
-    pr: Mapped['PaymentRequest'] = relationship(
+    pr_list: Mapped[List['PaymentRequest']] = relationship(
         backref='kbk',
     )
 
@@ -80,7 +80,7 @@ class OKTMO(SupplementaryBase):
     """
     ОКТМО
     """
-    pr: Mapped['PaymentRequest'] = relationship(
+    pr_list: Mapped[List['PaymentRequest']] = relationship(
         backref='oktmo',
     )
 
@@ -89,7 +89,7 @@ class Prepayment(SupplementaryBase):
     """
     Платеж авансовый или по факту
     """
-    pr: Mapped['PaymentRequest'] = relationship(
+    pr_list: Mapped[List['PaymentRequest']] = relationship(
         backref='prepayment',
     )
 
@@ -98,6 +98,6 @@ class PaymentStatus(SupplementaryBase):
     """
     статус платежа: у исполнителя, на подписи, на исполнении
     """
-    pr: Mapped['PaymentRegister'] = relationship(
+    register: Mapped[List['PaymentRegister']] = relationship(
         backref='paymentstatus',
     )
