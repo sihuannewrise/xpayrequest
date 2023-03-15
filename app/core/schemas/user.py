@@ -14,7 +14,7 @@ class UserRead(schemas.BaseUser[UUID]):
 class UserCreate(schemas.BaseUserCreate):
     first_name: Optional[str]
     patronymic_name: Optional[str]
-    last_name: str
+    last_name: Optional[str]
     description: Optional[str]
 
 
