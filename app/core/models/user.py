@@ -19,6 +19,9 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     proc: Mapped[List['PaymentProcessing']] = relationship(
         backref='user')
 
+    def __repr__(self) -> str:
+        return f'{self.__class__.__name__} <{self.email}>'
+
 
 class AccessToken(SQLAlchemyBaseAccessTokenTableUUID, Base):
     pass

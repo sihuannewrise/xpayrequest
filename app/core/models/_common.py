@@ -25,10 +25,16 @@ class EntityBase(Base):
         default=False,
         server_default=text('FALSE'))
 
+    def __repr__(self) -> str:
+        return f'{self.__class__.__name__} <{self.name}'
+
 
 class SupplementaryBase(Base):
     __abstract__ = True
     name: Mapped[str] = mapped_column(String(50), unique=True)
+
+    def __repr__(self) -> str:
+        return f'{self.__class__.__name__} <{self.name}'
 
 
 class BankAccountType(SupplementaryBase):

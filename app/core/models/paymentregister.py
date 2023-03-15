@@ -17,3 +17,9 @@ class PaymentRegister(Base):
 
     status: Mapped['PaymentStatus'] = relationship(
         backref='paymentregister')
+
+    def __repr__(self) -> str:
+        return (
+            f'{self.__class__.__name__} '
+            f'<register_id {self.id}, pr_id {self.pr_id}>'
+        )

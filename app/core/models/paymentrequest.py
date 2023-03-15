@@ -55,3 +55,9 @@ class PaymentRequest(Base):
 
     register: Mapped['PaymentRegister'] = relationship(backref='pr')
     proc: Mapped[List['PaymentProcessing']] = relationship(backref='pr')
+
+    def __repr__(self) -> str:
+        return (
+            f'{self.__class__.__name__} '
+            f'<pr_id {self.id}, payer_id {self.payer_id}>'
+        )
