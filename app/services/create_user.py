@@ -12,12 +12,15 @@ get_user_db_context = asyncm(get_user_db)
 get_user_manager_context = asyncm(get_user_manager)
 
 
-async def create_user(email: str, password: str,
-                      is_superuser: bool = False,
-                      first_name: str = None,
-                      patronymic_name: str = None,
-                      last_name: str = None,
-                      description: str = None,):
+async def create_user(
+    email: str,
+    password: str,
+    is_superuser: bool = False,
+    first_name: str = None,
+    patronymic_name: str = None,
+    last_name: str = None,
+    description: str = None,
+):
     try:
         async with get_async_session_context() as session:
             async with get_user_db_context(session) as user_db:

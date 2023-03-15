@@ -14,7 +14,7 @@ class Base(DeclarativeBase):
     def __tablename__(cls):
         return cls.__name__.lower()
 
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement='auto')
     description: Mapped[Optional[str]] = mapped_column(String(150))
 
 
