@@ -20,4 +20,4 @@ class BankAccount(Base):
     bank: Mapped['Bank'] = relationship(backref='bankaccount')
 
     def __repr__(self) -> str:
-        return f'{self.__class__.__name__} <{self.account}'
+        return f'<{self.__class__.__name__} ({self.account})>'

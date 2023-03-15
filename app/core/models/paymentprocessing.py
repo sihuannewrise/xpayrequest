@@ -20,5 +20,6 @@ class PaymentProcessing(Base):
 
     def __repr__(self) -> str:
         return (
-            f'{self.__class__.__name__} <proc_id {self.id}, pr_id {self.pr_id}'
+            f'<{self.__class__.__name__} ('
+            f'proc_id={self.id}, pr_id={self.pr_id})>'
         )

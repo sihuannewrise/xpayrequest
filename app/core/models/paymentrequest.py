@@ -58,6 +58,6 @@ class PaymentRequest(Base):
 
     def __repr__(self) -> str:
         return (
-            f'{self.__class__.__name__} '
-            f'<pr_id {self.id}, payer_id {self.payer_id}>'
+            f'<{self.__class__.__name__} ('
+            f'pr_id={self.id}, payer_id={self.payer_id})>'
         )
