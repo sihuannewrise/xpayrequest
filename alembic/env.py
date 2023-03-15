@@ -1,7 +1,7 @@
 import asyncio
 
-import os                       # MYMOD
-from dotenv import load_dotenv  # MYMOD
+import os                                   # MYMOD
+from dotenv import load_dotenv              # MYMOD
 
 from logging.config import fileConfig
 from sqlalchemy import pool
@@ -29,7 +29,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = Base.metadata  # MYMOD
+target_metadata = Base.metadata              # MYMOD
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
