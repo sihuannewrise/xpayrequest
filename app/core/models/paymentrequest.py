@@ -15,12 +15,12 @@ class PaymentRequest(Base):
     payer_id: Mapped[int] = mapped_column(ForeignKey('payer.id'))
     recipient_id: Mapped[int] = mapped_column(ForeignKey('counteragent.id'))
 
-    created_on: Mapped[datetime] = mapped_column(
-        default=datetime.now,
-        server_default=func.CURRENT_TIMESTAMP(),)
-    updated_on: Mapped[datetime] = mapped_column(
-        onupdate=func.now(),
-        server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"),)
+    # created_on: Mapped[datetime] = mapped_column(
+    #     default=datetime.now,
+    #     server_default=func.CURRENT_TIMESTAMP(),)
+    # updated_on: Mapped[datetime] = mapped_column(
+    #     onupdate=func.now(),
+    #     server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"),)
 
     kfp_id: Mapped[Optional[int]] = mapped_column(ForeignKey('kfp.id'))
     due_date: Mapped[Optional[datetime]]

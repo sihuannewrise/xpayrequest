@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List, Optional
-from sqlalchemy import String, text, UniqueConstraint
+from sqlalchemy import String, text
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.core.db import Base
@@ -15,7 +15,6 @@ class EntityBase(Base):
     status: Mapped[Optional[EntityStatus]]
     inn: Mapped[Optional[str]] = mapped_column(String(12))
     kpp: Mapped[Optional[str]] = mapped_column(String(9))
-    __table_args__ = (UniqueConstraint('inn', 'kpp', name='_inn_kpp_unique'),)
 
     actuality_date: Mapped[Optional[datetime]]
     registration_date: Mapped[Optional[datetime]]

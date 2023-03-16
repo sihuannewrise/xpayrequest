@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import String
+from sqlalchemy import String, UniqueConstraint
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.core.models._common import EntityBase
@@ -22,6 +22,7 @@ class CounterAgent(EntityBase):
     management_name: Mapped[Optional[str]] = mapped_column(String(150))
     address_full_with_index: Mapped[Optional[str]] = mapped_column(String(150))
     address_egrul: Mapped[Optional[str]] = mapped_column(String(150))
+    __table_args__ = (UniqueConstraint('inn', 'kpp', name='_inn_kpp_unique'),)
 
     bank_accounts: Mapped['BankAccount'] = relationship(backref='ca')
     payments: Mapped['PaymentRequest'] = relationship(backref='ca')

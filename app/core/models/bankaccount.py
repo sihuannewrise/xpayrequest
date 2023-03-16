@@ -12,7 +12,6 @@ class BankAccount(Base):
     ca_id: Mapped[int] = mapped_column(ForeignKey('counteragent.id'),)
     type_id: Mapped[int] = mapped_column(ForeignKey('bankaccounttype.id'))
     is_default: Mapped[Optional[bool]]
-
     __table_args__ = (UniqueConstraint(
         'account', 'bank_id', name='_account_bank_unique',
     ),)
