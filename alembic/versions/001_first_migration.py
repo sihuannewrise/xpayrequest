@@ -2,7 +2,7 @@
 
 Revision ID: 001
 Revises: 
-Create Date: 2023-03-16 21:17:01.978935
+Create Date: 2023-03-17 15:15:01.032152
 
 """
 from alembic import op
@@ -187,6 +187,8 @@ def upgrade() -> None:
     sa.Column('type_id', sa.Integer(), nullable=False),
     sa.Column('payer_id', sa.Integer(), nullable=False),
     sa.Column('recipient_id', sa.Integer(), nullable=False),
+    sa.Column('created_on', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_on', sa.DateTime(), nullable=False),
     sa.Column('kfp_id', sa.Integer(), nullable=True),
     sa.Column('due_date', sa.DateTime(), nullable=True),
     sa.Column('purpose', sa.String(length=210), nullable=True),
