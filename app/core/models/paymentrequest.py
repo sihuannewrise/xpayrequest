@@ -12,7 +12,7 @@ from app.core.db import Base
 class PaymentRequest(Base):
     author: Mapped[UUID] = mapped_column(ForeignKey('user.id'))
     type_id: Mapped[int] = mapped_column(ForeignKey('paymenttype.id'))
-    payer_id: Mapped[int] = mapped_column(ForeignKey('payer.id'))
+    payer_id: Mapped[int] = mapped_column(ForeignKey('company.id'))
     recipient_id: Mapped[int] = mapped_column(ForeignKey('counteragent.id'))
 
     created_on: Mapped[datetime] = mapped_column(server_default=func.now())

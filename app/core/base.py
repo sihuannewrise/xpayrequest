@@ -2,8 +2,9 @@
 from app.core.db import Base                            # noqa
 from app.core.models import (                           # noqa
     Bank, BankAccount, CounterAgent, PaymentRequest,
-    Payer, User, AccessToken,
+    Company, User, AccessToken,
     PaymentRegister, PaymentProcessing,
+    Employee, Position,
 )
 from app.core.models._common import (                   # noqa
     BankAccountType, PaymentType, KFP,
