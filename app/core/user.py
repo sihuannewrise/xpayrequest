@@ -59,18 +59,18 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
     ) -> None:
         if len(password) < 6:
             raise InvalidPasswordException(
-                reason='Password should be at least 6 characters'
+                reason='Длина пароля не меньше 6-ти символов'
             )
         if user.email in password:
             raise InvalidPasswordException(
-                reason='Password should not contain e-mail'
+                reason='Пароль не должен содержать e-mail'
             )
 
     async def on_after_register(
         self, user: User, request: Optional[Request] = None,
     ):
         # Вместо print здесь можно было бы настроить отправку письма.
-        print(f'Пользователь {user.email} зарегистрирован.')
+        print(f'Пользователь {user.email} зарегистрирован')
 
     async def on_after_forgot_password(
         self, user: User, token: str, request: Optional[Request] = None
