@@ -20,9 +20,7 @@ class EntityBase(Base):
     registration_date: Mapped[Optional[datetime]]
     liquidation_date: Mapped[Optional[datetime]]
 
-    is_archived: Mapped[bool] = mapped_column(
-        default=False,
-        server_default=text('FALSE'))
+    is_archived: Mapped[bool] = mapped_column(server_default=text('FALSE'))
 
     def __repr__(self) -> str:
         return f'<{self.__class__.__name__} ({self.name})>'
