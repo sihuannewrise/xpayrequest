@@ -6,6 +6,7 @@ class Settings(BaseSettings):
     app_description: str = 'Передача заявок в оплату'
 
     database_url: str
+    sqlalchemy_database_pem: str
     secret: str = 'SECRET'
 
     ydb_endpoint: str

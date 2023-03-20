@@ -3,7 +3,7 @@ from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.db import Base
 
@@ -14,9 +14,6 @@ class PaymentRegister(Base):
 
     status_id: Mapped[int] = mapped_column(ForeignKey('paymentstatus.id'))
     user_id: Mapped[UUID] = mapped_column(ForeignKey('user.id'))
-
-    status: Mapped['PaymentStatus'] = relationship(
-        backref='paymentregister')
 
     def __repr__(self) -> str:
         return (

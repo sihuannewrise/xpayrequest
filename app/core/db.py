@@ -18,7 +18,11 @@ class Base(DeclarativeBase):
     description: Mapped[Optional[str]] = mapped_column(String(150))
 
 
-engine = create_async_engine(settings.database_url, echo=True)
+engine = create_async_engine(
+    settings.database_url,
+    # connect_args={"ssl": {"key": settings.sqlalchemy_database_pem}},
+    echo=True,
+)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
 

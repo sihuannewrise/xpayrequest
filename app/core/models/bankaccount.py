@@ -1,6 +1,6 @@
 from typing import Optional
 from sqlalchemy import ForeignKey, String, UniqueConstraint
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.core.db import Base
 
@@ -15,8 +15,6 @@ class BankAccount(Base):
     __table_args__ = (UniqueConstraint(
         'account', 'bank_id', name='_account_bank_unique',
     ),)
-
-    bank: Mapped['Bank'] = relationship(backref='bankaccount')
 
     def __repr__(self) -> str:
         return f'<{self.__class__.__name__} ({self.account})>'
