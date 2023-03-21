@@ -1,13 +1,17 @@
-from pydantic import BaseSettings
+from typing import Optional
+from pydantic import BaseSettings, EmailStr
 
 
 class Settings(BaseSettings):
-    app_title: str = 'Заявки на оплату'
-    app_description: str = 'Передача заявок в оплату'
+    app_title: str = 'Payment requests forwarding'
+    app_description: str = 'Payment requests forwarding application'
 
     database_url: str
-    sqlalchemy_database_pem: str
     secret: str = 'SECRET'
+    sqlalchemy_database_pem: str
+
+    first_superuser_email: Optional[EmailStr] = None
+    first_superuser_password: Optional[str] = None
 
     ydb_endpoint: str
     ydb_database: str

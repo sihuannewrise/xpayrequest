@@ -32,7 +32,10 @@ async def get_access_token_db(
     yield SQLAlchemyAccessTokenDatabase(session, AccessToken)
 
 
-cookie_transport = CookieTransport(cookie_max_age=3600)
+cookie_transport = CookieTransport(
+    cookie_name='xwickusersauth',
+    cookie_max_age=3600,
+)
 
 
 def get_database_strategy(
@@ -75,7 +78,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, UUID]):
     async def on_after_forgot_password(
         self, user: User, token: str, request: Optional[Request] = None
     ):
-        print(f'User {user.email} has forgot their password. '
+        print(f'User {user.email} has forgot his password. '
               f'Reset token: {token}')
 
     async def on_after_request_verify(
