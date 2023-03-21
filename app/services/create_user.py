@@ -1,3 +1,5 @@
+# command to run this script:  python -m app.services.create_user
+import os
 import asyncio
 from pydantic import EmailStr
 
@@ -18,6 +20,7 @@ async def create_user(
     email: EmailStr,
     password: str,
     is_superuser: bool = False,
+    is_verified: bool = True,
     description: str = None,
 ):
     try:
@@ -29,6 +32,7 @@ async def create_user(
                             email=email,
                             password=password,
                             is_superuser=is_superuser,
+                            is_verified=is_verified,
                             description=description,
                         )
                     )
@@ -43,10 +47,14 @@ async def create_first_superuser():
             email=settings.first_superuser_email,
             password=settings.first_superuser_password,
             is_superuser=True,
-            description='autocreated superuser'
+            description='autocreated superuser',
         )
 
 
 if __name__ == "__main__":
-    # asyncio.run(create_user("king.arthur@camelot.bt", "guinevere"))
-    asyncio.run(create_first_superuser())
+    asyncio.run(create_user(
+        'basya@camelot.bt',
+        'guinevere',
+        description=f'created from script "{os.path.basename(__file__)}"',
+    ))
+    # asyncio.run(create_first_superuser())
