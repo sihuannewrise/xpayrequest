@@ -43,7 +43,7 @@ async def create_first_superuser():
             email=settings.first_superuser_email,
             password=settings.first_superuser_password,
             is_superuser=True,
-            description='Superuser created by robot'
+            description='autocreated superuser'
         )
 
 
