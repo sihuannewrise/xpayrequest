@@ -1,3 +1,5 @@
+from typing import Optional
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -11,13 +13,13 @@ class BankCRUD(CRUDBase):
         self,
         bank_name: str,
         session: AsyncSession,
-    ):
-        bank = await session.scalar(
+    ) -> Optional[int]:
+        db_bank_id = await session.scalar(
             select(Bank).where(
                 Bank.name == bank_name
             )
         )
-        return bank
+        return db_bank_id
 
 
 bank_crud = BankCRUD(Bank)
