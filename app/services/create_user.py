@@ -1,4 +1,4 @@
-# command to run this script:  python -m app.services.create_user
+# command to run this script from root dir:  python -m app.services.create_user
 import os
 import asyncio
 from pydantic import EmailStr

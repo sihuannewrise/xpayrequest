@@ -10,12 +10,12 @@ from app.core.config import settings
 
 
 class Base(DeclarativeBase):
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    description: Mapped[Optional[str]] = mapped_column(String(150))
+
     @declared_attr
     def __tablename__(cls):
         return cls.__name__.lower()
-
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    description: Mapped[Optional[str]] = mapped_column(String(150))
 
 
 engine = create_async_engine(
