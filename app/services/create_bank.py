@@ -20,6 +20,8 @@ async def dadata_find_bank(id: str):
         settings.dadata_token, settings.dadata_secret,
     ) as dadata:
         result = await dadata.find_by_id(name='bank', query=id)
+        if not result:
+            raise ValueError('No data')
         return result[0]
 
 

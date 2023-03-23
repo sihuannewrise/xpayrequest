@@ -19,6 +19,16 @@ class CRUDBase:
         )
         return db_obj
 
+    async def get_obj_by_name(
+        self, obj_name, session: AsyncSession,
+    ) -> Optional[int]:
+        db_obj_id = await session.scalar(
+            select(self.model).where(
+                self.model.name == obj_name
+            )
+        )
+        return db_obj_id
+
     async def get_multi(self, session: AsyncSession):
         db_objs = await session.scalars(select(self.model))
         return db_objs.all()
