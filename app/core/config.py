@@ -13,8 +13,8 @@ class Settings(BaseSettings):
     first_superuser_email: Optional[EmailStr] = None
     first_superuser_password: Optional[str] = None
 
-    ydb_endpoint: str
-    ydb_database: str
+    dadata_token: str
+    dadata_secret: str
 
     class Config:
         env_file = 'ENV/.env'

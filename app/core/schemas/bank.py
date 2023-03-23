@@ -120,4 +120,5 @@ class BankDB(BankBase):
     description: str
 
     class Config:
+        title = 'Класс со схемой ответа из БД'
         orm_mode = True
