@@ -8,7 +8,7 @@ class Settings(BaseSettings):
 
     database_url: str
     secret: str = 'SECRET'
-    sqlalchemy_database_pem: str
+    # sqlalchemy_database_pem: str
 
     first_superuser_email: Optional[EmailStr] = None
     first_superuser_password: Optional[str] = None

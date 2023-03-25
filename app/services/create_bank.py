@@ -20,9 +20,7 @@ async def dadata_find_bank(id: str):
         settings.dadata_token, settings.dadata_secret,
     ) as dadata:
         result = await dadata.find_by_id(name='bank', query=id)
-        if not result:
-            raise ValueError('No data')
-        return result[0]
+        return result
 
 
 async def dadata_suggest_bank(name: str):
@@ -35,31 +33,31 @@ async def dadata_suggest_bank(name: str):
 
 if __name__ == "__main__":
     def get_bank_by_id(id: str):
-        data = asyncio.run(dadata_find_bank(id))
+        try:
+            data = asyncio.run(dadata_find_bank(id))[0]
+            bank = {
+                'name': data['value'],
+                'bic': data['data']['bic'],
+                'address': data['data']['address']['value'],
+                'status': data['data']['state']['status'],
+                'inn': data['data']['inn'],
+                'kpp': data['data']['kpp'],
+                'actuality_date': data['data']['state']['actuality_date'],
+                'registration_date': data['data']['state']['registration_date'],
+                'liquidation_date': data['data']['state']['liquidation_date'],
+                'correspondent_account': data['data']['correspondent_account'],
+                'payment_city': data['data']['payment_city'],
+                'swift': data['data']['swift'],
+                'registration_number': data['data']['registration_number'],
+                'treasury_accounts': data['data']['treasury_accounts'],
+                'opf_type': data['data']['opf']['type'],
+            }
+            for key, value in bank.items():
+                print(f'{key} - {value}')
+        except IndexError:
+            print('No data')
 
-        bank = {
-            'name': data['value'],
-            'bic': data['data']['bic'],
-            'address': data['data']['address']['value'],
-            'status': data['data']['state']['status'],
-            'inn': data['data']['inn'],
-            'kpp': data['data']['kpp'],
-            'actuality_date': data['data']['state']['actuality_date'],
-            'registration_date': data['data']['state']['registration_date'],
-            'liquidation_date': data['data']['state']['liquidation_date'],
-            'correspondent_account': data['data']['correspondent_account'],
-            'payment_city': data['data']['payment_city'],
-            'swift': data['data']['swift'],
-            'registration_number': data['data']['registration_number'],
-            'treasury_accounts': data['data']['treasury_accounts'],
-            'opf_type': data['data']['opf']['type'],
-        }
-
-        for key, value in bank.items():
-            print(f'{key} - {value}')
-        return None
-
-    # get_bank_by_id('044525985')
+    get_bank_by_id('044525985')
 
     def suggest_bank_names(phrase: str):
         data = asyncio.run(dadata_suggest_bank(phrase))
