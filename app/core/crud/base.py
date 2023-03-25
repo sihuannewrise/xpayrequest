@@ -29,9 +29,9 @@ class CRUDBase:
         )
         return db_obj_id
 
-    async def get_multi(self, session: AsyncSession):
+    async def get_multi(self, session: AsyncSession, limit: int, offset: int):
         db_objs = await session.scalars(select(self.model))
-        return db_objs.all()
+        return db_objs.offset(offset).limit(limit).all()
 
     async def create(
         self, obj_in, session: AsyncSession, user: Optional[User] = None

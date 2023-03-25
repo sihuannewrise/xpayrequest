@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel, Extra, Field, validator, constr
 from app.core.models._selectchoice import BankOPFType, EntityStatus
@@ -122,3 +122,9 @@ class BankDB(BankBase):
     class Config:
         title = 'Класс со схемой ответа из БД'
         orm_mode = True
+
+
+class PaginatedBankDB(BaseModel):
+    limit: int
+    offset: int
+    data: List[BankDB]
