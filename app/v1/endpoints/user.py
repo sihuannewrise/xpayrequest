@@ -26,9 +26,7 @@ router.include_router(
 
 
 @router.delete(
-    '/users/{id}',
-    tags=['users'],
-    deprecated=True,
+    '/users/{id}', tags=['users'], deprecated=True,
 )
 def delete_user(id: UUID):
     """Не используйте удаление, деактивируйте пользователей."""
