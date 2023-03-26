@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}<title> {{title_text}} </title>{% endblock %}
+
+
+{% block content %}
+<div class="container py-5">
+  <h1> {{ title_text }} </h1>
+  {% include 'posts/includes/switcher.html' %}
+
+  {% if page_obj %}
+    <article class="row my-3">
+      <ul class="list-group list-group-flush">
+      {% for author in page_obj %}
+        <li class="list-group-item">
+          <span> {{ page_obj.start_index|add:forloop.counter0 }}.</span>
+          {% if author.get_full_name %}
+            <a href="{% url 'posts:profile' author %}"> {{ author.get_full_name }} </a>
+          {% else %}
+            <a href="{% url 'posts:profile' author %}"> {{ author }} </a>
+          {% endif %}
+          <a class="btn-sm btn-light" href="{% url 'posts:profile_unfollow' author %}">отписаться</a>
+        </li>
+      {% endfor %}
+      </ul>
+    </article>
+    <p>Всего авторов: {{ authors_num }} </p>
+    {% include 'posts/includes/paginator.html' %}
+  {% endif %}
+
+  {% if not page_obj %}
+    <p> Настройки будут доступны после подписи на авторов </p>
+  {% endif %}
+
+</div>    
+{% endblock %}

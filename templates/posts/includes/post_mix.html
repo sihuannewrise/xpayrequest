@@ -1,0 +1,11 @@
+<h1> {{ title_text }} </h1>
+{% include 'posts/includes/switcher.html' %}
+{% if page_obj.has_previous %}
+    {% include 'posts/includes/paginator.html' %}
+{% endif %}
+{% for post in page_obj %}
+    {% include 'posts/includes/post_list.html' %}
+    {% include 'posts/includes/post_group.html' %}
+    {% if not forloop.last %}<hr>{% endif %}
+{% endfor %}
+{% include 'posts/includes/paginator.html' %}
