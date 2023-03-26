@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.models.user import User
+from app.core.settings import variables as var
 
 
 class CRUDBase:
@@ -29,7 +30,11 @@ class CRUDBase:
         )
         return db_obj_id
 
-    async def get_multi(self, session: AsyncSession, limit: int, offset: int):
+    async def get_multi(
+        self, session: AsyncSession,
+        limit: int = var.PAG_LIMIT,
+        offset: int = var.PAG_OFFSET,
+    ):
         db_objs = await session.scalars(select(self.model))
         return db_objs.offset(offset).limit(limit).all()
 
