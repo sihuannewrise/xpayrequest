@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Optional, List
 
-from pydantic import BaseModel, Extra, Field, validator, constr
+from pydantic import BaseModel, Extra, Field, constr
 from app.core.models._selectchoice import BankOPFType, EntityStatus
 from app.core.settings import variables as var
 
@@ -18,7 +18,6 @@ class BankBase(BaseModel):
         min_length=var.BIC_LEN,
         max_length=var.BIC_LEN,
         strip_whitespace=True,
-        title='БИК',
     )
     is_archived: Optional[bool] = Field(
         False,
@@ -29,7 +28,7 @@ class BankBase(BaseModel):
     address: Optional[str] = Field(max_length=200)
     status: Optional[EntityStatus]
     inn: Optional[str] = constr(
-        regex='^[0-9]+$',
+        regex=fr"'^(\d{var.INN_LEN[0]}|\d{var.INN_LEN[1]})$'",
         strip_whitespace=True,
     )
     kpp: Optional[str] = constr(
@@ -62,15 +61,6 @@ class BankBase(BaseModel):
         extra = Extra.forbid
         min_anystr_length = 2
 
-    @validator('inn')
-    def inn_len_fixed(cls, value):
-        if len(value) not in var.INN_LEN:
-            raise ValueError(
-                f'Длина ИНН должна быть {var.INN_LEN[0]} '
-                f'или {var.INN_LEN[1]} знаков!',
-            )
-        return value
-
 
 class BankCreate(BankBase):
     name: str = Field(
@@ -79,12 +69,11 @@ class BankCreate(BankBase):
         title='Название банка',
         description='Можно загрузить из классификатора по БИК',
     )
-    bic: str = constr(
+    bank_bic: str = constr(
         regex='^[0-9]+$',
         min_length=var.BIC_LEN,
         max_length=var.BIC_LEN,
         strip_whitespace=True,
-        title='БИК',
     )
     is_archived: bool = Field(
         False,
@@ -100,13 +89,13 @@ class BankUpdate(BankBase):
 class BankDB(BankBase):
     id: int
     name: str
-    bic: str
+    bank_bic: str
     is_archived: bool
 
     address: str
     status: EntityStatus
-    inn: str
-    kpp: str
+    bank_inn: str
+    bank_kpp: str
     actuality_date: date
     registration_date: date
     liquidation_date: date

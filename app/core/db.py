@@ -10,11 +10,12 @@ from app.core.config import settings
 
 
 class Base(DeclarativeBase):
-    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(
+        primary_key=True, autoincrement=True, index=True)
     description: Mapped[Optional[str]] = mapped_column(String(150))
 
     @declared_attr
-    def __tablename__(cls):
+    def __tablename__(cls) -> str:
         return cls.__name__.lower()
 
 

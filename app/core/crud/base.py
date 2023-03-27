@@ -35,8 +35,9 @@ class CRUDBase:
         limit: int = var.PAG_LIMIT,
         offset: int = var.PAG_OFFSET,
     ):
-        db_objs = await session.scalars(select(self.model))
-        return db_objs.offset(offset).limit(limit).all()
+        db_objs = await session.scalars(
+            select(self.model).offset(offset).limit(limit))
+        return db_objs.all()
 
     async def create(
         self, obj_in, session: AsyncSession, user: Optional[User] = None
