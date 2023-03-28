@@ -12,7 +12,7 @@ class BankBase(BaseModel):
         title='Название банка',
     )
     bic: Optional[str] = Field(
-        regex=fr'^\d{var.BIC_LEN}$',
+        regex=fr'^[0-9]{var.BIC_LEN}$',
         max_length=var.BIC_LEN,
         title='БИК',
     )
@@ -25,11 +25,11 @@ class BankBase(BaseModel):
     address: Optional[str] = Field(max_length=200)
     status: Optional[EntityStatus]
     inn: Optional[str] = Field(
-        regex=fr"'^(\d{var.INN_LEN[0]}|\d{var.INN_LEN[1]})$'",
+        regex=fr'^(\d{var.INN_LEN[0]}|\d{var.INN_LEN[1]})$',
         title='ИНН банка',
     )
     kpp: Optional[str] = Field(
-        regex=fr"'^\d{var.KPP_LEN}$'",
+        regex=fr'^\d{var.KPP_LEN}$',
         title='КПП банка',
     )
     actuality_date: Optional[date]
@@ -101,7 +101,6 @@ class BankDB(BankBase):
     description: str
 
     class Config:
-        title = 'Класс со схемой ответа из БД'
         orm_mode = True
 
 
