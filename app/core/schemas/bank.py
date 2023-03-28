@@ -12,8 +12,9 @@ class BankBase(BaseModel):
         title='Название банка',
     )
     bic: Optional[str] = Field(
-        regex=fr"'^\d{var.BIC_LEN}$'",
-        title='Банковский идентификационный код',
+        regex=fr'^\d{var.BIC_LEN}$',
+        max_length=var.BIC_LEN,
+        title='БИК',
     )
     is_archived: Optional[bool] = Field(
         False,
@@ -57,9 +58,20 @@ class BankBase(BaseModel):
 
 
 class BankCreate(BankBase):
-    name: str
-    bic: str
-    is_archived: bool
+    name: str = Field(
+        max_length=160,
+        title='Название банка',
+    )
+    bic: str = Field(
+        regex=fr'^\d{var.BIC_LEN}$',
+        max_length=var.BIC_LEN,
+        title='БИК',
+    )
+    is_archived: bool = Field(
+        False,
+        title='Пометка архивной записи',
+        description='По умолчанию значение false',
+    )
 
 
 class BankUpdate(BankBase):

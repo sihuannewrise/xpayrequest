@@ -40,10 +40,11 @@ async def create_new_bank(
 ):
     """
     Только для суперпользователей.
-    Создает банк.
+
+    Создает банк, обязательные поля.
      - **name** - имя банка;
      - **bic** - БИК банка;
-     - **description** - описание банка.
+     - **is_archived** - архивный.
     """
     new_bank = await bank_crud.create_bank(bank, session)
     return new_bank
