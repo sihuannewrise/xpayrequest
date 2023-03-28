@@ -1,23 +1,19 @@
 from datetime import date
 from typing import Optional, List
 
-from pydantic import BaseModel, Extra, Field, constr
+from pydantic import BaseModel, Extra, Field
 from app.core.models._selectchoice import BankOPFType, EntityStatus
 from app.core.settings import variables as var
 
 
 class BankBase(BaseModel):
     name: Optional[str] = Field(
-        ...,
         max_length=160,
         title='Название банка',
-        description='Можно загрузить из классификатора по БИК',
     )
-    bic: Optional[str] = constr(
-        regex='^[0-9]+$',
-        min_length=var.BIC_LEN,
-        max_length=var.BIC_LEN,
-        strip_whitespace=True,
+    bic: Optional[str] = Field(
+        regex=fr"'^\d{var.BIC_LEN}$'",
+        title='Банковский идентификационный код',
     )
     is_archived: Optional[bool] = Field(
         False,
@@ -27,15 +23,13 @@ class BankBase(BaseModel):
 
     address: Optional[str] = Field(max_length=200)
     status: Optional[EntityStatus]
-    inn: Optional[str] = constr(
+    inn: Optional[str] = Field(
         regex=fr"'^(\d{var.INN_LEN[0]}|\d{var.INN_LEN[1]})$'",
-        strip_whitespace=True,
+        title='ИНН банка',
     )
-    kpp: Optional[str] = constr(
-        regex='^[0-9]+$',
-        min_length=var.KPP_LEN,
-        max_length=var.KPP_LEN,
-        strip_whitespace=True,
+    kpp: Optional[str] = Field(
+        regex=fr"'^\d{var.KPP_LEN}$'",
+        title='КПП банка',
     )
     actuality_date: Optional[date]
     registration_date: Optional[date]
@@ -63,23 +57,9 @@ class BankBase(BaseModel):
 
 
 class BankCreate(BankBase):
-    name: str = Field(
-        ...,
-        max_length=160,
-        title='Название банка',
-        description='Можно загрузить из классификатора по БИК',
-    )
-    bank_bic: str = constr(
-        regex='^[0-9]+$',
-        min_length=var.BIC_LEN,
-        max_length=var.BIC_LEN,
-        strip_whitespace=True,
-    )
-    is_archived: bool = Field(
-        False,
-        title='Пометка архивной записи',
-        description='По умолчанию значение false',
-    )
+    name: str
+    bic: str
+    is_archived: bool
 
 
 class BankUpdate(BankBase):
@@ -89,13 +69,13 @@ class BankUpdate(BankBase):
 class BankDB(BankBase):
     id: int
     name: str
-    bank_bic: str
+    bic: str
     is_archived: bool
 
     address: str
     status: EntityStatus
-    bank_inn: str
-    bank_kpp: str
+    inn: str
+    kpp: str
     actuality_date: date
     registration_date: date
     liquidation_date: date
