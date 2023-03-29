@@ -22,8 +22,8 @@ class BankCRUD(CRUDBase):
         bank_info: BankCreate,
         session: AsyncSession,
     ) -> Bank:
-        bank_details = await session.scalar(Bank).filter(
-            Bank.bic == bank_info.bic).first()
+        query = select(Bank).where(Bank.bic == bank_info.bic)
+        bank_details = await session.scalar(query)
         if bank_details is not None:
             raise BankAlreadyExistsError
 

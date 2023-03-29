@@ -4,9 +4,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.crud.bank import bank_crud
 from app.core.db import get_async_session
 from app.core.schemas.bank import (
-        BankCreate, BankDB,
+    BankCreate, BankDB,
 )
 from app.core.user import current_superuser
+from app.core.dependencies.bank import check_bank_not_exist
 
 router = APIRouter()
 
@@ -35,16 +36,15 @@ async def get_all_banks(
     summary='Создать банк',
 )
 async def create_new_bank(
-    bank: BankCreate,
+    bank: BankCreate = Depends(check_bank_not_exist),
     session: AsyncSession = Depends(get_async_session),
 ):
-    """
-    Только для суперпользователей.
+    # """
+    # Только для суперпользователей.
 
-    Создает банк, обязательные поля.
-     - **name** - имя банка;
-     - **bic** - БИК банка;
-     - **is_archived** - архивный.
-    """
+    # Создает банк, обязательные поля:
+    #  - **name** - имя банка;
+    #  - **bic** - БИК банка.
+    # """
     new_bank = await bank_crud.create_bank(bank, session)
     return new_bank

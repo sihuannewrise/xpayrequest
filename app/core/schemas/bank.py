@@ -12,7 +12,7 @@ class BankBase(BaseModel):
         title='Название банка',
     )
     bic: Optional[str] = Field(
-        regex=fr'^[0-9]{var.BIC_LEN}$',
+        regex=fr'^\d{var.BIC_LEN}$',
         max_length=var.BIC_LEN,
         title='БИК',
     )
