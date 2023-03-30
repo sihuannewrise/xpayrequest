@@ -6,10 +6,10 @@ from sqlalchemy import ForeignKey, String
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
-from app.core.db import Base
+from app.core.models._common import BaseWithPK
 
 
-class PaymentRequest(Base):
+class PaymentRequest(BaseWithPK):
     author: Mapped[UUID] = mapped_column(ForeignKey('user.id'))
     type_id: Mapped[int] = mapped_column(ForeignKey('paymenttype.id'))
     payer_id: Mapped[int] = mapped_column(ForeignKey('company.id'))

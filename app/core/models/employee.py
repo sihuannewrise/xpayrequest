@@ -5,12 +5,12 @@ from uuid import UUID
 from sqlalchemy import ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.core.db import Base
+from app.core.models._common import BaseWithPK
 
 
-class Employee(Base):
+class Employee(BaseWithPK):
     full_name: Mapped[str] = mapped_column(String(300))
-    birthdate: Mapped[date]
+    birthdate: Mapped[Optional[date]]
 
     first_name: Mapped[Optional[str]] = mapped_column(String(100))
     patronymic_name: Mapped[Optional[str]] = mapped_column(String(100))

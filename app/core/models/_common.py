@@ -7,6 +7,20 @@ from app.core.db import Base
 from ._selectchoice import EntityStatus
 
 
+class BaseWithPK(Base):
+    __abstract__ = True
+    id: Mapped[int] = mapped_column(
+        primary_key=True, autoincrement=True, index=True)
+
+
+class SupplementaryBase(BaseWithPK):
+    __abstract__ = True
+    name: Mapped[str] = mapped_column(String(50), unique=True)
+
+    def __repr__(self) -> str:
+        return f'<{self.__class__.__name__} ({self.name})>'
+
+
 class EntityBase(Base):
     __abstract__ = True
 
@@ -20,15 +34,8 @@ class EntityBase(Base):
     registration_date: Mapped[Optional[datetime]]
     liquidation_date: Mapped[Optional[datetime]]
 
-    is_archived: Mapped[bool] = mapped_column(server_default=text('FALSE'))
-
-    def __repr__(self) -> str:
-        return f'<{self.__class__.__name__} ({self.name})>'
-
-
-class SupplementaryBase(Base):
-    __abstract__ = True
-    name: Mapped[str] = mapped_column(String(50), unique=True)
+    is_archived: Mapped[Optional[bool]] = mapped_column(
+        server_default=text('FALSE'))
 
     def __repr__(self) -> str:
         return f'<{self.__class__.__name__} ({self.name})>'

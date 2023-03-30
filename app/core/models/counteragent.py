@@ -9,6 +9,9 @@ from app.core.models._selectchoice import CounterAgentType
 
 
 class CounterAgent(EntityBase):
+    id: Mapped[int] = mapped_column(
+        primary_key=True, autoincrement=True, index=True)
+
     ogrn: Mapped[Optional[str]] = mapped_column(String(20))
     ogrn_date: Mapped[Optional[datetime]]
     ca_type: Mapped[Optional[CounterAgentType]]
@@ -21,7 +24,7 @@ class CounterAgent(EntityBase):
     management_disqualified: Mapped[Optional[str]] = mapped_column(String(50))
     management_name: Mapped[Optional[str]] = mapped_column(String(150))
     address_full_with_index: Mapped[Optional[str]] = mapped_column(String(150))
-    address_egrul: Mapped[Optional[str]] = mapped_column(String(150))
+
     __table_args__ = (UniqueConstraint('inn', 'kpp', name='_inn_kpp_unique'),)
 
     bank_accounts: Mapped['BankAccount'] = relationship(backref='ca')

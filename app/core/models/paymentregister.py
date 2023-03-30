@@ -5,10 +5,10 @@ from uuid import UUID
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.core.db import Base
+from app.core.models._common import BaseWithPK
 
 
-class PaymentRegister(Base):
+class PaymentRegister(BaseWithPK):
     fulfill_date: Mapped[Optional[datetime]]
     pr_id: Mapped[int] = mapped_column(ForeignKey('paymentrequest.id'))
 

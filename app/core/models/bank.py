@@ -8,7 +8,7 @@ from app.core.models._selectchoice import BankOPFType
 
 
 class Bank(EntityBase):
-    bic: Mapped[str] = mapped_column(String(9), unique=True)
+    bic: Mapped[str] = mapped_column(String(9), primary_key=True, index=True)
     correspondent_account: Mapped[Optional[str]] = mapped_column(String(20))
     payment_city: Mapped[Optional[str]] = mapped_column(String(50))
 
@@ -16,6 +16,7 @@ class Bank(EntityBase):
     registration_number: Mapped[Optional[str]] = mapped_column(String(20))
     treasury_accounts: Mapped[Optional[str]] = mapped_column(String(20))
     opf_type: Mapped[Optional[BankOPFType]]
+
     __table_args__ = (
         UniqueConstraint('inn', 'kpp', name='_bank_inn_kpp_unique'),)
 
