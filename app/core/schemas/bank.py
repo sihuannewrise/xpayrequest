@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Optional, List
 
-from pydantic import BaseModel, Extra, Field
+from pydantic import BaseModel, Field
 from app.core.models._selectchoice import BankOPFType, EntityStatus
 from app.core.settings import variables as var
 
@@ -23,38 +23,42 @@ class BankBase(BaseModel):
         include_in_schema=False,
     )
 
-    address: Optional[str] = Field(max_length=200)
-    status: Optional[EntityStatus]
+    address: Optional[str] = Field(None, max_length=200)
+    status: Optional[EntityStatus] = Field(None,)
     inn: Optional[str] = Field(
+        None,
         regex=fr'^(\d{var.INN_LEN[0]}|\d{var.INN_LEN[1]})$',
         title='ИНН банка',
     )
     kpp: Optional[str] = Field(
+        None,
         regex=fr'^\d{var.KPP_LEN}$',
         title='КПП банка',
     )
-    actuality_date: Optional[date]
-    registration_date: Optional[date]
-    liquidation_date: Optional[date]
+    actuality_date: Optional[date] = Field(None,)
+    registration_date: Optional[date] = Field(None,)
+    liquidation_date: Optional[date] = Field(None,)
     correspondent_account: Optional[str] = Field(
+        None,
         min_length=var.CORR_ACC_LEN,
         max_length=var.CORR_ACC_LEN,
     )
-    payment_city: Optional[str] = Field(max_length=50)
+    payment_city: Optional[str] = Field(None, max_length=50)
     swift: Optional[str] = Field(
+        None,
         min_length=var.SWIFT_LEN,
         max_length=var.SWIFT_LEN,
     )
-    registration_number: Optional[str] = Field(max_length=20)
+    registration_number: Optional[str] = Field(None, max_length=20)
     treasury_accounts: Optional[str] = Field(
+        None,
         min_length=20,
         max_length=20,
     )
-    opf_type: Optional[BankOPFType]
-    description: Optional[str]
+    opf_type: Optional[BankOPFType] = Field(None,)
+    description: Optional[str] = Field(None,)
 
     class Config:
-        extra = Extra.forbid
         min_anystr_length = 2
 
 
@@ -72,6 +76,19 @@ class BankCreate(BankBase):
         False,
         include_in_schema=False,
     )
+
+    class Config:
+        schema_extra = {
+            'example': {
+               'name': 'ПАО Сбербанк',
+               'bic': '044525225',
+               'correspondent_account': '30101810400000000225',
+               'payment_city': 'г Москва',
+               'opf_type': 'банк',
+               'status': 'действующая',
+               'address': 'г Москва, ул Вавилова, д 19'
+            }
+        }
 
 
 class BankUpdate(BankBase):

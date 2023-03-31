@@ -8,7 +8,7 @@ router = APIRouter()
 
 @router.get(
     "/",
-    tags=['web'],
+    tags=['Web'],
     response_class=HTMLResponse,
     summary='Главная страница',
 )

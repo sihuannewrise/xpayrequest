@@ -35,7 +35,8 @@ async def get_all_banks(
     response_model_exclude_none=True,
     dependencies=[Depends(current_superuser)],
     summary='Создание нового банка',
-    response_description='Данные вновь созданного банка',
+    response_description='В случае успешного создания '
+                         'возвращаются данные вновь созданного банка.',
 )
 async def create_new_bank(
     bank: BankCreate,
