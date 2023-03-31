@@ -8,18 +8,19 @@ from app.core.settings import variables as var
 
 class BankBase(BaseModel):
     name: Optional[str] = Field(
+        None,
         max_length=160,
         title='Название банка',
     )
     bic: Optional[str] = Field(
+        None,
         regex=fr'^\d{var.BIC_LEN}$',
         max_length=var.BIC_LEN,
         title='БИК',
     )
     is_archived: Optional[bool] = Field(
         False,
-        title='Пометка архивной записи',
-        description='По умолчанию значение false',
+        include_in_schema=False,
     )
 
     address: Optional[str] = Field(max_length=200)
@@ -69,8 +70,7 @@ class BankCreate(BankBase):
     )
     is_archived: bool = Field(
         False,
-        title='Пометка архивной записи',
-        description='По умолчанию значение false',
+        include_in_schema=False,
     )
 
 

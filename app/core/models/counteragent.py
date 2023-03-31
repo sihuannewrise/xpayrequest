@@ -23,7 +23,7 @@ class CounterAgent(EntityBase):
     management_post: Mapped[Optional[str]] = mapped_column(String(50))
     management_disqualified: Mapped[Optional[str]] = mapped_column(String(50))
     management_name: Mapped[Optional[str]] = mapped_column(String(150))
-    address_full_with_index: Mapped[Optional[str]] = mapped_column(String(150))
+    address_full: Mapped[Optional[str]] = mapped_column(String(150))
 
     __table_args__ = (UniqueConstraint('inn', 'kpp', name='_inn_kpp_unique'),)
 
