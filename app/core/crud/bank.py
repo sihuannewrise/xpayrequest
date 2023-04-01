@@ -1,40 +1,34 @@
+from typing import Optional
+
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.crud.base import CRUDBase
 from app.core.models.bank import Bank
-from app.core.exceptions.bank import BankAlreadyExistsError, BankNotFoundError
 from app.core.schemas.bank import BankCreate, BankDB, BankUpdate
 
 
 class BankCRUD(CRUDBase):
-    async def get_bank_by_id(
-        bank_id: int,
-        session: AsyncSession,
-    ) -> Bank:
-        bank = await session.scalar(select(Bank).where(Bank.id == bank_id))
-        if bank is None:
-            raise BankNotFoundError
-        return bank
+    async def get_bank_by_bic(
+        self, bic: str, session: AsyncSession,
+    ) -> Optional[str]:
+        query = select(Bank.bic).where(Bank.bic == bic)
+        bic = await session.scalar(query)
+        return bic
 
     async def create_bank(
-        bank_info: BankCreate,
-        session: AsyncSession,
+        self, bank: BankCreate, session: AsyncSession,
     ) -> Bank:
-        query = select(Bank).where(Bank.bic == bank_info.bic)
-        bank_details = await session.scalar(query)
-        if bank_details is not None:
-            raise BankAlreadyExistsError
-
-        obj_in_data = bank_info.dict()
-        new_bank_info = Bank(**obj_in_data)
-        session.add(new_bank_info)
+        bank_data = bank.dict()
+        new_bank = Bank(**bank_data)
+        session.add(new_bank)
         await session.commit()
-        await session.refresh(new_bank_info)
-        return new_bank_info
+        await session.refresh(new_bank)
+        return new_bank
 
     async def update_bank(
+        self,
         bank_db: BankDB,
         update_info: BankUpdate,
         session: AsyncSession,

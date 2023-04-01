@@ -1,4 +1,7 @@
-class BankException(Exception):
+from fastapi import HTTPException
+
+
+class BankException(HTTPException):
     ...
 
 

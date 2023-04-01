@@ -14,7 +14,8 @@ class BankBase(BaseModel):
     )
     bic: Optional[str] = Field(
         None,
-        regex=fr'^\d{var.BIC_LEN}$',
+        regex=r'^[0-9]+$',
+        min_length=var.BIC_LEN,
         max_length=var.BIC_LEN,
         title='БИК',
     )
@@ -27,12 +28,16 @@ class BankBase(BaseModel):
     status: Optional[EntityStatus] = Field(None,)
     inn: Optional[str] = Field(
         None,
-        regex=fr'^(\d{var.INN_LEN[0]}|\d{var.INN_LEN[1]})$',
+        regex=r'^[0-9]+$',
+        min_length=var.INN_LEN[0],
+        max_length=var.INN_LEN[1],
         title='ИНН банка',
     )
     kpp: Optional[str] = Field(
         None,
-        regex=fr'^\d{var.KPP_LEN}$',
+        regex=r'^[0-9]+$',
+        min_length=var.KPP_LEN,
+        max_length=var.KPP_LEN,
         title='КПП банка',
     )
     actuality_date: Optional[date] = Field(None,)
@@ -40,6 +45,7 @@ class BankBase(BaseModel):
     liquidation_date: Optional[date] = Field(None,)
     correspondent_account: Optional[str] = Field(
         None,
+        regex=r'^[0-9]+$',
         min_length=var.CORR_ACC_LEN,
         max_length=var.CORR_ACC_LEN,
     )
@@ -52,6 +58,7 @@ class BankBase(BaseModel):
     registration_number: Optional[str] = Field(None, max_length=20)
     treasury_accounts: Optional[str] = Field(
         None,
+        regex=r'^[0-9]+$',
         min_length=20,
         max_length=20,
     )
@@ -68,7 +75,8 @@ class BankCreate(BankBase):
         title='Название банка',
     )
     bic: str = Field(
-        regex=fr'^\d{var.BIC_LEN}$',
+        regex=r'^[0-9]+$',
+        min_length=var.BIC_LEN,
         max_length=var.BIC_LEN,
         title='БИК',
     )
@@ -96,26 +104,24 @@ class BankUpdate(BankBase):
 
 
 class BankDB(BankBase):
-    id: int
-    name: str
     bic: str
-    is_archived: bool
+    name: str
+    is_archived: bool = False
+    address: str | None = None
+    status: EntityStatus | None = None
+    correspondent_account: str | None = None
+    payment_city: str | None = None
 
-    address: str
-    status: EntityStatus
-    inn: str
-    kpp: str
-    actuality_date: date
-    registration_date: date
-    liquidation_date: date
-
-    correspondent_account: str
-    payment_city: str
-    swift: str
-    registration_number: str
-    treasury_accounts: str
-    opf_type: BankOPFType
-    description: str
+    inn: str | None = None
+    kpp: str | None = None
+    actuality_date: date | None = None
+    registration_date: date | None = None
+    liquidation_date: date | None = None
+    swift: str | None = None
+    registration_number: str | None = None
+    treasury_accounts: str | None = None
+    opf_type: BankOPFType | None = None
+    description: str | None = None
 
     class Config:
         orm_mode = True

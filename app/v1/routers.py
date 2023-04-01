@@ -9,4 +9,7 @@ main_router.include_router(
     prefix='/bank',
     tags=['Bank']
 )
-main_router.include_router(web_router)
+main_router.include_router(
+    web_router,
+    tags=['Web'],
+)
