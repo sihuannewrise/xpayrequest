@@ -22,7 +22,7 @@ class CRUDBase:
 
     async def get_obj_by_name(
         self, obj_name, session: AsyncSession,
-    ) -> Optional[int]:
+    ) -> Optional[int | str]:
         db_obj_id = await session.scalar(
             select(self.model).where(
                 self.model.name == obj_name

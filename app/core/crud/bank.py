@@ -1,7 +1,6 @@
 from typing import Optional
 
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.crud.base import CRUDBase
@@ -13,8 +12,10 @@ class BankCRUD(CRUDBase):
     async def get_bank_by_bic(
         self, bic: str, session: AsyncSession,
     ) -> Optional[str]:
-        query = select(Bank.bic).where(Bank.bic == bic)
-        bic = await session.scalar(query)
+        # альтернативныйспособ поиска по БИК
+        # query = select(Bank.bic).where(Bank.bic == bic)
+        # bic = await session.scalar(query)
+        bic = await session.get(Bank, bic)
         return bic
 
     async def create_bank(

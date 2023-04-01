@@ -23,18 +23,18 @@ from app.core.crud.bank import bank_crud
 #     return charity_project
 
 
-async def check_bank_name_duplilcate(
+async def check_name_duplicate(
     bank_name: str,
     session: AsyncSession,
 ) -> None:
-    bank = await bank_crud.get_bank_by_name(
-        bank_name=bank_name,
+    bank = await bank_crud.get_obj_by_name(
+        obj_name=bank_name,
         session=session,
     )
     if bank is not None:
         raise HTTPException(
-            status_code=HTTPStatus.BAD_REQUEST,
-            detail='Bank с таким именем уже существует!'
+            status_code=HTTPStatus.CONFLICT,
+            detail='Банк с таким именем уже существует!'
         )
 
 

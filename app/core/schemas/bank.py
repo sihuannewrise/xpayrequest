@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Optional, List
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from app.core.models._selectchoice import BankOPFType, EntityStatus
 from app.core.settings import variables as var
 
@@ -100,7 +100,25 @@ class BankCreate(BankBase):
 
 
 class BankUpdate(BankBase):
-    pass
+    bic: Optional[str] = Field(
+        example='044525225',
+        include_in_schema=False,
+    )
+
+    @validator('name')
+    def name_cannot_be_null(cls, value):
+        if value is None:
+            raise ValueError('Имя банка не может быть пустым!')
+        return value
+
+    class Config:
+        schema_extra = {
+            'example': {
+               'inn': '7707083893',
+               'kpp': '773601001',
+               'address': 'г. Москва, ул. Вавилова, дом 19'
+            }
+        }
 
 
 class BankDB(BankBase):
