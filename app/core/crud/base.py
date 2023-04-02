@@ -12,14 +12,6 @@ class CRUDBase:
     def __init__(self, model):
         self.model = model
 
-    async def get(self, obj_id, session: AsyncSession):
-        db_obj = await session.scalar(
-            select(self.model).where(
-                self.model.id == obj_id
-            )
-        )
-        return db_obj
-
     async def get_obj_by_name(
         self, obj_name, session: AsyncSession,
     ) -> Optional[int | str]:
@@ -29,6 +21,12 @@ class CRUDBase:
             )
         )
         return db_obj_id
+
+    async def get_obj_by_pk(
+        self, pk, session: AsyncSession,
+    ) -> Optional[int | str]:
+        db_obj = await session.get(self.model, pk)
+        return db_obj
 
     async def get_multi(
         self, session: AsyncSession,
@@ -62,7 +60,7 @@ class CRUDBase:
         await session.refresh(db_obj)
         return db_obj
 
-    async def delete(self, db_obj: int, session: AsyncSession):
+    async def delete(self, db_obj, session: AsyncSession):
         await session.delete(db_obj)
         await session.commit()
         return db_obj

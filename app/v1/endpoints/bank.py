@@ -8,8 +8,8 @@ from app.core.schemas.bank import (
 )
 from app.core.user import current_superuser, current_user
 from app.core.models import Bank
-from app.core.exceptions.bank import BankAlreadyExistsError, BankNotFoundError
-from app.v1.validators.bank import check_name_duplicate
+from app.core.exceptions.bank import BankAlreadyExistsError
+from app.v1.validators.bank import check_bank_exists, check_name_duplicate
 
 router = APIRouter()
 
@@ -56,11 +56,11 @@ async def create_new_bank(
      - **name** - имя банка;
      - **bic** - БИК банка.
     """
-    bic = await bank_crud.get_bank_by_bic(bank.bic, session)
+    bic = await bank_crud.get_obj_by_pk(bank.bic, session)
     if bic is not None:
         raise BankAlreadyExistsError()
     await check_name_duplicate(bank.name, session)
-    new_bank = await bank_crud.create_bank(bank, session)
+    new_bank = await bank_crud.create(bank, session)
     return new_bank
 
 
@@ -82,10 +82,28 @@ async def partially_update_bank(
     Только для суперпользователей.
     Обновление данных по БИК.
     """
-    bank = await bank_crud.get_bank_by_bic(bic, session)
-    if bank is None:
-        raise BankNotFoundError()
+    bank = await check_bank_exists(bic, session)
     if upd_data.name is not None:
         await check_name_duplicate(upd_data.name, session)
     bank = await bank_crud.update(bank, upd_data, session)
+    return bank
+
+
+@router.delete(
+    '/{bic}',
+    response_model=BankDB,
+    response_model_exclude_none=True,
+    dependencies=[Depends(current_superuser)],
+    summary='Удаление банка',
+)
+async def remove_bank(
+    bic: str,
+    session: AsyncSession = Depends(get_async_session),
+) -> Bank:
+    """
+    Только для суперпользователей.
+    Удаление банка по БИКу.
+    """
+    bank = await check_bank_exists(bic, session)
+    bank = await bank_crud.delete(bank, session)
     return bank
