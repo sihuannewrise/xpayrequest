@@ -31,7 +31,10 @@ async def check_name_duplicate(model, name, session):
         select(model).where(model.name == name)
     )
     if obj is not None:
-        raise ValueError(f'{name} уже существует в таблице {model}!')
+        raise ValueError(
+            f'Значение \033[1m{name}\033[0m уже существует '
+            f'в таблице \033[1m{model.__name__.lower()}\033[0m !'
+        )
     return obj
 
 
@@ -45,8 +48,11 @@ async def fill_supp_tables():
                     db_obj = model(name=name, description=desc)
                     session.add(db_obj)
                 except ValueError:
-                    print(f'{name} уже существует в таблице {model}!')
-        await session.commit()
+                    print(
+                        f'Значение \033[1m{name}\033[0m уже существует '
+                        f'в таблице \033[1m{model.__name__.lower()}\033[0m !'
+                    )
+            await session.commit()
 
 
 if __name__ == "__main__":
