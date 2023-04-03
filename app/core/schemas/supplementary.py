@@ -1,4 +1,7 @@
 # schemas for supplementary models:
+from typing import Optional
+from pydantic import BaseModel, Field, validator
+
 SUPP_SCHEMAS = [
     'BankAccountType',
     'PaymentType',
@@ -10,9 +13,6 @@ SUPP_SCHEMAS = [
     'PaymentStatus',
     'PaymentVerdict',
 ]
-
-from typing import Optional
-from pydantic import BaseModel, Field, validator
 
 
 class SuppBase(BaseModel):
@@ -27,14 +27,12 @@ class SuppBase(BaseModel):
 
 
 class SuppObjectCreate(SuppBase):
-    __metaclass__ = type
     name: str = Field(
         max_length=50,
     )
 
 
 class SuppObjectUpdate(SuppBase):
-    __metaclass__ = type
 
     @validator('name')
     def name_cannot_be_null(cls, value):
@@ -44,13 +42,7 @@ class SuppObjectUpdate(SuppBase):
 
 
 class SuppObjectDB(SuppBase):
-    __metaclass__ = type
-
     id: int
 
     class Config:
         orm_mode = True
-
-
-for schema in SUPP_SCHEMAS:
-        
