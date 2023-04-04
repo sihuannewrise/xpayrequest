@@ -16,7 +16,7 @@
 #     'treasury_accounts': data['data']['treasury_accounts'],
 #     'opf_type': data['data']['opf']['type'],
 # }
-
+DATE_FIELDS = ('actuality_date', 'registration_date', 'liquidation_date')
 
 # supplementry tables info
 BankAccountType = {
