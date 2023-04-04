@@ -6,9 +6,8 @@ import aiofiles
 from datetime import datetime as dt
 
 from contextlib import asynccontextmanager
-from fastapi.encoders import jsonable_encoder
 
-from app.services.dadata import dadata_find_bank, dadata_suggest_bank
+from app.services.dadata import dadata_find_bank
 from app.core.db import get_async_session
 from app.core.models.bank import Bank
 from app.services.config.biclist import BICS
@@ -19,10 +18,8 @@ get_async_session_context = asynccontextmanager(get_async_session)
 
 async def get_bic_list(filename):
     """Формирует из файла множество с БИКами банков.
-
     Args:
         filename (txt): столбец с кодами
-
     Returns:
         set: перечень БИК
     """
@@ -79,69 +76,48 @@ async def get_bank_by_id(id: str):
             bank['treasury_accounts'] = bank['treasury_accounts'][0]
         return bank
     except IndexError:
-        print('No <dadata>')
-        return None
+        print('No DAData')
 
 
-async def create_bank_by_id(bank_info: dict, is_archived: bool = False):
+async def create_bank_by_id(
+    bic: str, bank_info: dict, session, is_archived: bool = False,
+) -> None:
     """
     Создание в БД записи о новом банке.
     Перед записью сверяет, нет ли в БД существующей записи с БИКом.
     Добавляет в словарь дополнительные ключи.
     """
-    async with get_async_session_context() as session:
+    try:
         extra_fields = {
             'is_archived': is_archived,
-            'description': 'autoloaded from dadata',
+            'description': 'autoloaded from DAData',
         }
         bank_info.update(extra_fields)
-        try:
-            await check_bic_duplicate(bank_info['bic'], session)
-            bank = Bank()
-            for field in bank_info:
-                setattr(bank, field, bank_info[field])
-            session.add(bank)
-            await session.commit()
-            await session.refresh(bank)
-            return bank
-        except ValueError:
-            return None
+        await check_bic_duplicate(bic, session)
+        model = Bank()
+        for field in bank_info:
+            setattr(model, field, bank_info[field])
+        session.add(model)
+        await session.commit()
+        await session.refresh(model)
+        return None
+    except ValueError:
+        print(f'No dadata on {bic}')
+        return None
 
 
-async def create_bank():
-    bank = await get_bank_by_id('044525297')
-    obj = await create_bank_by_id(bank)
-    print(obj)
-
-
-async def create_milti_banks():
+async def create_milti_banks(bics: set):
     async with get_async_session_context() as session:
-        for bic in BICS:
-            # await check_bic_duplicate(bic, session)
-            bank = Bank()
+        for bic in bics:
             dadata = await get_bank_by_id(bic)
-            db_obj = jsonable_encoder(dadata)
-            for field in db_obj:
-                setattr(bank, field, db_obj[field])
-            session.add(bank)
-            await session.commit()
-            await session.refresh(bank)
-            print(bank)
-            return bank
-
-
-async def suggest_bank_names(phrase: str):
-    data = asyncio.run(dadata_suggest_bank(phrase))
-    for i in range(len(data)):
-        print(data[i]['value'])
+            if dadata is not None:
+                await create_bank_by_id(bic, dadata, session)
     return None
 
 
 if __name__ == "__main__":
     # asyncio.run(get_bank_by_id('004525988'))  # УФК
-    # asyncio.run(get_bank_by_id('044525297'))
+    # asyncio.run(get_bank_by_id('044579132'))
 
     # asyncio.run(get_bic_list('app/services/config/biclist.txt'))
-
-    # asyncio.run(create_bank('044525985'))
-    asyncio.run(create_bank())
+    asyncio.run(create_milti_banks(BICS))
