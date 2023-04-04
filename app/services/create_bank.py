@@ -1,36 +1,19 @@
 # command to run this script from root dir:  python -m app.services.create_bank
-# creating bank by BIC, SWIFT or INN from dadata
+# creating bank by id (BIC, SWIFT or INN) from dadata
 
 import asyncio
 import aiofiles
-
-from dadata import DadataAsync
+from datetime import datetime as dt
 
 from contextlib import asynccontextmanager
 from fastapi.encoders import jsonable_encoder
 
-from app.core.config import settings
+from app.services.dadata import dadata_find_bank, dadata_suggest_bank
 from app.core.db import get_async_session
 from app.core.models.bank import Bank
 from app.services.config.biclist import BICS
 
 get_async_session_context = asynccontextmanager(get_async_session)
-
-
-async def dadata_find_bank(id: str):
-    async with DadataAsync(
-        settings.dadata_token, settings.dadata_secret,
-    ) as dadata:
-        result = await dadata.find_by_id(name='bank', query=id)
-        return result
-
-
-async def dadata_suggest_bank(name: str):
-    async with DadataAsync(
-        settings.dadata_token, settings.dadata_secret,
-    ) as dadata:
-        result = await dadata.suggest(name='bank', query=name)
-        return result
 
 
 async def check_bic_duplicate(bic: str, session):
@@ -61,7 +44,7 @@ async def get_bank_by_id(id: str):
             'payment_city': data['data']['payment_city'],
             'swift': data['data']['swift'],
             'registration_number': data['data']['registration_number'],
-            'treasury_accounts': data['data']['treasury_accounts'][0],
+            'treasury_accounts': data['data']['treasury_accounts'],
             'opf_type': data['data']['opf']['type'],
         }
         return bank
@@ -84,7 +67,22 @@ async def get_bic_list(filename):
         return bic_list
 
 
-async def create_bank():
+async def create_bank_by_id(id: str):
+    async with get_async_session_context() as session:
+        # await check_bic_duplicate(id, session)
+        bank = Bank()
+        dadata = await get_bank_by_id(bic)
+        db_obj = jsonable_encoder(dadata)
+        for field in db_obj:
+            setattr(bank, field, db_obj[field])
+        session.add(bank)
+        await session.commit()
+        await session.refresh(bank)
+        print(bank)
+        return bank
+
+
+async def create_milti_banks():
     async with get_async_session_context() as session:
         for bic in BICS:
             # await check_bic_duplicate(bic, session)
@@ -102,5 +100,5 @@ async def create_bank():
 
 if __name__ == "__main__":
     # asyncio.run(get_bic_list('app/services/config/biclist.txt'))
-    # asyncio.run(get_bank_by_id('007182108'))
-    asyncio.run(create_bank())
+    # asyncio.run(get_bank_by_id('044525985'))
+    asyncio.run(create_bank('044525985'))

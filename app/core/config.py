@@ -13,8 +13,8 @@ class Settings(BaseSettings):
     first_superuser_email: Optional[EmailStr] = None
     first_superuser_password: Optional[str] = None
 
-    dadata_token: str
-    dadata_secret: str
+    dd_token: str
+    dd_secret: str
 
     class Config:
         env_file = 'ENV/.env'
