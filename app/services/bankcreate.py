@@ -90,7 +90,7 @@ async def get_bank_by_id(id: str):
     return bank
 
 
-async def create_bank(
+async def bank_create(
     bic: str, bank_info: dict, session, is_archived: bool = False,
 ):
     """
@@ -127,9 +127,41 @@ async def add_banks(bics: set):
         for bic in bics:
             try:
                 dadata = await get_bank_by_id(bic)
-                await create_bank(bic, dadata, session)
+                await bank_create(bic, dadata, session)
             except Exception as e:
                 print(e)
+
+
+async def add_all_bank(
+    bic: str, bank_info: dict, session, is_archived: bool = False,
+):
+    """
+    Создание в БД записи о новом банке.
+    Args:
+        bic (str) - БИК, bank_info (dict) - словарь с данными по банку
+    Returns:
+        Данные банка, записанные в БД.
+
+    Данные должны поступать корректные (не None, например).
+    Перед записью сверяет, нет ли в БД существующей записи с БИКом.
+    Добавляет в словарь дополнительные ключи is_archived и description.
+    """
+    try:
+        await check_no_bic_duplicate(bic, session)
+        extra_fields = {
+            'is_archived': is_archived,
+            'description': 'autoloaded from DAData',
+        }
+        bank_info.update(extra_fields)
+        model = Bank()
+        for field in bank_info:
+            setattr(model, field, bank_info[field])
+        session.add(model)
+        await session.commit()
+        await session.refresh(model)
+        return model
+    except Exception as e:
+        print(e)
 
 
 if __name__ == "__main__":
