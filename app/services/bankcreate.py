@@ -1,15 +1,15 @@
-# command to run this script from root dir:  python -m app.services.create_bank
+# command to run this script from root dir:  python -m app.services.bankcreate
 # creating bank by id (BIC, SWIFT or INN) from dadata
 
 import asyncio
 import aiofiles
 from datetime import datetime as dt
-
 from contextlib import asynccontextmanager
 
 from app.services.dadata import dadata_find_bank
 from app.core.db import get_async_session
 from app.core.models.bank import Bank
+
 from app.services.config.biclist import BICS
 from app.services.config.mapping import DATE_FIELDS
 
@@ -17,7 +17,7 @@ get_async_session_context = asynccontextmanager(get_async_session)
 
 
 async def get_bic_list(filename):
-    """Формирует из файла множество с БИКами банков.
+    """Формирует из файла множество с БИКами.
     Args:
         filename (txt): столбец с кодами
     Returns:
@@ -30,9 +30,11 @@ async def get_bic_list(filename):
         return bic_set
 
 
-async def check_bic_duplicate(bic: str, session):
+async def check_no_bic_duplicate(bic: str, session):
     """
     Проверяет наличие БИК в БД перед внесением новой записи.
+    Возвращает True - если проверка пройдена, т.е. нет дубликата в БД,
+    и ошибку - если есть.
     """
     bank = await session.get(Bank, bic)
     if bank is not None:
@@ -40,14 +42,22 @@ async def check_bic_duplicate(bic: str, session):
             f'Значение \033[1m{bic}\033[0m уже существует '
             f'в таблице \033[1m{Bank.__name__.lower()}\033[0m !'
         )
-    return None
+    # except HTTPException:
+    #         raise HTTPException(
+    #             status_code=HTTPStatus.CONFLICT,
+    #             detail=f'Значение \033[1m{bic}\033[0m уже существует '
+    #                 f'в таблице \033[1m{Bank.__name__.lower()}\033[0m !'
+    #         )
 
 
 async def get_bank_by_id(id: str):
     """
     Получает из сервиса dadata информацию о банке по его ID (БИК, ИНН, свифт).
     Информацию парсит в словарь по интересующим полям.
-    Возвращает словарь или None.
+    Удаляет поля со значением None. Форматирует поля с датами в datetime
+    формат и из поля "казначейские счета" (treasury_accounts) берет из списка
+    первое значение.
+    Возвращает словарь или ошибку.
     """
     try:
         data = await dadata_find_bank(id)
@@ -69,55 +79,62 @@ async def get_bank_by_id(id: str):
             'treasury_accounts': data['data']['treasury_accounts'],
             'opf_type': data['data']['opf']['type'],
         }
+        bank = {k: v for k, v in bank.items() if v is not None}
         for field in DATE_FIELDS:
-            if bank[field] is not None:
+            if field in bank:
                 bank[field] = dt.fromtimestamp(bank[field]/1000)
-        if isinstance(bank['treasury_accounts'], list):
+        if 'treasury_accounts' in bank and isinstance(
+            bank['treasury_accounts'], list
+        ):
             bank['treasury_accounts'] = bank['treasury_accounts'][0]
         return bank
-    except IndexError:
-        print('No DAData')
+    except Exception as e:
+        print(e)
 
 
 async def create_bank_by_id(
     bic: str, bank_info: dict, session, is_archived: bool = False,
-) -> None:
+):
     """
     Создание в БД записи о новом банке.
+    Данные должны поступать корректные (не None, например).
     Перед записью сверяет, нет ли в БД существующей записи с БИКом.
-    Добавляет в словарь дополнительные ключи.
+    Добавляет в словарь дополнительные ключи is_archived и description.
     """
     try:
+        await check_no_bic_duplicate(bic, session)
         extra_fields = {
             'is_archived': is_archived,
             'description': 'autoloaded from DAData',
         }
         bank_info.update(extra_fields)
-        await check_bic_duplicate(bic, session)
         model = Bank()
         for field in bank_info:
             setattr(model, field, bank_info[field])
         session.add(model)
         await session.commit()
         await session.refresh(model)
-        return None
-    except ValueError:
-        print(f'No dadata on {bic}')
-        return None
+        return model
+    except Exception as e:
+        print(e)
 
 
 async def create_milti_banks(bics: set):
     async with get_async_session_context() as session:
         for bic in bics:
-            dadata = await get_bank_by_id(bic)
-            if dadata is not None:
+            try:
+                dadata = await get_bank_by_id(bic)
                 await create_bank_by_id(bic, dadata, session)
+            except ValueError:
+                pass
     return None
 
 
 if __name__ == "__main__":
     # asyncio.run(get_bank_by_id('004525988'))  # УФК
-    # asyncio.run(get_bank_by_id('044579132'))
+    # print(asyncio.run(get_bank_by_id('007182108')))
 
     # asyncio.run(get_bic_list('app/services/config/biclist.txt'))
     asyncio.run(create_milti_banks(BICS))
+
+    # asyncio.run()
