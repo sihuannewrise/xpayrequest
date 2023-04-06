@@ -38,8 +38,7 @@ def upgrade() -> None:
     sa.Column('is_archived', sa.Boolean(), server_default=sa.text('FALSE'), nullable=True),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.PrimaryKeyConstraint('bic'),
-    sa.UniqueConstraint('inn', 'kpp', name='_bank_inn_kpp_unique'),
-    sa.UniqueConstraint('name')
+    sa.UniqueConstraint('inn', 'kpp', name='_bank_inn_kpp_unique')
     )
     op.create_index(op.f('ix_bank_bic'), 'bank', ['bic'], unique=False)
     op.create_table('bankaccounttype',

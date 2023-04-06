@@ -12,6 +12,7 @@ class CounterAgent(EntityBase):
     id: Mapped[int] = mapped_column(
         primary_key=True, autoincrement=True, index=True)
 
+    name: Mapped[str] = mapped_column(String(160), unique=True)
     ogrn: Mapped[Optional[str]] = mapped_column(String(20))
     ogrn_date: Mapped[Optional[datetime]]
     ca_type: Mapped[Optional[CounterAgentType]]

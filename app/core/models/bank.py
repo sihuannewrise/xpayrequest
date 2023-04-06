@@ -9,6 +9,7 @@ from app.core.models._selectchoice import BankOPFType
 
 class Bank(EntityBase):
     bic: Mapped[str] = mapped_column(String(9), primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(160))
     correspondent_account: Mapped[Optional[str]] = mapped_column(String(20))
     payment_city: Mapped[Optional[str]] = mapped_column(String(50))
 
