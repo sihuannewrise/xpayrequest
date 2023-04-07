@@ -1,5 +1,5 @@
-# command to run this script from root dir:  python -m app.services.bankcreate
-# creating bank by id (BIC, SWIFT or INN) from dadata
+# command to run this script from root dir:  python -m app.services.counteragentcreate  # noqa
+# creating ca by id (INN or OGRN) from dadata
 
 import os
 import asyncio
@@ -10,36 +10,27 @@ from contextlib import asynccontextmanager
 from sqlalchemy import select
 from app.services.dadata import dd_find_by_id
 from app.core.db import get_async_session
-from app.core.models.bank import Bank
+from app.core.models.counteragent import CounterAgent
 
-from app.services.config.listbic import BICS
+# from app.services.config.listca import BICS
 from app.services.config.mapping import DATE_FIELDS, DD_SEARCH_SUBJECT
 
 get_async_session_context = asynccontextmanager(get_async_session)
 
 
-async def get_bank_list(filename):
-    bic_set = set()
+async def get_counteragent_list(filename):
+    inn_set = set()
     async with aiofiles.open(filename, mode='r') as file:
         async for line in file:
-            bic_set.add(line.strip())
-        return bic_set
+            inn_set.add(line.strip())
+        return inn_set
 
 
-async def check_no_bic_duplicate(bic: str, session):
-    bank = await session.get(Bank, bic)
-    if bank is not None:
-        raise ValueError(
-            f'БИК \033[1m{bic}\033[0m уже в таблице '
-            f'\033[1m{Bank.__name__.lower()}\033[0m !'
-        )
-
-
-async def stuff_bank_with_data(
-    bank_info: dict, is_archived: bool = False,
+async def stuff_ca_with_data(
+    ca_info: dict, is_archived: bool = False,
     description: str = 'autoloaded',
 ):
-    data = bank_info[0]
+    data = ca_info[0]
     bank = {
         'name': data['value'],
         'bic': data['data']['bic'],
@@ -73,21 +64,17 @@ async def stuff_bank_with_data(
     return bank
 
 
-async def add_all_banks(bics: set) -> None:
+async def add_all_counteragents(inn_list: list) -> None:
     """
-    Отфильтровывает вх данные, отсеивая те, что уже есть в БД.
-    Оставшиеся БИКи обрабатываются дальше.
-    Получает из БД список всех БИКов. Создает список моделей с данными
-    банков и записывает в БД сразу все банки из списка (метод add_all).
     """
     async with get_async_session_context() as session:
-        real_banks = []
-        bics_from_db = await session.scalars(select(Bank.bic))
-        bics_from_db = bics_from_db.all()
+        real_counteragents = []
+        inns_from_db = await session.scalars(select(CounterAgent.inn))
+        inns_from_db = inns_from_db.all()
         raw_bics = set(bics).difference(set(bics_from_db))
         for bic in raw_bics:
             candidate_bank = await dd_find_by_id(
-                DD_SEARCH_SUBJECT['bank'], bic,
+                DD_SEARCH_SUBJECT['counteragent'], bic,
             )
             if not candidate_bank:
                 continue
@@ -107,6 +94,6 @@ async def add_all_banks(bics: set) -> None:
 
 if __name__ == "__main__":
     # print(asyncio.run(dd_find_bank('007182108')))
-    # asyncio.run(get_bank_list('app/services/config/listbic.txt'))
+    # asyncio.run(get_counteragent_list('app/services/config/listca.py'))
 
-    asyncio.run(add_all_banks(BICS))
+    print(asyncio.run(dd_find_by_id('party', '7707441644'))[0])

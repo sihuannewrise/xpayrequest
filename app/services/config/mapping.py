@@ -1,4 +1,8 @@
 # dadata mapping table
+DD_SEARCH_SUBJECT = {
+    'bank': 'bank',
+    'counteragent': 'party',
+}
 DATE_FIELDS = ('actuality_date', 'registration_date', 'liquidation_date')
 
 # supplementry tables info
@@ -82,6 +86,15 @@ PaymentVerdict = {
     'accepted': 'одобрено',
 }
 
+KPP = {
+    '770701001': 'по месту нахождения организации',
+    '770801001': 'по месту нахождения организации',
+    '110208001': 'по месту нахождения земельного участка',
+    '231508001': 'по месту нахождения земельного участка',
+}
+
+
+# Don't forget update this dictionary in app.services.supplementarycreate file
 SUPPLEMENTARY_SCHEMAS = {
     'BankAccountType': BankAccountType,
     'PaymentType': PaymentType,
@@ -92,4 +105,5 @@ SUPPLEMENTARY_SCHEMAS = {
     'Prepayment': Prepayment,
     'PaymentStatus': PaymentStatus,
     'PaymentVerdict': PaymentVerdict,
+    'KPP': KPP,
 }

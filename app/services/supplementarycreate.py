@@ -1,4 +1,4 @@
-# command to run this script from root dir:  python -m app.services.create_supplementary  # noqa
+# command to run this script from root dir:  python -m app.services.supplementarycreate  # noqa
 
 import asyncio
 from contextlib import asynccontextmanager
@@ -7,7 +7,7 @@ from sqlalchemy import select
 from app.core.db import get_async_session
 from app.core.models._common import (
     BankAccountType, PaymentType, KFP, PaymentStatus, KBK, OKTMO, Prepayment,
-    PayerStatus, PaymentVerdict,
+    PayerStatus, PaymentVerdict, KPP,
 )
 from app.services.config.mapping import SUPPLEMENTARY_SCHEMAS
 
@@ -23,6 +23,7 @@ MAPPING = {
     'Prepayment': Prepayment,
     'PaymentStatus': PaymentStatus,
     'PaymentVerdict': PaymentVerdict,
+    'KPP': KPP,
 }
 
 

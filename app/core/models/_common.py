@@ -24,10 +24,9 @@ class SupplementaryBase(BaseWithPK):
 class EntityBase(Base):
     __abstract__ = True
 
+    inn: Mapped[Optional[str]] = mapped_column(String(12))
     address: Mapped[Optional[str]] = mapped_column(String(200))
     status: Mapped[Optional[EntityStatus]]
-    inn: Mapped[Optional[str]] = mapped_column(String(12))
-    kpp: Mapped[Optional[str]] = mapped_column(String(9))
 
     actuality_date: Mapped[Optional[datetime]]
     registration_date: Mapped[Optional[datetime]]
@@ -118,4 +117,13 @@ class PaymentVerdict(SupplementaryBase):
     """
     proc: Mapped[List['PaymentProcessing']] = relationship(
         backref='paymentverdict',
+    )
+
+
+class KPP(SupplementaryBase):
+    """
+    список КПП
+    """
+    ca_list: Mapped[List['CaKppMapping']] = relationship(
+        backref='kpp',
     )
