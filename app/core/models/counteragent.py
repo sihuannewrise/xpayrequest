@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 from sqlalchemy import String, UniqueConstraint
 from sqlalchemy.orm import relationship, Mapped, mapped_column
@@ -16,7 +16,6 @@ class CounterAgent(EntityBase):
     name_short_with_opf: Mapped[Optional[str]] = mapped_column(String(150))
     opf_short: Mapped[Optional[str]] = mapped_column(String(10))
 
-    kpp: Mapped[Optional[int]]
     ca_type: Mapped[Optional[CounterAgentType]]
 
     ogrn: Mapped[Optional[str]] = mapped_column(String(20))
@@ -29,7 +28,6 @@ class CounterAgent(EntityBase):
     management_name: Mapped[Optional[str]] = mapped_column(String(150))
     address_full: Mapped[Optional[str]] = mapped_column(String(150))
 
-    __table_args__ = (UniqueConstraint('inn', 'kpp', name='_inn_kpp_unique'),)
-
-    bank_accounts: Mapped['BankAccount'] = relationship(backref='ca')
-    payments: Mapped['PaymentRequest'] = relationship(backref='ca')
+    bank_accounts: Mapped[List['BankAccount']] = relationship(backref='ca')
+    payments: Mapped[List['PaymentRequest']] = relationship(backref='ca')
+    kpp_list: Mapped[List['CaKppMapping']] = relationship(backref='ca')

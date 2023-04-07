@@ -9,6 +9,7 @@ from .paymentprocessing import PaymentProcessing  # noqa
 from .user import User, AccessToken               # noqa
 from .employee import Employee                    # noqa
 from .position import Position                    # noqa
+from ._mapping import CaKppMapping                # noqa
 
 from ._common import (                            # noqa
     BankAccountType,
@@ -18,4 +19,5 @@ from ._common import (                            # noqa
     Prepayment,
     KBK, KFP, OKTMO,
     PaymentVerdict,
+    KPP,
 )
