@@ -1,6 +1,7 @@
 # command to run this script from root dir:  python -m app.services.bankcreate
 # creating bank by id (BIC, SWIFT or INN) from dadata
 
+import os
 import asyncio
 import aiofiles
 from datetime import datetime as dt
@@ -36,6 +37,7 @@ async def check_no_bic_duplicate(bic: str, session):
 
 async def stuff_bank_with_data(
     bank_info: dict, is_archived: bool = False,
+    description: str = 'autoloaded',
 ):
     data = bank_info[0]
     bank = {
@@ -65,7 +67,7 @@ async def stuff_bank_with_data(
         bank['treasury_accounts'] = bank['treasury_accounts'][0]
     extra_fields = {
         'is_archived': is_archived,
-        'description': 'autoloaded from DAData',
+        'description': description,
     }
     bank.update(extra_fields)
     return bank
@@ -73,10 +75,10 @@ async def stuff_bank_with_data(
 
 async def add_all_banks(bics: set) -> None:
     """
-    Получает из БД список всех БИКов. Отфильтровывает вх данные, отсеивая те,
-    что уже есть в БД. Оставшиеся БИКи обрабатываются дальше.
-    Создает список моделей с данными банков и записывает в БД сразу
-    все банки из списка (метод add_all).
+    Отфильтровывает вх данные, отсеивая те, что уже есть в БД.
+    Оставшиеся БИКи обрабатываются дальше.
+    Получает из БД список всех БИКов. Создает список моделей с данными
+    банков и записывает в БД сразу все банки из списка (метод add_all).
     """
     async with get_async_session_context() as session:
         real_banks = []
@@ -89,13 +91,15 @@ async def add_all_banks(bics: set) -> None:
                 continue
             new_bank = await stuff_bank_with_data(
                 candidate_bank, is_archived=False,
+                description=f'autoloaded from {os.path.basename(__file__)}'
             )
             model = Bank()
             for field in new_bank:
                 setattr(model, field, new_bank[field])
             real_banks.append(model)
-        session.add_all(real_banks)
-        await session.commit()
+        if real_banks:
+            session.add_all(real_banks)
+            await session.commit()
         return None
 
 
