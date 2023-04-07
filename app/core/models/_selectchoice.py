@@ -24,3 +24,8 @@ class EntityStatus(str, Enum):
     BANKRUPT = 'банкротство'
     REORGANIZING = ('в процессе присоединения к другому юрлицу, '
                     'с последующей ликвидацией')
+
+
+class CounterAgentSubsidiary(str, Enum):
+    CHILD = 'обособленное подразделение'
+    PARENT = 'головная организация'

@@ -20,4 +20,5 @@ from ._common import (                            # noqa
     KBK, KFP, OKTMO,
     PaymentVerdict,
     KPP,
+    CounterAgentGroup,
 )

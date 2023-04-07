@@ -94,6 +94,12 @@ KPP = {
 }
 
 
+CounterAgentGroup = {
+    'LUKOIL': 'Группа ЛУКОЙЛ',
+    'authorities': 'Государственные органы',
+}
+
+
 # Don't forget update this dictionary in app.services.supplementarycreate file
 SUPPLEMENTARY_SCHEMAS = {
     'BankAccountType': BankAccountType,
@@ -106,4 +112,5 @@ SUPPLEMENTARY_SCHEMAS = {
     'PaymentStatus': PaymentStatus,
     'PaymentVerdict': PaymentVerdict,
     'KPP': KPP,
+    'CounterAgentGroup': CounterAgentGroup,
 }

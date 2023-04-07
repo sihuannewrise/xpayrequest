@@ -7,7 +7,7 @@ from sqlalchemy import select
 from app.core.db import get_async_session
 from app.core.models._common import (
     BankAccountType, PaymentType, KFP, PaymentStatus, KBK, OKTMO, Prepayment,
-    PayerStatus, PaymentVerdict, KPP,
+    PayerStatus, PaymentVerdict, KPP, CounterAgentGroup,
 )
 from app.services.config.mapping import SUPPLEMENTARY_SCHEMAS
 
@@ -24,6 +24,7 @@ MAPPING = {
     'PaymentStatus': PaymentStatus,
     'PaymentVerdict': PaymentVerdict,
     'KPP': KPP,
+    'CounterAgentGroup': CounterAgentGroup,
 }
 
 

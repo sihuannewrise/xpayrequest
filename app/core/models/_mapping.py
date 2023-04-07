@@ -19,3 +19,14 @@ class CaKppMapping(BaseWithPK):
 
     def __repr__(self) -> str:
         return f'<{self.__class__.__name__} ({self.ca_inn}-{self.kpp_name})>'
+
+
+class ParentChildMapping(BaseWithPK):
+    parent_id: Mapped[int] = mapped_column(ForeignKey('counteragent.id'))
+    child_id: Mapped[int] = mapped_column(ForeignKey('counteragent.id'))
+
+    __table_args__ = (
+        UniqueConstraint('parent_id', 'child_id', name='_parentchild_unique'),)
+
+    def __repr__(self) -> str:
+        return f'<{self.__class__.__name__} ({self.parent_id}-{self.child_id})>'

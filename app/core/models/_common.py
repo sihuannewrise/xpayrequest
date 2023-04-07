@@ -127,3 +127,12 @@ class KPP(SupplementaryBase):
     ca_list: Mapped[List['CaKppMapping']] = relationship(
         backref='kpp',
     )
+
+
+class CounterAgentGroup(SupplementaryBase):
+    """
+    группа контрагентов
+    """
+    ca_list: Mapped[List['CounterAgent']] = relationship(
+        backref='counteragentgroup',
+    )

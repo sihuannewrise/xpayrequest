@@ -1,11 +1,11 @@
 from datetime import datetime
 from typing import List, Optional
 
-from sqlalchemy import String, UniqueConstraint
+from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.core.models._common import EntityBase
-from app.core.models._selectchoice import CounterAgentType
+from app.core.models._selectchoice import CounterAgentType, CounterAgentSubsidiary
 
 
 class CounterAgent(EntityBase):
@@ -17,6 +17,9 @@ class CounterAgent(EntityBase):
     opf_short: Mapped[Optional[str]] = mapped_column(String(10))
 
     ca_type: Mapped[Optional[CounterAgentType]]
+    group_name: Mapped[str] = mapped_column(
+        ForeignKey('CounterAgentGroup.name'), index=True)
+    subsidiary: Mapped[Optional[CounterAgentSubsidiary]]
 
     ogrn: Mapped[Optional[str]] = mapped_column(String(20))
     ogrn_date: Mapped[Optional[datetime]]
