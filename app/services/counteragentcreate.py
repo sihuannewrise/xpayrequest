@@ -30,7 +30,7 @@ async def entity_processing(entity):
     pass
 
 
-async def stuff_ca_with_data(
+async def stuff_entity_with_data(
     data: dict,
     is_archived: bool = False,
     description: str = 'autoloaded',
@@ -52,6 +52,13 @@ async def stuff_ca_with_data(
         'address': data['data']['address']['value'],
         'address_full': data['data']['address']['data']['source'],
     }
+    extra_fields = {
+        'is_archived': is_archived,
+        'description': description,
+        'group_name': group_name,
+        'email': email,
+    }
+    entity.update(extra_fields)
     if entity['ca_type'] == 'LEGAL':
         if data['data']['management']:
             management = {
@@ -78,15 +85,9 @@ async def stuff_ca_with_data(
     for field in DATE_FIELDS:
         if field in entity:
             entity[field] = dt.fromtimestamp(entity[field]/1000)
-    extra_fields = {
-        'is_archived': is_archived,
-        'description': description,
-        'group_name': group_name,
-        'email': email,
-    }
-    entity.update(extra_fields)
+
     print(entity)
-    return None
+    return entity
 
 
 # async def add_all_counteragents(inn_list: list) -> None:
@@ -121,6 +122,5 @@ if __name__ == "__main__":
     # print(asyncio.run(dd_find_bank('007182108')))
     # asyncio.run(get_counteragent_list('app/services/config/listca.py'))
 
-    dd_ca = asyncio.run(dd_find_by_id('party', '7706295292'))
-    # print(dd_ca)
-    asyncio.run(stuff_ca_with_data(dd_ca[0]))
+    dd_ca = asyncio.run(dd_find_by_id('party', '212802282250'))
+    asyncio.run(stuff_entity_with_data(dd_ca[0]))
