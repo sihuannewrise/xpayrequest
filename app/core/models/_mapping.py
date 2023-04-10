@@ -22,11 +22,16 @@ class CaKppMapping(BaseWithPK):
 
 
 class ParentChildMapping(BaseWithPK):
-    parent_id: Mapped[int] = mapped_column(ForeignKey('counteragent.id'))
-    child_id: Mapped[int] = mapped_column(ForeignKey('counteragent.id'))
+    parent_name: Mapped[int] = mapped_column(ForeignKey('counteragent.name'))
+    child_name: Mapped[int] = mapped_column(ForeignKey('counteragent.name'))
 
     __table_args__ = (
-        UniqueConstraint('parent_id', 'child_id', name='_parentchild_unique'),)
+        UniqueConstraint(
+            'parent_name', 'child_name', name='_parentchild_unique'),
+    )
 
     def __repr__(self) -> str:
-        return f'<{self.__class__.__name__} ({self.parent_id}-{self.child_id})>'
+        return (
+            f'<{self.__class__.__name__} (Parent'
+            f'{self.parent_name}-Child{self.child_name})>'
+        )

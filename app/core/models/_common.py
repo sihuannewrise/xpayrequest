@@ -24,7 +24,7 @@ class SupplementaryBase(BaseWithPK):
 class EntityBase(Base):
     __abstract__ = True
 
-    inn: Mapped[Optional[str]] = mapped_column(String(12))
+    inn: Mapped[Optional[str]] = mapped_column(String(12), index=True)
     address: Mapped[Optional[str]] = mapped_column(String(200))
     status: Mapped[Optional[EntityStatus]]
 
@@ -131,7 +131,7 @@ class KPP(SupplementaryBase):
 
 class CounterAgentGroup(SupplementaryBase):
     """
-    группа контрагентов
+    группа контрагентов (ЛУКОЙЛ, госорганы)
     """
     ca_list: Mapped[List['CounterAgent']] = relationship(
         backref='counteragentgroup',

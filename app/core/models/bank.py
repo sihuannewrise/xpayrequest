@@ -17,7 +17,7 @@ class Bank(EntityBase):
     registration_number: Mapped[Optional[str]] = mapped_column(String(20))
     treasury_accounts: Mapped[Optional[str]] = mapped_column(String(20))
     opf_type: Mapped[Optional[BankOPFType]]
-    kpp: Mapped[Optional[str]] = mapped_column(String(9))
+    kpp: Mapped[Optional[str]] = mapped_column(String(9), index=True)
 
     __table_args__ = (
         UniqueConstraint('inn', 'kpp', name='_bank_inn_kpp_unique'),)
