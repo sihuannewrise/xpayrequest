@@ -19,15 +19,18 @@ get_async_session_context = asynccontextmanager(get_async_session)
 
 
 async def get_counteragent_list(filename):
-    inn_set = set()
+    ikpp_dict = dict()
+    kpp_set = set()
     async with aiofiles.open(filename, mode='r') as file:
         async for line in file:
-            inn_set.add(line.strip())
-        return inn_set
-
-
-async def entity_processing(entity):
-    pass
+            inn, *kpp = line.split()
+            kpp_set.update(kpp)
+            if inn in ikpp_dict:
+                ikpp_dict[inn].update(kpp)
+            else:
+                ikpp_dict.update({inn: set(kpp)})
+        print(len(ikpp_dict), len(kpp_set))
+        return ikpp_dict
 
 
 async def stuff_entity_with_data(
@@ -50,7 +53,7 @@ async def stuff_entity_with_data(
         'registration_date': data['data']['state']['registration_date'],
         'liquidation_date': data['data']['state']['liquidation_date'],
         'address': data['data']['address']['value'],
-        'address_full': data['data']['address']['data']['source'].title(),
+        'address_full': data['data']['address']['data']['source'],
     }
     extra_fields = {
         'is_archived': is_archived,
@@ -64,7 +67,7 @@ async def stuff_entity_with_data(
             management = {
                 'management_name': data['data']['management']['name'],
                 'management_post':
-                    data['data']['management']['post'].capitalize(),
+                    data['data']['management']['post'],
                 'management_disqualified':
                     data['data']['management']['disqualified'],
             }
@@ -90,37 +93,38 @@ async def stuff_entity_with_data(
     return entity
 
 
-async def add_all_counteragents(inn_kpp_tuple: list(tuple)) -> None:
-    """
-    """
-    async with get_async_session_context() as session:
-        real_counteragents = []
-        inns_from_db = await session.scalars(select(CounterAgent.inn))
-        inns_from_db = inns_from_db.all()
-        raw_bics = set(bics).difference(set(bics_from_db))
-        for bic in raw_bics:
-            candidate_bank = await dd_find_by_id(
-                DD_SEARCH_SUBJECT['counteragent'], bic,
-            )
-            if not candidate_bank:
-                continue
-            new_bank = await stuff_bank_with_data(
-                candidate_bank, is_archived=False,
-                description=f'autoloaded from {os.path.basename(__file__)}'
-            )
-            model = Bank()
-            for field in new_bank:
-                setattr(model, field, new_bank[field])
-            real_banks.append(model)
-        if real_banks:
-            session.add_all(real_banks)
-            await session.commit()
-        return None
+# async def add_all_counteragents(inn_kpp_tuple: list(tuple)) -> None:
+#     """
+#     """
+#     async with get_async_session_context() as session:
+#         real_counteragents = []
+#         inns_from_db = await session.scalars(select(CounterAgent.inn))
+#         inns_from_db = inns_from_db.all()
+#         raw_bics = set(bics).difference(set(bics_from_db))
+#         for bic in raw_bics:
+#             candidate_bank = await dd_find_by_id(
+#                 DD_SEARCH_SUBJECT['counteragent'], bic,
+#             )
+#             if not candidate_bank:
+#                 continue
+#             new_bank = await stuff_bank_with_data(
+#                 candidate_bank, is_archived=False,
+#                 description=f'autoloaded from {os.path.basename(__file__)}'
+#             )
+#             model = Bank()
+#             for field in new_bank:
+#                 setattr(model, field, new_bank[field])
+#             real_banks.append(model)
+#         if real_banks:
+#             session.add_all(real_banks)
+#             await session.commit()
+#         return None
 
 
 if __name__ == "__main__":
     # print(asyncio.run(dd_find_bank('007182108')))
-    # asyncio.run(get_counteragent_list('app/services/config/listca.py'))
+    asyncio.run(get_counteragent_list('app/services/config/listca.py'))
 
-    dd_ca = asyncio.run(dd_find_by_id('party', '7706295292'))
-    asyncio.run(stuff_entity_with_data(dd_ca[0]))
+    # dd_ca = asyncio.run(dd_find_by_id('party', '9909249880'))
+    # print(dd_ca)
+    # print(asyncio.run(stuff_entity_with_data(dd_ca[0])))
