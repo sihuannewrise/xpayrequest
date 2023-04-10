@@ -26,7 +26,7 @@ async def get_counteragent_list(filename):
         return inn_set
 
 
-async def legal_entity_proceccing(entity):
+async def entity_processing(entity):
     pass
 
 
@@ -37,72 +37,56 @@ async def stuff_ca_with_data(
     group_name: str = None,
     email: str = None,
 ):
-    class Entity:
-        def __init__(self) -> None:
-            self.name = data['data']['name']['full']
-            self.opf_short = data['data']['opf']['short']
-            self.name_full_with_opf = data['data']['name']['full_with_opf']
-
-            self.status = data['data']['state']['status']
-            self.inn = data['data']['inn']
-            self.ogrn = data['data']['ogrn']
-            self.ogrn_date = data['data']['ogrn_date']
-            self.actuality_date = data['data']['state']['actuality_date']
-            self.registration_date = data['data']['state']['registration_date']
-            self.liquidation_date = data['data']['state']['liquidation_date']
-
-            self.address = data['data']['address']['value']
-            self.address_full = data['data']['address']['data']['source']
-
-        def __repr__(self) -> str:
-            return f'<{self.__class__.__name__} {self.__dict__}>'
-
-    class Legal(Entity):
-        def __init__(self) -> None:
-            super().__init__()
-            self.branch_type = data['data']['branch_type']
-            self.kpp_name = data['data']['kpp']
-            self.management = data['data']['management']
-
-    class Individual(Entity):
-        def __init__(self) -> None:
-            super().__init__()
-            self.fio_name = data['data']['fio']['name']
-            self.fio_patronymic = data['data']['fio']['patronymic']
-            self.fio_surname = data['data']['fio']['surname']
-
-    ca_type = data['data']['type']
-    if ca_type == 'LEGAL':
-        ca = Legal()
-        if ca.management:
+    entity = {
+        'ca_type': data['data']['type'],
+        'name': data['data']['name']['full'],
+        'opf_short': data['data']['opf']['short'],
+        'name_full_with_opf': data['data']['name']['full_with_opf'],
+        'status': data['data']['state']['status'],
+        'inn': data['data']['inn'],
+        'ogrn': data['data']['ogrn'],
+        'ogrn_date': data['data']['ogrn_date'],
+        'actuality_date': data['data']['state']['actuality_date'],
+        'registration_date': data['data']['state']['registration_date'],
+        'liquidation_date': data['data']['state']['liquidation_date'],
+        'address': data['data']['address']['value'],
+        'address_full': data['data']['address']['data']['source'],
+    }
+    if entity['ca_type'] == 'LEGAL':
+        if data['data']['management']:
             management = {
                 'management_name': data['data']['management']['name'],
                 'management_post': data['data']['management']['post'],
                 'management_disqualified':
                     data['data']['management']['disqualified'],
             }
-            for key, value in management.items():
-                setattr(ca, key, value)
-            print(ca)
+            entity.update(management)
+        legal = {
+            'branch_type': data['data']['branch_type'],
+            'kpp_name': data['data']['kpp'],
+        }
+        entity.update(legal)
     else:
-        ca = Individual()
+        individual = {
+            'fio_name': data['data']['fio']['name'],
+            'fio_patronymic': data['data']['fio']['patronymic'],
+            'fio_surname': data['data']['fio']['surname'],
+        }
+        entity.update(individual)
 
-    # ca = {k: v for k, v in ca.items() if v is not None}
-    # for field in DATE_FIELDS:
-    #     if field in ca:
-    #         ca[field] = dt.fromtimestamp(ca[field]/1000)
-    # if 'treasury_accounts' in ca and isinstance(
-    #     ca['treasury_accounts'], list
-    # ):
-    #     ca['treasury_accounts'] = ca['treasury_accounts'][0]
-    # extra_fields = {
-    #     'is_archived': is_archived,
-    #     'description': description,
-    #     'group_name': group_name,
-    #     'email': email,
-    # }
-    # ca.update(extra_fields)
-    # return ca
+    entity = {k: v for k, v in entity.items() if v is not None}
+    for field in DATE_FIELDS:
+        if field in entity:
+            entity[field] = dt.fromtimestamp(entity[field]/1000)
+    extra_fields = {
+        'is_archived': is_archived,
+        'description': description,
+        'group_name': group_name,
+        'email': email,
+    }
+    entity.update(extra_fields)
+    print(entity)
+    return None
 
 
 # async def add_all_counteragents(inn_list: list) -> None:
