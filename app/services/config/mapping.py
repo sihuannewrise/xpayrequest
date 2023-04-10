@@ -3,7 +3,9 @@ DD_SEARCH_SUBJECT = {
     'bank': 'bank',
     'counteragent': 'party',
 }
-DATE_FIELDS = ('actuality_date', 'registration_date', 'liquidation_date')
+DATE_FIELDS = (
+    'actuality_date', 'registration_date', 'liquidation_date', 'ogrn_date',
+)
 
 # supplementry tables info
 BankAccountType = {

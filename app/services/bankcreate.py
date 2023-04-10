@@ -36,10 +36,9 @@ async def check_no_bic_duplicate(bic: str, session):
 
 
 async def stuff_bank_with_data(
-    bank_info: dict, is_archived: bool = False,
+    data: dict, is_archived: bool = False,
     description: str = 'autoloaded',
 ):
-    data = bank_info[0]
     bank = {
         'name': data['value'],
         'bic': data['data']['bic'],
@@ -92,7 +91,7 @@ async def add_all_banks(bics: set) -> None:
             if not candidate_bank:
                 continue
             new_bank = await stuff_bank_with_data(
-                candidate_bank, is_archived=False,
+                candidate_bank[0], is_archived=False,
                 description=f'autoloaded from {os.path.basename(__file__)}'
             )
             model = Bank()

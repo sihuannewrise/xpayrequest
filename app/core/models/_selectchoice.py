@@ -26,6 +26,6 @@ class EntityStatus(str, Enum):
                     'с последующей ликвидацией')
 
 
-class CounterAgentSubsidiary(str, Enum):
-    CHILD = 'обособленное подразделение'
-    PARENT = 'головная организация'
+class CounterAgentBranch(str, Enum):
+    MAIN = 'головная организация'
+    BRANCH = 'обособленное подразделение'

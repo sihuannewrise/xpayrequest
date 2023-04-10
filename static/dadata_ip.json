@@ -5,15 +5,15 @@
       "unrestricted_value": "ИП Кузин Сергей Николаевич",
       "data": {
         "citizenship": {
-          "code": {
-            "numeric": 643,
-            "alpha_3": "RUS"
+            "code": {
+              "numeric": 643,
+              "alpha_3": "RUS"
+            },
+            "name": {
+              "full": "Российская Федерация",
+              "short": "Россия"
+            }
           },
-          "name": {
-            "full": "Российская Федерация",
-            "short": "Россия"
-          }
-        },
         "fio": {
           "surname": "Кузин",
           "name": "Сергей",
