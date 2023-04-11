@@ -1,3 +1,6 @@
+# alembic revision --autogenerate -m "First migration" --rev-id 001
+# alembic upgrade head
+
 import asyncio
 
 import os                                   # MYMOD

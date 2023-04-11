@@ -9,7 +9,7 @@ from app.core.models._common import (
     BankAccountType, PaymentType, KFP, PaymentStatus, KBK, OKTMO, Prepayment,
     PayerStatus, PaymentVerdict, KPP, CounterAgentGroup,
 )
-from app.services.config.mapping import SUPPLEMENTARY_SCHEMAS
+from app.services.config.mapping import SUPPLEMENTARY_SCHEMAS, KPP_LIST
 
 get_async_session_context = asynccontextmanager(get_async_session)
 
@@ -52,10 +52,21 @@ async def fill_supp_tables():
                 except ValueError:
                     print(
                         f'Значение \033[1m{name}\033[0m уже существует '
-                        f'в таблице \033[1m{model.__name__.lower()}\033[0m !'
+                        f'в таблице \033[1m{model.__name__.lower()}\033[0m'
                     )
             await session.commit()
 
 
+async def fill_kpp():
+    async with get_async_session_context() as session:
+        kpp_list_to_add = []
+        for kpp in KPP_LIST:
+            kpp_list_to_add.append(KPP(name=kpp))
+        session.add_all(kpp_list_to_add)
+        await session.commit()
+        return None
+
+
 if __name__ == "__main__":
+    # asyncio.run(fill_kpp())
     asyncio.run(fill_supp_tables())

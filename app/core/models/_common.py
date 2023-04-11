@@ -18,13 +18,17 @@ class SupplementaryBase(BaseWithPK):
     name: Mapped[str] = mapped_column(String(50), unique=True)
 
     def __repr__(self) -> str:
-        return f'<{self.__class__.__name__} ({self.name}-{self.description})>'
+        if self.description:
+            return f'<{self.__class__.__name__} ({self.name}-{self.description})>'
+        else:
+            return f'<{self.__class__.__name__} ({self.name})>'
 
 
 class EntityBase(Base):
     __abstract__ = True
 
-    inn: Mapped[Optional[str]] = mapped_column(String(12), index=True)
+    inn: Mapped[Optional[str]] = mapped_column(
+        String(12), index=True, unique=True)
     address: Mapped[Optional[str]] = mapped_column(String(200))
     status: Mapped[Optional[EntityStatus]]
 
