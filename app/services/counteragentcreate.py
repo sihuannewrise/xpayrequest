@@ -54,22 +54,15 @@ async def check_name_duplicate(model, name, session):
         )
 
 
-async def inn_kpp_mapping(model, inn, kpp, session):
-    kpp_by_inn = await session.scalars(
-        select(model.kpp_name).where(
-            model.ca_inn == inn
-        )
-    )
-    kpp_by_inn = kpp_by_inn.all()
-    print(kpp_by_inn)
-    if kpp not in kpp_by_inn:
-        new_mapping = model(ca_inn=inn, kpp_name=kpp)
-        session.add(new_mapping)
-    else:
-        raise ValueError(
-            f'Запись \033[1m{kpp}\033[0m уже в таблице '
-            f'\033[1m{model.__name__.lower()}\033[0m !'
-        )
+# async def inn_kpp_mapping(model, inn, kpp, session):
+#     if kpp not in kpp_by_inn:
+#         new_mapping = model(ca_inn=inn, kpp_name=kpp)
+#         session.add(new_mapping)
+#     else:
+#         raise ValueError(
+#             f'Запись \033[1m{kpp}\033[0m уже в таблице '
+#             f'\033[1m{model.__name__.lower()}\033[0m !'
+#         )
 
 
 async def add_record_to_table(model, name, session):
@@ -163,13 +156,28 @@ async def add_counteragent(data: dict) -> None:
             except Exception as e:
                 print(e)
 
+            kpp_in_db = await session.scalars(
+                select(CaKppMapping.kpp_name).where(
+                    CaKppMapping.ca_inn == inn
+                )
+            )
+            kpp_in_db = kpp_in_db.all()
+
             for kpp in kpps:
                 try:
                     await check_name_duplicate(KPP, kpp, session)
                     await add_record_to_table(KPP, kpp, session)
                 except Exception as e:
                     print(e)
-                await inn_kpp_mapping(CaKppMapping, inn, kpp, session)
+                if kpp in kpp_in_db:
+                    raise ValueError(
+                        f'Запись \033[1m{kpp}\033[0m уже в таблице '
+                        f'\033[1m{CaKppMapping.__name__.lower()}\033[0m !'
+                    )
+                else:
+                    new_mapping = CaKppMapping(ca_inn=inn, kpp_name=kpp)
+                    session.add(new_mapping)
+        return None
 
 
 if __name__ == "__main__":
