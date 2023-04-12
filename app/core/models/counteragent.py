@@ -4,7 +4,7 @@ from typing import List, Optional
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
-from app.core.models._common import EntityBase
+from app.core.models._common import EntityBase, KPP
 from app.core.models._selectchoice import (
     CounterAgentType, CounterAgentBranch,
 )
@@ -19,10 +19,8 @@ class CounterAgent(EntityBase):
     name_full_with_opf: Mapped[Optional[str]] = mapped_column(String(300))
 
     ca_type: Mapped[Optional[CounterAgentType]]
-    kpp_name: Mapped[str] = mapped_column(
-        String(9), ForeignKey('kpp.name'), index=True)
-    group_name: Mapped[Optional[str]] = mapped_column(
-        ForeignKey('counteragentgroup.name'), index=True)
+    group_id: Mapped[Optional[str]] = mapped_column(
+        ForeignKey('counteragentgroup.id'), index=True)
     branch_type: Mapped[Optional[CounterAgentBranch]]
 
     ogrn: Mapped[Optional[str]] = mapped_column(String(20))

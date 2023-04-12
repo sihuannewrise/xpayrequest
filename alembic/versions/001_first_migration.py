@@ -2,7 +2,7 @@
 
 Revision ID: 001
 Revises: 
-Create Date: 2023-04-11 11:32:31.258538
+Create Date: 2023-04-12 12:04:37.694744
 
 """
 from alembic import op
@@ -157,8 +157,7 @@ def upgrade() -> None:
     sa.Column('opf_short', sa.String(length=10), nullable=True),
     sa.Column('name_full_with_opf', sa.String(length=300), nullable=True),
     sa.Column('ca_type', sa.Enum('LEGAL', 'INDIVIDUAL', name='counteragenttype'), nullable=True),
-    sa.Column('kpp_name', sa.String(length=9), nullable=False),
-    sa.Column('group_name', sa.String(length=50), nullable=True),
+    sa.Column('group_id', sa.Integer(), nullable=True),
     sa.Column('branch_type', sa.Enum('MAIN', 'BRANCH', name='counteragentbranch'), nullable=True),
     sa.Column('ogrn', sa.String(length=20), nullable=True),
     sa.Column('ogrn_date', sa.DateTime(), nullable=True),
@@ -178,15 +177,13 @@ def upgrade() -> None:
     sa.Column('liquidation_date', sa.DateTime(), nullable=True),
     sa.Column('is_archived', sa.Boolean(), server_default=sa.text('FALSE'), nullable=True),
     sa.Column('description', sa.String(length=150), nullable=True),
-    sa.ForeignKeyConstraint(['group_name'], ['counteragentgroup.name'], ),
-    sa.ForeignKeyConstraint(['kpp_name'], ['kpp.name'], ),
+    sa.ForeignKeyConstraint(['group_id'], ['counteragentgroup.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
-    op.create_index(op.f('ix_counteragent_group_name'), 'counteragent', ['group_name'], unique=False)
+    op.create_index(op.f('ix_counteragent_group_id'), 'counteragent', ['group_id'], unique=False)
     op.create_index(op.f('ix_counteragent_id'), 'counteragent', ['id'], unique=False)
     op.create_index(op.f('ix_counteragent_inn'), 'counteragent', ['inn'], unique=True)
-    op.create_index(op.f('ix_counteragent_kpp_name'), 'counteragent', ['kpp_name'], unique=False)
     op.create_table('employee',
     sa.Column('full_name', sa.String(length=300), nullable=False),
     sa.Column('birthdate', sa.Date(), nullable=True),
@@ -356,10 +353,9 @@ def downgrade() -> None:
     op.drop_table('bankaccount')
     op.drop_index(op.f('ix_employee_id'), table_name='employee')
     op.drop_table('employee')
-    op.drop_index(op.f('ix_counteragent_kpp_name'), table_name='counteragent')
     op.drop_index(op.f('ix_counteragent_inn'), table_name='counteragent')
     op.drop_index(op.f('ix_counteragent_id'), table_name='counteragent')
-    op.drop_index(op.f('ix_counteragent_group_name'), table_name='counteragent')
+    op.drop_index(op.f('ix_counteragent_group_id'), table_name='counteragent')
     op.drop_table('counteragent')
     op.drop_index(op.f('ix_accesstoken_created_at'), table_name='accesstoken')
     op.drop_table('accesstoken')

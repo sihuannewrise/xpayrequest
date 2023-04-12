@@ -32,27 +32,53 @@ async def get_counteragent_list(filename):
         return ikpp_dict
 
 
-async def check_name_duplicate(model, name: str):
-    async with get_async_session_context() as session:
-        record = await session.scalar(
-            select(model.name).where(model.name == name)
+async def check_inn_duplicate(model, inn, session):
+    record = await session.scalar(
+        select(model.inn).where(model.inn == inn)
+    )
+    if record is not None:
+        raise ValueError(
+            f'Запись \033[1m{inn}\033[0m уже в таблице '
+            f'\033[1m{model.__name__.lower()}\033[0m !'
         )
-        await session.close()
-        if record is not None:
-            raise ValueError(
-                f'Запись \033[1m{name}\033[0m уже в таблице '
-                f'\033[1m{model.__name__.lower()}\033[0m !'
-            )
 
 
-async def add_record_to_table(model, record):
-    async with get_async_session_context() as session:
-        db_table = model(name=record)
-        session.add(db_table)
-        session.commit
-        # await session.refresh(db_table)
-        print(db_table)
-        return None
+async def check_name_duplicate(model, name, session):
+    record = await session.scalar(
+        select(model.name).where(model.name == name)
+    )
+    if record is not None:
+        raise ValueError(
+            f'Запись \033[1m{name}\033[0m уже в таблице '
+            f'\033[1m{model.__name__.lower()}\033[0m !'
+        )
+
+
+async def inn_kpp_mapping(model, inn, kpp, session):
+    kpp_by_inn = await session.scalars(
+        select(model.kpp_name).where(
+            model.ca_inn == inn
+        )
+    )
+    kpp_by_inn = kpp_by_inn.all()
+    print(kpp_by_inn)
+    if kpp not in kpp_by_inn:
+        new_mapping = model(ca_inn=inn, kpp_name=kpp)
+        session.add(new_mapping)
+    else:
+        raise ValueError(
+            f'Запись \033[1m{kpp}\033[0m уже в таблице '
+            f'\033[1m{model.__name__.lower()}\033[0m !'
+        )
+
+
+async def add_record_to_table(model, name, session):
+    db_record = model(
+        name=name,
+        description=f'autoloaded from {os.path.basename(__file__)}',
+    )
+    session.add(db_record)
+    return None
 
 
 async def stuff_entity_with_data(
@@ -116,41 +142,42 @@ async def stuff_entity_with_data(
 
 
 async def add_counteragent(data: dict) -> None:
-    """
-    """
-    async with get_async_session_context() as session:
+    async with get_async_session_context() as session, session.begin():
         for inn, kpps in data.items():
-            print(inn)
+            try:
+                await check_inn_duplicate(CounterAgent, inn, session)
+                candidate = await dd_find_by_id(
+                    DD_SEARCH_SUBJECT['counteragent'], inn,
+                )
+                if not candidate:
+                    continue
+                new_ca = await stuff_entity_with_data(
+                    candidate[0],
+                    is_archived=False,
+                    description=f'autoloaded from {os.path.basename(__file__)}'
+                )
+                ca_model = CounterAgent()
+                for field in new_ca:
+                    setattr(ca_model, field, new_ca[field])
+                session.add(ca_model)
+            except Exception as e:
+                print(e)
+
             for kpp in kpps:
                 try:
-                    await check_name_duplicate(KPP, kpp)
-                    await add_record_to_table(KPP, kpp)
+                    await check_name_duplicate(KPP, kpp, session)
+                    await add_record_to_table(KPP, kpp, session)
                 except Exception as e:
                     print(e)
-            # candidate = await dd_find_by_id(
-            #     DD_SEARCH_SUBJECT['counteragent'], inn,
-            # )
-            # if not candidate:
-            #     continue
-            # new_ca = await stuff_entity_with_data(
-            #     candidate, is_archived=False,
-            #     description=f'autoloaded from {os.path.basename(__file__)}'
-            # )
-            # ca_model = CounterAgent()
-            # for field in new_ca:
-            #     setattr(ca_model, field, new_ca[field])
-        # if real_counteragents:
-        #     session.add_all(real_counteragents)
-        #     await session.commit()
-            # await session.refresh(db_obj)
-        return None
+                await inn_kpp_mapping(CaKppMapping, inn, kpp, session)
 
 
 if __name__ == "__main__":
     # print(asyncio.run(dd_find_record('007182108')))
     # asyncio.run(get_counteragent_list('app/services/config/listca.py'))
 
-    # dd_ca = asyncio.run(dd_find_by_id('party', '9909249880'))
+    # dd_ca = asyncio.run(dd_find_by_id('party', '212802282250'))
     # print(dd_ca)
     # print(asyncio.run(stuff_entity_with_data(dd_ca[0])))
+
     asyncio.run(add_counteragent(IKPP_DICT))
