@@ -37,7 +37,7 @@ async def check_duplicate_by_field(model, field, field_value, session):
     col = getattr(model, field)
     duplicate = await session.scalar(select(col).where(col == field_value))
     if duplicate is not None:
-        raise ValueError(
+        raise IndexError(
             f'Значение {field}=\033[1m{field_value}\033[0m уже в таблице '
             f'\033[1m{model.__name__.lower()}\033[0m !'
         )
@@ -76,11 +76,15 @@ async def stuff_entity_with_data(
         if data['data']['management']:
             management = {
                 'management_name': data['data']['management']['name'],
-                'management_post':
-                    data['data']['management']['post'],
+                'management_post': data['data']['management']['post'],
                 'management_disqualified':
                     data['data']['management']['disqualified'],
             }
+            if management['management_post']:
+                management.update({
+                    'management_post':
+                        management['management_post'].capitalize()
+                })
             entity.update(management)
         legal = {
             'branch_type': data['data']['branch_type'],
@@ -105,20 +109,21 @@ async def stuff_entity_with_data(
 
 async def add_to_counteragent(model, inn, session):
     try:
-        ca_model = model
-        await check_duplicate_by_field(ca_model, 'inn', inn, session)
+        await check_duplicate_by_field(model, 'inn', inn, session)
         candidate = await dd_find_by_id(
             DD_SEARCH_SUBJECT['counteragent'], inn,
         )
-        if candidate:
-            new_ca = await stuff_entity_with_data(
-                candidate[0],
-                is_archived=False,
-                description=f'autoloaded from {os.path.basename(__file__)}'
-            )
-            for field in new_ca:
-                setattr(ca_model, field, new_ca[field])
-            session.add(ca_model)
+        if not candidate:
+            raise ValueError('\033[1mNo dadata\033[0m')
+        new_ca = await stuff_entity_with_data(
+            candidate[0],
+            is_archived=False,
+            description=f'autoloaded from {os.path.basename(__file__)}'
+        )
+        ca_model = model()
+        for field in new_ca:
+            setattr(ca_model, field, new_ca[field])
+        session.add(ca_model)
     except Exception as e:
         print(e)
 
@@ -158,21 +163,21 @@ async def add_multi_rec(data: dict) -> None:
         for inn, kpps in data.items():
             try:
                 await add_to_counteragent(CounterAgent, inn, session)
-            except Exception as e:
-                print(e)
-
-            for kpp in kpps:
-                await add_to_kpp(KPP, kpp, session)
-                # await add_to_cakppmapping(
-                #     CaKppMapping, 'ca_inn', inn, 'kpp_name', kpp, session)
-        return None
+            except ValueError:
+                continue
+            except Exception:
+                for kpp in kpps:
+                    await add_to_kpp(KPP, kpp, session)
+                    await add_to_cakppmapping(
+                        CaKppMapping, 'ca_inn', inn, 'kpp_name', kpp, session)
+                await session.commit()
 
 
 if __name__ == "__main__":
     # print(asyncio.run(dd_find_double('007182108')))
     # asyncio.run(get_counteragent_list('app/services/config/listca.py'))
 
-    # dd_ca = asyncio.run(dd_find_by_id('party', '212802282250'))
+    # dd_ca = asyncio.run(dd_find_by_id('party', '343601497330'))
     # print(dd_ca)
     # print(asyncio.run(stuff_entity_with_data(dd_ca[0])))
 
