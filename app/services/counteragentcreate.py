@@ -1,5 +1,7 @@
 # command to run this script from root dir:  python -m app.services.counteragentcreate  # noqa
 # creating ca by id (INN or OGRN) from dadata
+# httpx.ReadTimeout
+# httpx.ConnectTimeout
 
 import os
 import asyncio
@@ -31,6 +33,15 @@ async def get_counteragent_list(filename):
             else:
                 ikpp_dict.update({inn: set(kpp)})
         return ikpp_dict
+
+
+def get_kpp_list(ikpp: dict):
+    kpp_set = set()
+    for _, kpps in ikpp.items():
+        if kpps:
+            for kpp in kpps:
+                kpp_set.add(kpp)
+    return kpp_set
 
 
 async def check_duplicate_by_field(model, field, field_value, session):
@@ -88,7 +99,7 @@ async def stuff_entity_with_data(
             entity.update(management)
         legal = {
             'branch_type': data['data']['branch_type'],
-            'kpp_name': data['data']['kpp'],
+            'kpp': data['data']['kpp'],
         }
         entity.update(legal)
     else:
@@ -114,16 +125,17 @@ async def add_to_counteragent(model, inn, session):
             DD_SEARCH_SUBJECT['counteragent'], inn,
         )
         if not candidate:
-            raise ValueError('\033[1mNo dadata\033[0m')
+            raise ValueError('\033[1m No dadata \033[0m !')
         new_ca = await stuff_entity_with_data(
             candidate[0],
             is_archived=False,
             description=f'autoloaded from {os.path.basename(__file__)}'
         )
+        print(new_ca['kpp'], new_ca['registration_date'])
         ca_model = model()
         for field in new_ca:
             setattr(ca_model, field, new_ca[field])
-        session.add(ca_model)
+            session.add(ca_model)
     except Exception as e:
         print(e)
 
@@ -140,7 +152,25 @@ async def add_to_kpp(model, kpp, session):
         print(e)
 
 
-async def add_to_cakppmapping(model, inn_field, inn, kpp_field, kpp, session):
+async def add_all_to_kpp(kpp_set):
+    async with get_async_session_context() as session:
+        db_kpps = await session.scalars(select(KPP.name))
+        db_kpps = db_kpps.all()
+        new_kpps = kpp_set.difference(set(db_kpps))
+        for kpp in new_kpps:
+            kpp_model = KPP(
+                name=kpp,
+                description=f'autoloaded from {os.path.basename(__file__)}',
+            )
+            session.add(kpp_model)
+        await session.commit()
+
+
+async def add_to_cakppmapping(
+    model, inn_field, inn, kpp_field, kpp, session,
+    valid_from: dt = None,
+    description: str = None,
+):
     try:
         inn_col = getattr(model, inn_field)
         kpp_col = getattr(model, kpp_field)
@@ -149,10 +179,16 @@ async def add_to_cakppmapping(model, inn_field, inn, kpp_field, kpp, session):
         kpp_list = kpp_list.all()
         if kpp in kpp_list:
             raise ValueError(
-                f'Значение {kpp_field}=\033[1m{kpp}\033[0m уже в таблице '
+                f'Запись {inn_field}=\033[1m{inn}\033[0m '
+                f'{kpp_field}=\033[1m{kpp}\033[0m уже в таблице '
                 f'\033[1m{model.__name__.lower()}\033[0m !'
             )
-        mapping_model = model(ca_inn=inn, kpp_name=kpp)
+        mapping_model = model(
+            ca_inn=inn,
+            kpp_name=kpp,
+            valid_from=valid_from,
+            description=description,
+        )
         session.add(mapping_model)
     except Exception as e:
         print(e)
@@ -160,24 +196,29 @@ async def add_to_cakppmapping(model, inn_field, inn, kpp_field, kpp, session):
 
 async def add_multi_rec(data: dict) -> None:
     async with get_async_session_context() as session, session.begin():
+        # valid_from: dt = None
+        # description: str = None
         for inn, kpps in data.items():
-            try:
-                await add_to_counteragent(CounterAgent, inn, session)
-            except ValueError:
-                continue
-            except Exception:
-                for kpp in kpps:
-                    await add_to_kpp(KPP, kpp, session)
-                    await add_to_cakppmapping(
-                        CaKppMapping, 'ca_inn', inn, 'kpp_name', kpp, session)
-                await session.commit()
+            await add_to_counteragent(
+                CounterAgent, inn, session)
+            for kpp in kpps:
+                await add_to_kpp(KPP, kpp, session)
+
+                # if kpp == dd_kpp:
+                #     valid_from = dd_valid_from
+                #     description = 'основной'
+                # await add_to_cakppmapping(
+                #         CaKppMapping, 'ca_inn', inn, 'kpp_name', kpp, session,
+                #         valid_from, description,
+                # )
+        return None
 
 
 if __name__ == "__main__":
-    # print(asyncio.run(dd_find_double('007182108')))
     # asyncio.run(get_counteragent_list('app/services/config/listca.py'))
+    # asyncio.run(add_all_to_kpp(get_kpp_list(IKPP_DICT)))
 
-    # dd_ca = asyncio.run(dd_find_by_id('party', '343601497330'))
+    # dd_ca = asyncio.run(dd_find_by_id('party', '3017041554'))
     # print(dd_ca)
     # print(asyncio.run(stuff_entity_with_data(dd_ca[0])))
 
