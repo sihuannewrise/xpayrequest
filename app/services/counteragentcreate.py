@@ -121,35 +121,39 @@ async def stuff_entity_with_data(
 async def add_to_counteragent(model, inn, session):
     try:
         await check_duplicate_by_field(model, 'inn', inn, session)
+    except IndexError as e:
+        print(e)
+    else:
         candidate = await dd_find_by_id(
             DD_SEARCH_SUBJECT['counteragent'], inn,
         )
         if not candidate:
-            raise ValueError('\033[1m No dadata \033[0m !')
+            raise ValueError(f'No dadata on \033[1m{inn}\033[0m !')
         new_ca = await stuff_entity_with_data(
             candidate[0],
             is_archived=False,
-            description=f'autoloaded from {os.path.basename(__file__)}'
+            description=f'autoloaded by {os.path.basename(__file__)}'
         )
-        print(new_ca['kpp'], new_ca['registration_date'])
         ca_model = model()
         for field in new_ca:
             setattr(ca_model, field, new_ca[field])
             session.add(ca_model)
-    except Exception as e:
-        print(e)
+        print(new_ca['kpp'], new_ca['registration_date'])
+        return None
 
 
 async def add_to_kpp(model, kpp, session):
     try:
         await check_duplicate_by_field(model, 'name', kpp, session)
+    except IndexError as e:
+        print(e)
+    else:
         kpp_model = model(
             name=kpp,
-            description=f'autoloaded from {os.path.basename(__file__)}',
+            description=f'autoloaded by {os.path.basename(__file__)}',
         )
         session.add(kpp_model)
-    except Exception as e:
-        print(e)
+        return None
 
 
 async def add_all_to_kpp(kpp_set):
@@ -196,21 +200,23 @@ async def add_to_cakppmapping(
 
 async def add_multi_rec(data: dict) -> None:
     async with get_async_session_context() as session, session.begin():
-        # valid_from: dt = None
-        # description: str = None
         for inn, kpps in data.items():
-            await add_to_counteragent(
-                CounterAgent, inn, session)
-            for kpp in kpps:
-                await add_to_kpp(KPP, kpp, session)
+            try:
+                await add_to_counteragent(
+                    CounterAgent, inn, session)
+            except ValueError as e:
+                print(e)
+            else:
+                for kpp in kpps:
+                    await add_to_kpp(KPP, kpp, session)
 
-                # if kpp == dd_kpp:
-                #     valid_from = dd_valid_from
-                #     description = 'основной'
-                # await add_to_cakppmapping(
-                #         CaKppMapping, 'ca_inn', inn, 'kpp_name', kpp, session,
-                #         valid_from, description,
-                # )
+                    try:
+                        await add_to_cakppmapping(
+                            CaKppMapping, 'ca_inn', inn,
+                            'kpp_name', kpp, session,
+                        )
+                    except ValueError as e:
+                        print(e)
         return None
 
 
