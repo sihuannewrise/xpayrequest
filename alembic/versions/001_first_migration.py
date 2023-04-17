@@ -2,13 +2,12 @@
 
 Revision ID: 001
 Revises: 
-Create Date: 2023-04-12 12:04:37.694744
+Create Date: 2023-04-17 12:05:14.341450
 
 """
 from alembic import op
 import sqlalchemy as sa
 import fastapi_users_db_sqlalchemy
-
 
 # revision identifiers, used by Alembic.
 revision = '001'
@@ -24,12 +23,12 @@ def upgrade() -> None:
     sa.Column('name', sa.String(length=160), nullable=False),
     sa.Column('correspondent_account', sa.String(length=20), nullable=True),
     sa.Column('payment_city', sa.String(length=50), nullable=True),
+    sa.Column('inn', sa.String(length=12), nullable=True),
     sa.Column('swift', sa.String(length=11), nullable=True),
     sa.Column('registration_number', sa.String(length=20), nullable=True),
     sa.Column('treasury_accounts', sa.String(length=20), nullable=True),
     sa.Column('opf_type', sa.Enum('BANK', 'BANK_BRANCH', 'NKO', 'NKO_BRANCH', 'RKC', 'CBR', 'TREASURY', 'OTHER', name='bankopftype'), nullable=True),
     sa.Column('kpp', sa.String(length=9), nullable=True),
-    sa.Column('inn', sa.String(length=12), nullable=True),
     sa.Column('address', sa.String(length=200), nullable=True),
     sa.Column('status', sa.Enum('ACTIVE', 'LIQUIDATING', 'LIQUIDATED', 'BANKRUPT', 'REORGANIZING', name='entitystatus'), nullable=True),
     sa.Column('actuality_date', sa.DateTime(), nullable=True),
@@ -41,27 +40,27 @@ def upgrade() -> None:
     sa.UniqueConstraint('inn', 'kpp', name='_bank_inn_kpp_unique')
     )
     op.create_index(op.f('ix_bank_bic'), 'bank', ['bic'], unique=False)
-    op.create_index(op.f('ix_bank_inn'), 'bank', ['inn'], unique=True)
+    op.create_index(op.f('ix_bank_inn'), 'bank', ['inn'], unique=False)
     op.create_index(op.f('ix_bank_kpp'), 'bank', ['kpp'], unique=False)
     op.create_table('bankaccounttype',
-    sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
     op.create_index(op.f('ix_bankaccounttype_id'), 'bankaccounttype', ['id'], unique=False)
     op.create_table('counteragentgroup',
-    sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
     op.create_index(op.f('ix_counteragentgroup_id'), 'counteragentgroup', ['id'], unique=False)
     op.create_table('kbk',
-    sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
@@ -153,6 +152,7 @@ def upgrade() -> None:
     op.create_index(op.f('ix_accesstoken_created_at'), 'accesstoken', ['created_at'], unique=False)
     op.create_table('counteragent',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('inn', sa.String(length=12), nullable=True),
     sa.Column('name', sa.String(length=160), nullable=False),
     sa.Column('opf_short', sa.String(length=10), nullable=True),
     sa.Column('name_full_with_opf', sa.String(length=300), nullable=True),
@@ -169,7 +169,6 @@ def upgrade() -> None:
     sa.Column('management_name', sa.String(length=150), nullable=True),
     sa.Column('email', sa.String(length=150), nullable=True),
     sa.Column('address_full', sa.String(length=150), nullable=True),
-    sa.Column('inn', sa.String(length=12), nullable=True),
     sa.Column('address', sa.String(length=200), nullable=True),
     sa.Column('status', sa.Enum('ACTIVE', 'LIQUIDATING', 'LIQUIDATED', 'BANKRUPT', 'REORGANIZING', name='entitystatus'), nullable=True),
     sa.Column('actuality_date', sa.DateTime(), nullable=True),
@@ -185,13 +184,13 @@ def upgrade() -> None:
     op.create_index(op.f('ix_counteragent_id'), 'counteragent', ['id'], unique=False)
     op.create_index(op.f('ix_counteragent_inn'), 'counteragent', ['inn'], unique=True)
     op.create_table('employee',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('full_name', sa.String(length=300), nullable=False),
     sa.Column('birthdate', sa.Date(), nullable=True),
     sa.Column('first_name', sa.String(length=100), nullable=True),
     sa.Column('patronymic_name', sa.String(length=100), nullable=True),
     sa.Column('last_name', sa.String(length=100), nullable=True),
     sa.Column('user_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
@@ -199,13 +198,13 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_employee_id'), 'employee', ['id'], unique=False)
     op.create_table('bankaccount',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('account', sa.String(length=20), nullable=False),
     sa.Column('currency', sa.String(length=20), nullable=True),
     sa.Column('bank_bic', sa.String(length=9), nullable=True),
     sa.Column('ca_id', sa.Integer(), nullable=False),
     sa.Column('type_id', sa.Integer(), nullable=True),
     sa.Column('is_default', sa.Boolean(), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.ForeignKeyConstraint(['bank_bic'], ['bank.bic'], ),
     sa.ForeignKeyConstraint(['ca_id'], ['counteragent.id'], ),
@@ -215,11 +214,11 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_bankaccount_id'), 'bankaccount', ['id'], unique=False)
     op.create_table('cakppmapping',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('ca_inn', sa.String(length=12), nullable=False),
     sa.Column('kpp_name', sa.String(length=50), nullable=False),
     sa.Column('valid_from', sa.DateTime(), nullable=True),
     sa.Column('valid_till', sa.DateTime(), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.ForeignKeyConstraint(['ca_inn'], ['counteragent.inn'], ),
     sa.ForeignKeyConstraint(['kpp_name'], ['kpp.name'], ),
@@ -238,9 +237,9 @@ def upgrade() -> None:
     sa.UniqueConstraint('name')
     )
     op.create_table('parentchildmapping',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('parent_name', sa.String(length=160), nullable=False),
     sa.Column('child_name', sa.String(length=160), nullable=False),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.ForeignKeyConstraint(['child_name'], ['counteragent.name'], ),
     sa.ForeignKeyConstraint(['parent_name'], ['counteragent.name'], ),
@@ -249,6 +248,7 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_parentchildmapping_id'), 'parentchildmapping', ['id'], unique=False)
     op.create_table('paymentrequest',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('author', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('type_id', sa.Integer(), nullable=False),
     sa.Column('payer_id', sa.Integer(), nullable=False),
@@ -275,7 +275,6 @@ def upgrade() -> None:
     sa.Column('sub_contract', sa.String(length=50), nullable=True),
     sa.Column('sub_contract_date', sa.DateTime(), nullable=True),
     sa.Column('prepayment_id', sa.Integer(), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.ForeignKeyConstraint(['author'], ['user.id'], ),
     sa.ForeignKeyConstraint(['field_101_id'], ['payerstatus.id'], ),
@@ -290,13 +289,13 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_paymentrequest_id'), 'paymentrequest', ['id'], unique=False)
     op.create_table('position',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('name', sa.String(length=300), nullable=False),
     sa.Column('employer_id', sa.Integer(), nullable=False),
     sa.Column('employee_id', sa.Integer(), nullable=False),
     sa.Column('full_stack', sa.Boolean(), server_default=sa.text('TRUE'), nullable=True),
     sa.Column('from_date', sa.Date(), nullable=True),
     sa.Column('till_date', sa.Date(), nullable=True),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.ForeignKeyConstraint(['employee_id'], ['employee.id'], ),
     sa.ForeignKeyConstraint(['employer_id'], ['company.id'], ),
@@ -304,11 +303,11 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_position_id'), 'position', ['id'], unique=False)
     op.create_table('paymentprocessing',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('pr_id', sa.Integer(), nullable=False),
     sa.Column('user_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('verdict_id', sa.Integer(), nullable=True),
     sa.Column('processed_at', sa.DateTime(), nullable=False),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.ForeignKeyConstraint(['pr_id'], ['paymentrequest.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
@@ -317,11 +316,11 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_paymentprocessing_id'), 'paymentprocessing', ['id'], unique=False)
     op.create_table('paymentregister',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('fulfill_date', sa.DateTime(), nullable=True),
     sa.Column('pr_id', sa.Integer(), nullable=False),
     sa.Column('status_id', sa.Integer(), nullable=False),
     sa.Column('user_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
-    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.ForeignKeyConstraint(['pr_id'], ['paymentrequest.id'], ),
     sa.ForeignKeyConstraint(['status_id'], ['paymentstatus.id'], ),

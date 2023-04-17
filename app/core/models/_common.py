@@ -27,8 +27,6 @@ class SupplementaryBase(BaseWithPK):
 class EntityBase(Base):
     __abstract__ = True
 
-    inn: Mapped[Optional[str]] = mapped_column(
-        String(12), index=True, unique=True)
     address: Mapped[Optional[str]] = mapped_column(String(200))
     status: Mapped[Optional[EntityStatus]]
 

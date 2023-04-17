@@ -138,7 +138,6 @@ async def add_to_counteragent(model, inn, session):
         for field in new_ca:
             setattr(ca_model, field, new_ca[field])
             session.add(ca_model)
-        print(new_ca['kpp'], new_ca['registration_date'])
         return None
 
 

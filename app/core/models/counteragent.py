@@ -15,6 +15,8 @@ class CounterAgent(EntityBase):
         primary_key=True, autoincrement=True, index=True)
 
     name: Mapped[str] = mapped_column(String(160), unique=True)
+    inn: Mapped[Optional[str]] = mapped_column(
+        String(12), index=True, unique=True)
     opf_short: Mapped[Optional[str]] = mapped_column(String(10))
     name_full_with_opf: Mapped[Optional[str]] = mapped_column(String(300))
 

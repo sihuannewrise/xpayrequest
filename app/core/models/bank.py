@@ -12,7 +12,7 @@ class Bank(EntityBase):
     name: Mapped[str] = mapped_column(String(160))
     correspondent_account: Mapped[Optional[str]] = mapped_column(String(20))
     payment_city: Mapped[Optional[str]] = mapped_column(String(50))
-
+    inn: Mapped[Optional[str]] = mapped_column(String(12), index=True)
     swift: Mapped[Optional[str]] = mapped_column(String(11))
     registration_number: Mapped[Optional[str]] = mapped_column(String(20))
     treasury_accounts: Mapped[Optional[str]] = mapped_column(String(20))
