@@ -7,6 +7,15 @@ DATE_FIELDS = (
     'actuality_date', 'registration_date', 'liquidation_date', 'ogrn_date',
 )
 
+# our companies
+COMPANIES = {
+    '7706295292': 'КНХ',
+    '7708395493': 'ЛУНИ',
+    '7708412886': 'СГ',
+    '7708405825': 'ЮНП-Инвест',
+    '7708414379': 'ИНВЕСТ',
+}
+
 # supplementry tables info
 BankAccountType = {
     'main': 'основной',

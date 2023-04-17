@@ -4,7 +4,7 @@ from typing import List, Optional
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
-from app.core.models._common import EntityBase, KPP
+from app.core.models._common import EntityBase
 from app.core.models._selectchoice import (
     CounterAgentType, CounterAgentBranch,
 )
