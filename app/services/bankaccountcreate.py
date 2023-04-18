@@ -45,10 +45,6 @@ async def check_account_duplicate(model, acc: str, session):
 
 async def add_account(bics: set) -> None:
     """
-    Отфильтровывает вх данные, отсеивая те, что уже есть в БД.
-    Оставшиеся БИКи обрабатываются дальше.
-    Получает из БД список всех БИКов. Создает список моделей с данными
-    банков и записывает в БД сразу все банки из списка (метод add_all).
     """
     async with get_async_session_context() as session:
         real_banks = []

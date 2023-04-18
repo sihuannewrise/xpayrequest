@@ -9,7 +9,8 @@ class BankAccount(BaseWithPK):
     account: Mapped[str] = mapped_column(String(20), unique=True)
     bank_bic: Mapped[Optional[str]] = mapped_column(ForeignKey('bank.bic'))
     is_default: Mapped[Optional[bool]]
-    currency: Mapped[Optional[int]] = mapped_column(ForeignKey('currency.id'))
+    currency_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey('currency.id'))
     type_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey('bankaccounttype.id'))
 

@@ -36,6 +36,7 @@ class CounterAgent(EntityBase):
     email: Mapped[Optional[str]] = mapped_column(String(150))
     address_full: Mapped[Optional[str]] = mapped_column(String(150))
 
-    bank_accounts: Mapped[List['BankAccount']] = relationship(backref='ca')
-    payments: Mapped[List['PaymentRequest']] = relationship(backref='ca')
     kpp_list: Mapped[List['CaKppMapping']] = relationship(backref='ca')
+    bank_accounts: Mapped[List['CaAccountMapping']] = relationship(
+        backref='ca')
+    payments: Mapped[List['PaymentRequest']] = relationship(backref='ca')

@@ -3,7 +3,7 @@ from starlette.staticfiles import StaticFiles
 
 from app.core.config import settings
 from app.v1.routers import main_router
-# from app.services import (create_first_superuser, fill_supp_tables,)
+# from app.services import create_first_superuser, fill_supp_tables,
 
 app = FastAPI(
     title=settings.app_title,
