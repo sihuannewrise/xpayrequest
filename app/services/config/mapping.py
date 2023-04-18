@@ -134,6 +134,11 @@ CounterAgentGroup = {
     'Госорганы': 'Государственные органы',
 }
 
+Currency = {
+    '810': 'Российский рубль',
+    '840': 'доллар США',
+    '978': 'евро',
+}
 
 # Don't forget update this dictionary in app.services.supplementarycreate file
 SUPPLEMENTARY_SCHEMAS = {
@@ -148,4 +153,5 @@ SUPPLEMENTARY_SCHEMAS = {
     'PaymentVerdict': PaymentVerdict,
     'KPP': KPP,
     'CounterAgentGroup': CounterAgentGroup,
+    'Currency': Currency,
 }

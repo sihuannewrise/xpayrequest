@@ -19,7 +19,9 @@ class SupplementaryBase(BaseWithPK):
 
     def __repr__(self) -> str:
         if self.description:
-            return f'<{self.__class__.__name__} ({self.name}-{self.description})>'
+            return (
+                f'<{self.__class__.__name__} ({self.name}-{self.description})>'
+            )
         else:
             return f'<{self.__class__.__name__} ({self.name})>'
 
@@ -137,4 +139,13 @@ class CounterAgentGroup(SupplementaryBase):
     """
     ca_list: Mapped[List['CounterAgent']] = relationship(
         backref='counteragentgroup',
+    )
+
+
+class Currency(SupplementaryBase):
+    """
+    справочник валют
+    """
+    acc_list: Mapped[List['BankAccount']] = relationship(
+        backref='currency',
     )

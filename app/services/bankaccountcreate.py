@@ -9,9 +9,9 @@ from contextlib import asynccontextmanager
 from sqlalchemy import select
 from app.services.dadata import dd_find_by_id
 from app.core.db import get_async_session
-from app.core.models.bank import Bank
+from app.core.models.bankaccount import BankAccount
 
-# from app.services.config.listbic import BICS
+from app.services.config.accounts import ACCOUNTS
 
 get_async_session_context = asynccontextmanager(get_async_session)
 
@@ -22,25 +22,28 @@ async def get_account_list(filename):
         async for line in file:
             bic, inn, account = line.strip().split()
             if account not in accounts:
-                accounts.update({account: {inn: bic}})
+                accounts.update({account: {bic: set([inn])}})
             else:
-                accounts[account].update({inn: bic})
+                accounts[account][bic].add(inn)
+        # for el, val in accounts.items():
+        #     print(f"'{el}': {val}")
         for acc, info in accounts.items():
-            print(acc)
-            for k, v in info.items():
-                print(k, v)
+            for bic, inn in info.items():
+                print(f"'{acc}': {{'{bic}': {list(inn)}}},")
 
 
-async def check_no_bic_duplicate(bic: str, session):
-    bank = await session.get(Bank, bic)
-    if bank is not None:
+async def check_account_duplicate(model, acc: str, session):
+    account = await session.scalar(select(model.account).where(
+        model.account == acc)
+    )
+    if account is not None:
         raise ValueError(
-            f'БИК \033[1m{bic}\033[0m уже в таблице '
-            f'\033[1m{Bank.__name__.lower()}\033[0m !'
+            f'Счет \033[1m{acc}\033[0m уже в таблице '
+            f'\033[1m{model.__name__.lower()}\033[0m !'
         )
 
 
-async def add_all_banks(bics: set) -> None:
+async def add_account(bics: set) -> None:
     """
     Отфильтровывает вх данные, отсеивая те, что уже есть в БД.
     Оставшиеся БИКи обрабатываются дальше.
@@ -73,4 +76,5 @@ async def add_all_banks(bics: set) -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(get_account_list('app/services/config/accounts.txt'))
+    # asyncio.run(get_account_list('app/services/config/accounts.txt'))
+    asyncio.run()

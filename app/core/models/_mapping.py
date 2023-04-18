@@ -35,3 +35,19 @@ class ParentChildMapping(BaseWithPK):
             f'<{self.__class__.__name__} (Parent'
             f'{self.parent_name}-Child{self.child_name})>'
         )
+
+
+class CaAccountMapping(BaseWithPK):
+    ca_id: Mapped[int] = mapped_column(
+        ForeignKey('counteragent.id'), index=True)
+    ca_account: Mapped[int] = mapped_column(
+        ForeignKey('bankaccount.account'), index=True)
+    valid_from: Mapped[Optional[datetime]]
+    valid_till: Mapped[Optional[datetime]]
+
+    __table_args__ = (
+        UniqueConstraint(
+            'ca_id', 'ca_account', name='_caaccountmapping_unique'),)
+
+    def __repr__(self) -> str:
+        return f'<{self.__class__.__name__} ({self.ca_id}-{self.ca_account})>'

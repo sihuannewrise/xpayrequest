@@ -7,12 +7,13 @@ from sqlalchemy import select
 from app.core.db import get_async_session
 from app.core.models._common import (
     BankAccountType, PaymentType, KFP, PaymentStatus, KBK, OKTMO, Prepayment,
-    PayerStatus, PaymentVerdict, KPP, CounterAgentGroup,
+    PayerStatus, PaymentVerdict, KPP, CounterAgentGroup, Currency,
 )
 from app.services.config.mapping import SUPPLEMENTARY_SCHEMAS, KPP_LIST
 
 get_async_session_context = asynccontextmanager(get_async_session)
 
+# Don't forget update this dictionary in app.services.config.mapping file
 MAPPING = {
     'BankAccountType': BankAccountType,
     'PaymentType': PaymentType,
@@ -25,6 +26,7 @@ MAPPING = {
     'PaymentVerdict': PaymentVerdict,
     'KPP': KPP,
     'CounterAgentGroup': CounterAgentGroup,
+    'Currency': Currency,
 }
 
 

@@ -9,7 +9,9 @@ from .paymentprocessing import PaymentProcessing  # noqa
 from .user import User, AccessToken               # noqa
 from .employee import Employee                    # noqa
 from .position import Position                    # noqa
-from ._mapping import CaKppMapping                # noqa
+from ._mapping import (                           # noqa
+    CaKppMapping, CaAccountMapping,
+)
 
 from ._common import (                            # noqa
     BankAccountType,
@@ -21,4 +23,5 @@ from ._common import (                            # noqa
     PaymentVerdict,
     KPP,
     CounterAgentGroup,
+    Currency,
 )

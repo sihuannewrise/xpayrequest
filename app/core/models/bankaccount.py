@@ -6,16 +6,15 @@ from app.core.models._common import BaseWithPK
 
 
 class BankAccount(BaseWithPK):
-    account: Mapped[str] = mapped_column(String(20))
-    currency: Mapped[Optional[str]] = mapped_column(String(20))
+    account: Mapped[str] = mapped_column(String(20), unique=True)
     bank_bic: Mapped[Optional[str]] = mapped_column(ForeignKey('bank.bic'))
-    ca_id: Mapped[int] = mapped_column(ForeignKey('counteragent.id'),)
+    is_default: Mapped[Optional[bool]]
+    currency: Mapped[Optional[int]] = mapped_column(ForeignKey('currency.id'))
     type_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey('bankaccounttype.id'))
-    is_default: Mapped[Optional[bool]]
 
     __table_args__ = (UniqueConstraint(
-        'account', 'bank_bic', name='_account_bank_unique',
+        'account', 'bank_bic', name='_account_bic_unique',
     ),)
 
     def __repr__(self) -> str:
