@@ -10,7 +10,7 @@ from app.core.models._common import BaseWithPK
 
 class Employee(BaseWithPK):
     full_name: Mapped[str] = mapped_column(String(300))
-    birthdate: Mapped[Optional[date]]
+    birthdate: Mapped[date] = mapped_column()
 
     first_name: Mapped[Optional[str]] = mapped_column(String(100))
     patronymic_name: Mapped[Optional[str]] = mapped_column(String(100))
@@ -20,7 +20,9 @@ class Employee(BaseWithPK):
     positions: Mapped[List['Position']] = relationship(backref='employee')
 
     __table_args__ = (
-        UniqueConstraint('full_name', 'birthdate', name='_name_birth_unique'),)
+        UniqueConstraint(
+            'full_name', 'birthdate', name='uix_fullname_birthdate'),
+    )
 
     def __repr__(self) -> str:
         return (

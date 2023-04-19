@@ -11,7 +11,8 @@ class Position(BaseWithPK):
     name: Mapped[str] = mapped_column(String(300))
     employer_id: Mapped[int] = mapped_column(ForeignKey('company.id'))
     employee_id: Mapped[int] = mapped_column(ForeignKey('employee.id'))
-    full_stack: Mapped[Optional[bool]] = mapped_column(server_default=text('TRUE'))
+    full_stack: Mapped[Optional[bool]] = mapped_column(
+        server_default=text('TRUE'))
     from_date: Mapped[Optional[date]]
     till_date: Mapped[Optional[date]]
 

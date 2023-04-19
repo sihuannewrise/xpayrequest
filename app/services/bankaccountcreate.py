@@ -8,7 +8,10 @@ from contextlib import asynccontextmanager
 
 from sqlalchemy import select
 from app.core.db import get_async_session
-from app.core.models import Bank, BankAccount, Currency
+from app.core.models import (
+    Bank, BankAccount, CaAccountMapping, Currency,
+    CounterAgent,
+)
 
 from app.services.config.accounts import ACCOUNTS
 from app.services.config.currency_ids import CURRENCY_IDS
@@ -33,6 +36,9 @@ async def get_account_list(filename):
 
 
 async def write_currencies_to_file():
+    """
+    Utility writes all currencies (name, id) from DB to a dictionary.
+    """
     async with get_async_session_context() as session:
         currency_ids = await session.execute(
             select(Currency.name, Currency.id))
@@ -77,6 +83,21 @@ async def add_bank_account(model, acc_num: str, bic: str, session):
             await session.commit()
 
 
+async def add_caaccount_mapping(model, acc_num: str, inn: str, session):
+    try:
+        ca_account = await session.scalar(select(model.ca_id).where(
+            model.ca_account == acc_num,
+            model.ca_inn == inn,
+        ))
+        if ca_account is not None:
+            raise ValueError(
+                f'inn==\033[1m{inn}\033[0m account=\033[1m{acc_num}\033[0m '
+                f'уже в таблице \033[1m{model.__name__.lower()}\033[0m !'
+            )
+    except IndexError as e:
+        print(e)
+
+
 async def add_multi_records(data: dict) -> None:
     async with get_async_session_context() as session:
         # await write_currencies_to_file()
@@ -87,17 +108,10 @@ async def add_multi_records(data: dict) -> None:
                         BankAccount, account, bic, session)
                 except ValueError as e:
                     print(e)
-            # else:
-            #     for kpp in kpps:
-            #         await add_to_kpp(KPP, kpp, session)
-
-            #         try:
-            #             await add_to_cakppmapping(
-            #                 CaKppMapping, 'ca_inn', inn,
-            #                 'kpp_name', kpp, session,
-            #             )
-            #         except ValueError as e:
-            #             print(e)
+            else:
+                for inn in inn_list:
+                    await add_caaccount_mapping(
+                        CaAccountMapping, account, inn, session)
         return None
 
 

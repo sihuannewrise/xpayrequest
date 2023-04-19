@@ -11,18 +11,16 @@ from app.core.models._selectchoice import (
 
 
 class CounterAgent(EntityBase):
-    id: Mapped[int] = mapped_column(
-        primary_key=True, autoincrement=True, index=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
     name: Mapped[str] = mapped_column(String(160), unique=True)
-    inn: Mapped[Optional[str]] = mapped_column(
-        String(12), index=True, unique=True)
+    inn: Mapped[Optional[str]] = mapped_column(String(12), unique=True)
     opf_short: Mapped[Optional[str]] = mapped_column(String(10))
     name_full_with_opf: Mapped[Optional[str]] = mapped_column(String(300))
 
     ca_type: Mapped[Optional[CounterAgentType]]
     group_id: Mapped[Optional[str]] = mapped_column(
-        ForeignKey('counteragentgroup.id'), index=True)
+        ForeignKey('counteragentgroup.id'))
     branch_type: Mapped[Optional[CounterAgentBranch]]
 
     ogrn: Mapped[Optional[str]] = mapped_column(String(20))

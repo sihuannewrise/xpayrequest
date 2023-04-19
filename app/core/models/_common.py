@@ -9,8 +9,7 @@ from ._selectchoice import EntityStatus
 
 class BaseWithPK(Base):
     __abstract__ = True
-    id: Mapped[int] = mapped_column(
-        primary_key=True, autoincrement=True, index=True)
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
 
 class SupplementaryBase(BaseWithPK):
@@ -47,7 +46,7 @@ class BankAccountType(SupplementaryBase):
     """
     основной, инвест, спецсчет
     """
-    accounts: Mapped[List['BankAccount']] = relationship(
+    accounts: Mapped[List['CaAccountMapping']] = relationship(
         backref='bankaccounttype',
     )
 

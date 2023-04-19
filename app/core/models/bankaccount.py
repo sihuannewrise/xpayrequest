@@ -7,16 +7,13 @@ from app.core.models._common import BaseWithPK
 
 class BankAccount(BaseWithPK):
     account: Mapped[str] = mapped_column(String(20), unique=True)
-    bank_bic: Mapped[Optional[str]] = mapped_column(ForeignKey('bank.bic'))
-    is_default: Mapped[Optional[bool]]
+    bank_bic: Mapped[str] = mapped_column(ForeignKey('bank.bic'))
     currency_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey('currency.id'))
-    type_id: Mapped[Optional[int]] = mapped_column(
-        ForeignKey('bankaccounttype.id'))
 
-    __table_args__ = (UniqueConstraint(
-        'account', 'bank_bic', name='_account_bic_unique',
-    ),)
+    __table_args__ = (
+        UniqueConstraint('account', 'bank_bic', name='uix_account_bic',),
+    )
 
     def __repr__(self) -> str:
         return f'<{self.__class__.__name__} ({self.account})>'

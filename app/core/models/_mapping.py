@@ -8,14 +8,13 @@ from app.core.models._common import BaseWithPK
 
 
 class CaKppMapping(BaseWithPK):
-    ca_inn: Mapped[int] = mapped_column(
-        ForeignKey('counteragent.inn'), index=True)
-    kpp_name: Mapped[int] = mapped_column(ForeignKey('kpp.name'), index=True)
+    ca_inn: Mapped[int] = mapped_column(ForeignKey('counteragent.inn'))
+    kpp_name: Mapped[int] = mapped_column(ForeignKey('kpp.name'))
     valid_from: Mapped[Optional[datetime]]
     valid_till: Mapped[Optional[datetime]]
 
     __table_args__ = (
-        UniqueConstraint('ca_inn', 'kpp_name', name='_innkppmapping_unique'),)
+        UniqueConstraint('ca_inn', 'kpp_name', name='uix_inn_kpp_mapping'),)
 
     def __repr__(self) -> str:
         return f'<{self.__class__.__name__} ({self.ca_inn}-{self.kpp_name})>'
@@ -27,7 +26,7 @@ class ParentChildMapping(BaseWithPK):
 
     __table_args__ = (
         UniqueConstraint(
-            'parent_name', 'child_name', name='_parentchild_unique'),
+            'parent_name', 'child_name', name='uix_parent_child'),
     )
 
     def __repr__(self) -> str:
@@ -38,16 +37,18 @@ class ParentChildMapping(BaseWithPK):
 
 
 class CaAccountMapping(BaseWithPK):
-    ca_id: Mapped[int] = mapped_column(
-        ForeignKey('counteragent.id'), index=True)
-    ca_account: Mapped[int] = mapped_column(
-        ForeignKey('bankaccount.account'), index=True)
+    ca_inn: Mapped[int] = mapped_column(ForeignKey('counteragent.inn'))
+    ca_account: Mapped[int] = mapped_column(ForeignKey('bankaccount.account'))
+    type_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey('bankaccounttype.id'))
     valid_from: Mapped[Optional[datetime]]
     valid_till: Mapped[Optional[datetime]]
+    is_default: Mapped[Optional[bool]]
 
     __table_args__ = (
         UniqueConstraint(
-            'ca_id', 'ca_account', name='_caaccountmapping_unique'),)
+            'ca_inn', 'ca_account', name='uix_ca_account_mapping'),
+    )
 
     def __repr__(self) -> str:
-        return f'<{self.__class__.__name__} ({self.ca_id}-{self.ca_account})>'
+        return f'<{self.__class__.__name__} ({self.ca_inn}-{self.ca_account})>'

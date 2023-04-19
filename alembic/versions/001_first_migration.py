@@ -1,14 +1,13 @@
 """First migration
 
 Revision ID: 001
-Revises: 
-Create Date: 2023-04-18 12:26:30.522076
+Revises:
+Create Date: 2023-04-19 15:28:34.309274
 
 """
 from alembic import op
 import sqlalchemy as sa
 import fastapi_users_db_sqlalchemy
-
 
 # revision identifiers, used by Alembic.
 revision = '001'
@@ -25,11 +24,11 @@ def upgrade() -> None:
     sa.Column('correspondent_account', sa.String(length=20), nullable=True),
     sa.Column('payment_city', sa.String(length=50), nullable=True),
     sa.Column('inn', sa.String(length=12), nullable=True),
+    sa.Column('kpp', sa.String(length=9), nullable=True),
     sa.Column('swift', sa.String(length=11), nullable=True),
     sa.Column('registration_number', sa.String(length=20), nullable=True),
     sa.Column('treasury_accounts', sa.String(length=20), nullable=True),
     sa.Column('opf_type', sa.Enum('BANK', 'BANK_BRANCH', 'NKO', 'NKO_BRANCH', 'RKC', 'CBR', 'TREASURY', 'OTHER', name='bankopftype'), nullable=True),
-    sa.Column('kpp', sa.String(length=9), nullable=True),
     sa.Column('address', sa.String(length=200), nullable=True),
     sa.Column('status', sa.Enum('ACTIVE', 'LIQUIDATING', 'LIQUIDATED', 'BANKRUPT', 'REORGANIZING', name='entitystatus'), nullable=True),
     sa.Column('actuality_date', sa.DateTime(), nullable=True),
@@ -38,11 +37,9 @@ def upgrade() -> None:
     sa.Column('is_archived', sa.Boolean(), server_default=sa.text('FALSE'), nullable=True),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.PrimaryKeyConstraint('bic'),
-    sa.UniqueConstraint('inn', 'kpp', name='_bank_inn_kpp_unique')
+    sa.UniqueConstraint('bic')
     )
-    op.create_index(op.f('ix_bank_bic'), 'bank', ['bic'], unique=False)
-    op.create_index(op.f('ix_bank_inn'), 'bank', ['inn'], unique=False)
-    op.create_index(op.f('ix_bank_kpp'), 'bank', ['kpp'], unique=False)
+    op.create_index('uix_inn_kpp', 'bank', ['inn', 'kpp'], unique=False, postgresql_where=sa.text('inn IS NOT NULL AND kpp IS NOT NULL'))
     op.create_table('bankaccounttype',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -50,7 +47,6 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
-    op.create_index(op.f('ix_bankaccounttype_id'), 'bankaccounttype', ['id'], unique=False)
     op.create_table('counteragentgroup',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -58,7 +54,6 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
-    op.create_index(op.f('ix_counteragentgroup_id'), 'counteragentgroup', ['id'], unique=False)
     op.create_table('currency',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -66,7 +61,6 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
-    op.create_index(op.f('ix_currency_id'), 'currency', ['id'], unique=False)
     op.create_table('kbk',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -74,7 +68,6 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
-    op.create_index(op.f('ix_kbk_id'), 'kbk', ['id'], unique=False)
     op.create_table('kfp',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -82,7 +75,6 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
-    op.create_index(op.f('ix_kfp_id'), 'kfp', ['id'], unique=False)
     op.create_table('kpp',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -90,7 +82,6 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
-    op.create_index(op.f('ix_kpp_id'), 'kpp', ['id'], unique=False)
     op.create_table('oktmo',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -98,7 +89,6 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
-    op.create_index(op.f('ix_oktmo_id'), 'oktmo', ['id'], unique=False)
     op.create_table('payerstatus',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -106,7 +96,6 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
-    op.create_index(op.f('ix_payerstatus_id'), 'payerstatus', ['id'], unique=False)
     op.create_table('paymentstatus',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -114,7 +103,6 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
-    op.create_index(op.f('ix_paymentstatus_id'), 'paymentstatus', ['id'], unique=False)
     op.create_table('paymenttype',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -122,7 +110,6 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
-    op.create_index(op.f('ix_paymenttype_id'), 'paymenttype', ['id'], unique=False)
     op.create_table('paymentverdict',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -130,7 +117,6 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
-    op.create_index(op.f('ix_paymentverdict_id'), 'paymentverdict', ['id'], unique=False)
     op.create_table('prepayment',
     sa.Column('name', sa.String(length=50), nullable=False),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -138,7 +124,6 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
-    op.create_index(op.f('ix_prepayment_id'), 'prepayment', ['id'], unique=False)
     op.create_table('user',
     sa.Column('id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('email', sa.String(length=320), nullable=False),
@@ -161,20 +146,16 @@ def upgrade() -> None:
     op.create_index(op.f('ix_accesstoken_created_at'), 'accesstoken', ['created_at'], unique=False)
     op.create_table('bankaccount',
     sa.Column('account', sa.String(length=20), nullable=False),
-    sa.Column('bank_bic', sa.String(length=9), nullable=True),
-    sa.Column('is_default', sa.Boolean(), nullable=True),
+    sa.Column('bank_bic', sa.String(length=9), nullable=False),
     sa.Column('currency_id', sa.Integer(), nullable=True),
-    sa.Column('type_id', sa.Integer(), nullable=True),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.ForeignKeyConstraint(['bank_bic'], ['bank.bic'], ),
     sa.ForeignKeyConstraint(['currency_id'], ['currency.id'], ),
-    sa.ForeignKeyConstraint(['type_id'], ['bankaccounttype.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('account'),
-    sa.UniqueConstraint('account', 'bank_bic', name='_account_bic_unique')
+    sa.UniqueConstraint('account', 'bank_bic', name='uix_account_bic')
     )
-    op.create_index(op.f('ix_bankaccount_id'), 'bankaccount', ['id'], unique=False)
     op.create_table('counteragent',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('name', sa.String(length=160), nullable=False),
@@ -203,14 +184,12 @@ def upgrade() -> None:
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.ForeignKeyConstraint(['group_id'], ['counteragentgroup.id'], ),
     sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('inn'),
     sa.UniqueConstraint('name')
     )
-    op.create_index(op.f('ix_counteragent_group_id'), 'counteragent', ['group_id'], unique=False)
-    op.create_index(op.f('ix_counteragent_id'), 'counteragent', ['id'], unique=False)
-    op.create_index(op.f('ix_counteragent_inn'), 'counteragent', ['inn'], unique=True)
     op.create_table('employee',
     sa.Column('full_name', sa.String(length=300), nullable=False),
-    sa.Column('birthdate', sa.Date(), nullable=True),
+    sa.Column('birthdate', sa.Date(), nullable=False),
     sa.Column('first_name', sa.String(length=100), nullable=True),
     sa.Column('patronymic_name', sa.String(length=100), nullable=True),
     sa.Column('last_name', sa.String(length=100), nullable=True),
@@ -219,24 +198,23 @@ def upgrade() -> None:
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('full_name', 'birthdate', name='_name_birth_unique')
+    sa.UniqueConstraint('full_name', 'birthdate', name='uix_fullname_birthdate')
     )
-    op.create_index(op.f('ix_employee_id'), 'employee', ['id'], unique=False)
     op.create_table('caaccountmapping',
-    sa.Column('ca_id', sa.Integer(), nullable=False),
+    sa.Column('ca_inn', sa.String(length=12), nullable=False),
     sa.Column('ca_account', sa.String(length=20), nullable=False),
+    sa.Column('type_id', sa.Integer(), nullable=True),
     sa.Column('valid_from', sa.DateTime(), nullable=True),
     sa.Column('valid_till', sa.DateTime(), nullable=True),
+    sa.Column('is_default', sa.Boolean(), nullable=True),
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('description', sa.String(length=150), nullable=True),
     sa.ForeignKeyConstraint(['ca_account'], ['bankaccount.account'], ),
-    sa.ForeignKeyConstraint(['ca_id'], ['counteragent.id'], ),
+    sa.ForeignKeyConstraint(['ca_inn'], ['counteragent.inn'], ),
+    sa.ForeignKeyConstraint(['type_id'], ['bankaccounttype.id'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('ca_id', 'ca_account', name='_caaccountmapping_unique')
+    sa.UniqueConstraint('ca_inn', 'ca_account', name='uix_ca_account_mapping')
     )
-    op.create_index(op.f('ix_caaccountmapping_ca_account'), 'caaccountmapping', ['ca_account'], unique=False)
-    op.create_index(op.f('ix_caaccountmapping_ca_id'), 'caaccountmapping', ['ca_id'], unique=False)
-    op.create_index(op.f('ix_caaccountmapping_id'), 'caaccountmapping', ['id'], unique=False)
     op.create_table('cakppmapping',
     sa.Column('ca_inn', sa.String(length=12), nullable=False),
     sa.Column('kpp_name', sa.String(length=50), nullable=False),
@@ -247,11 +225,8 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['ca_inn'], ['counteragent.inn'], ),
     sa.ForeignKeyConstraint(['kpp_name'], ['kpp.name'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('ca_inn', 'kpp_name', name='_innkppmapping_unique')
+    sa.UniqueConstraint('ca_inn', 'kpp_name', name='uix_inn_kpp_mapping')
     )
-    op.create_index(op.f('ix_cakppmapping_ca_inn'), 'cakppmapping', ['ca_inn'], unique=False)
-    op.create_index(op.f('ix_cakppmapping_id'), 'cakppmapping', ['id'], unique=False)
-    op.create_index(op.f('ix_cakppmapping_kpp_name'), 'cakppmapping', ['kpp_name'], unique=False)
     op.create_table('company',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=50), nullable=False),
@@ -268,9 +243,8 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['child_name'], ['counteragent.name'], ),
     sa.ForeignKeyConstraint(['parent_name'], ['counteragent.name'], ),
     sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('parent_name', 'child_name', name='_parentchild_unique')
+    sa.UniqueConstraint('parent_name', 'child_name', name='uix_parent_child')
     )
-    op.create_index(op.f('ix_parentchildmapping_id'), 'parentchildmapping', ['id'], unique=False)
     op.create_table('paymentrequest',
     sa.Column('author', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('type_id', sa.Integer(), nullable=False),
@@ -311,7 +285,6 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['type_id'], ['paymenttype.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_paymentrequest_id'), 'paymentrequest', ['id'], unique=False)
     op.create_table('position',
     sa.Column('name', sa.String(length=300), nullable=False),
     sa.Column('employer_id', sa.Integer(), nullable=False),
@@ -325,7 +298,6 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['employer_id'], ['company.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_position_id'), 'position', ['id'], unique=False)
     op.create_table('paymentprocessing',
     sa.Column('pr_id', sa.Integer(), nullable=False),
     sa.Column('user_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
@@ -338,7 +310,6 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['verdict_id'], ['paymentverdict.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_paymentprocessing_id'), 'paymentprocessing', ['id'], unique=False)
     op.create_table('paymentregister',
     sa.Column('fulfill_date', sa.DateTime(), nullable=True),
     sa.Column('pr_id', sa.Integer(), nullable=False),
@@ -351,69 +322,38 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_paymentregister_id'), 'paymentregister', ['id'], unique=False)
     # ### end Alembic commands ###
 
 
 def downgrade() -> None:
     # ### commands auto generated by Alembic - please adjust! ###
-    op.drop_index(op.f('ix_paymentregister_id'), table_name='paymentregister')
     op.drop_table('paymentregister')
-    op.drop_index(op.f('ix_paymentprocessing_id'), table_name='paymentprocessing')
     op.drop_table('paymentprocessing')
-    op.drop_index(op.f('ix_position_id'), table_name='position')
     op.drop_table('position')
-    op.drop_index(op.f('ix_paymentrequest_id'), table_name='paymentrequest')
     op.drop_table('paymentrequest')
-    op.drop_index(op.f('ix_parentchildmapping_id'), table_name='parentchildmapping')
     op.drop_table('parentchildmapping')
     op.drop_table('company')
-    op.drop_index(op.f('ix_cakppmapping_kpp_name'), table_name='cakppmapping')
-    op.drop_index(op.f('ix_cakppmapping_id'), table_name='cakppmapping')
-    op.drop_index(op.f('ix_cakppmapping_ca_inn'), table_name='cakppmapping')
     op.drop_table('cakppmapping')
-    op.drop_index(op.f('ix_caaccountmapping_id'), table_name='caaccountmapping')
-    op.drop_index(op.f('ix_caaccountmapping_ca_id'), table_name='caaccountmapping')
-    op.drop_index(op.f('ix_caaccountmapping_ca_account'), table_name='caaccountmapping')
     op.drop_table('caaccountmapping')
-    op.drop_index(op.f('ix_employee_id'), table_name='employee')
     op.drop_table('employee')
-    op.drop_index(op.f('ix_counteragent_inn'), table_name='counteragent')
-    op.drop_index(op.f('ix_counteragent_id'), table_name='counteragent')
-    op.drop_index(op.f('ix_counteragent_group_id'), table_name='counteragent')
     op.drop_table('counteragent')
-    op.drop_index(op.f('ix_bankaccount_id'), table_name='bankaccount')
     op.drop_table('bankaccount')
     op.drop_index(op.f('ix_accesstoken_created_at'), table_name='accesstoken')
     op.drop_table('accesstoken')
     op.drop_index(op.f('ix_user_email'), table_name='user')
     op.drop_table('user')
-    op.drop_index(op.f('ix_prepayment_id'), table_name='prepayment')
     op.drop_table('prepayment')
-    op.drop_index(op.f('ix_paymentverdict_id'), table_name='paymentverdict')
     op.drop_table('paymentverdict')
-    op.drop_index(op.f('ix_paymenttype_id'), table_name='paymenttype')
     op.drop_table('paymenttype')
-    op.drop_index(op.f('ix_paymentstatus_id'), table_name='paymentstatus')
     op.drop_table('paymentstatus')
-    op.drop_index(op.f('ix_payerstatus_id'), table_name='payerstatus')
     op.drop_table('payerstatus')
-    op.drop_index(op.f('ix_oktmo_id'), table_name='oktmo')
     op.drop_table('oktmo')
-    op.drop_index(op.f('ix_kpp_id'), table_name='kpp')
     op.drop_table('kpp')
-    op.drop_index(op.f('ix_kfp_id'), table_name='kfp')
     op.drop_table('kfp')
-    op.drop_index(op.f('ix_kbk_id'), table_name='kbk')
     op.drop_table('kbk')
-    op.drop_index(op.f('ix_currency_id'), table_name='currency')
     op.drop_table('currency')
-    op.drop_index(op.f('ix_counteragentgroup_id'), table_name='counteragentgroup')
     op.drop_table('counteragentgroup')
-    op.drop_index(op.f('ix_bankaccounttype_id'), table_name='bankaccounttype')
     op.drop_table('bankaccounttype')
-    op.drop_index(op.f('ix_bank_kpp'), table_name='bank')
-    op.drop_index(op.f('ix_bank_inn'), table_name='bank')
-    op.drop_index(op.f('ix_bank_bic'), table_name='bank')
+    op.drop_index('uix_inn_kpp', table_name='bank', postgresql_where=sa.text('inn IS NOT NULL AND kpp IS NOT NULL'))
     op.drop_table('bank')
     # ### end Alembic commands ###
