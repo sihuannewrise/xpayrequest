@@ -1,4 +1,4 @@
-# command to run this script from root dir:  python -m app.services.companycreate   # noqa
+# command to run this script from root dir:  python -m app.services.4_companycreate   # noqa
 
 import os
 import asyncio

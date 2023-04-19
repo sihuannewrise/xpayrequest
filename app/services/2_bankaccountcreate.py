@@ -1,4 +1,4 @@
-# command to run this script from root dir:  python -m app.services.bankaccountcreate  # noqa
+# command to run this script from root dir:  python -m app.services.2_bankaccountcreate  # noqa
 
 import os
 import asyncio

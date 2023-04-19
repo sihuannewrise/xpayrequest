@@ -1,4 +1,4 @@
-# command to run this script from root dir:  python -m app.services.counteragentcreate  # noqa
+# command to run this script from root dir:  python -m app.services.2_counteragentcreate  # noqa
 # creating ca by id (INN or OGRN) from dadata
 # httpx.ReadTimeout
 # httpx.ConnectTimeout

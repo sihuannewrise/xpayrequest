@@ -1,4 +1,4 @@
-# command to run this script from root dir:  python -m app.services.bankcreate
+# command to run this script from root dir:  python -m app.services.1_bankcreate   # noqa
 # creating bank by id (BIC, SWIFT or INN) from dadata
 
 import os
