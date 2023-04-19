@@ -223,8 +223,8 @@ if __name__ == "__main__":
     # asyncio.run(get_counteragent_list('app/services/config/listca.py'))
     # asyncio.run(add_all_to_kpp(get_kpp_list(IKPP_DICT)))
 
-    # dd_ca = asyncio.run(dd_find_by_id('party', '3017041554'))
+    dd_ca = asyncio.run(dd_find_by_id('party', '1102079562'))
     # print(dd_ca)
-    # print(asyncio.run(stuff_entity_with_data(dd_ca[0])))
+    print(asyncio.run(stuff_entity_with_data(dd_ca[0])))
 
-    asyncio.run(add_multi_rec(IKPP_DICT))
+    # asyncio.run(add_multi_rec(IKPP_DICT))

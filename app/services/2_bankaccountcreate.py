@@ -10,11 +10,11 @@ from sqlalchemy import select
 from app.core.db import get_async_session
 from app.core.models import (
     Bank, BankAccount, CaAccountMapping, Currency,
-    CounterAgent,
 )
 
 from app.services.config.accounts import ACCOUNTS
 from app.services.config.currency_ids import CURRENCY_IDS
+from app.services.config.mapping import RUBLE_CODE
 
 get_async_session_context = asynccontextmanager(get_async_session)
 
@@ -73,10 +73,13 @@ async def add_bank_account(model, acc_num: str, bic: str, session):
         except IndexError as e:
             print(e)
         else:
+            currency_code = acc_num[5:8]
+            if currency_code not in CURRENCY_IDS:
+                currency_code = RUBLE_CODE
             acc_model = model(
                 account=acc_num,
                 bank_bic=bic,
-                currency_id=CURRENCY_IDS[acc_num[5:8]],
+                currency_id=CURRENCY_IDS[currency_code],
                 description=f'autoloaded by {os.path.basename(__file__)}'
             )
             session.add(acc_model)
@@ -85,7 +88,7 @@ async def add_bank_account(model, acc_num: str, bic: str, session):
 
 async def add_caaccount_mapping(model, acc_num: str, inn: str, session):
     try:
-        ca_account = await session.scalar(select(model.ca_id).where(
+        ca_account = await session.scalar(select(model.id).where(
             model.ca_account == acc_num,
             model.ca_inn == inn,
         ))
@@ -96,6 +99,15 @@ async def add_caaccount_mapping(model, acc_num: str, inn: str, session):
             )
     except IndexError as e:
         print(e)
+    else:
+        mapping_model = model(
+            ca_inn=inn,
+            ca_account=acc_num,
+            is_default=False,
+            description=f'autoloaded by {os.path.basename(__file__)}'
+        )
+        session.add(mapping_model)
+        await session.commit()
 
 
 async def add_multi_records(data: dict) -> None:
@@ -108,11 +120,13 @@ async def add_multi_records(data: dict) -> None:
                         BankAccount, account, bic, session)
                 except ValueError as e:
                     print(e)
-            else:
-                for inn in inn_list:
-                    await add_caaccount_mapping(
-                        CaAccountMapping, account, inn, session)
-        return None
+                else:
+                    for inn in inn_list:
+                        try:
+                            await add_caaccount_mapping(
+                                CaAccountMapping, account, inn, session)
+                        except ValueError as e:
+                            print(e)
 
 
 if __name__ == "__main__":
