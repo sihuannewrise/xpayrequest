@@ -1,4 +1,4 @@
-# command to run this script from root dir:  python -m app.services.2_counteragentcreate  # noqa
+# command to run this script from root dir:  python -m app.services.3_counteragentcreate  # noqa
 # creating ca by id (INN or OGRN) from dadata
 # httpx.ReadTimeout
 # httpx.ConnectTimeout
@@ -138,6 +138,8 @@ async def add_to_counteragent(model, inn, session):
         for field in new_ca:
             setattr(ca_model, field, new_ca[field])
             session.add(ca_model)
+        if hasattr(ca_model, 'kpp') and ca_model.kpp:
+            return ca_model.kpp
         return None
 
 
@@ -171,8 +173,9 @@ async def add_all_to_kpp(kpp_set):
 
 async def add_to_cakppmapping(
     model, inn_field, inn, kpp_field, kpp, session,
+    is_basic: bool = False,
     valid_from: dt = None,
-    description: str = None,
+    description: str = f'autoloaded by {os.path.basename(__file__)}',
 ):
     try:
         inn_col = getattr(model, inn_field)
@@ -189,6 +192,7 @@ async def add_to_cakppmapping(
         mapping_model = model(
             ca_inn=inn,
             kpp_name=kpp,
+            is_basic=is_basic,
             valid_from=valid_from,
             description=description,
         )
@@ -197,12 +201,13 @@ async def add_to_cakppmapping(
         print(e)
 
 
-async def add_multi_rec(data: dict) -> None:
+async def add_multi_records(data: dict) -> None:
     async with get_async_session_context() as session, session.begin():
         for inn, kpps in data.items():
             try:
-                await add_to_counteragent(
+                dd_kpp = await add_to_counteragent(
                     CounterAgent, inn, session)
+                await session.commit()
             except ValueError as e:
                 print(e)
             else:
@@ -210,21 +215,48 @@ async def add_multi_rec(data: dict) -> None:
                     await add_to_kpp(KPP, kpp, session)
 
                     try:
+                        is_basic = False
+                        if kpp == dd_kpp:
+                            is_basic = True
                         await add_to_cakppmapping(
                             CaKppMapping, 'ca_inn', inn,
                             'kpp_name', kpp, session,
+                            is_basic=is_basic,
                         )
                     except ValueError as e:
                         print(e)
         return None
 
 
+async def add_one_ca(inn: str) -> None:
+    async with get_async_session_context() as session:
+        try:
+            dd_kpp = await add_to_counteragent(CounterAgent, inn, session)
+            await session.commit()
+        except ValueError as e:
+            print(e)
+        else:
+            if dd_kpp:
+                await add_to_kpp(KPP, dd_kpp, session)
+        finally:
+            if dd_kpp:
+                try:
+                    await add_to_cakppmapping(
+                        CaKppMapping, 'ca_inn', inn,
+                        'kpp_name', dd_kpp, session,
+                        is_basic=True,
+                    )
+                except ValueError as e:
+                    print(e)
+
+
 if __name__ == "__main__":
     # asyncio.run(get_counteragent_list('app/services/config/listca.py'))
     # asyncio.run(add_all_to_kpp(get_kpp_list(IKPP_DICT)))
 
-    dd_ca = asyncio.run(dd_find_by_id('party', '1102079562'))
+    # dd_ca = asyncio.run(dd_find_by_id('party', '1102079562'))
     # print(dd_ca)
-    print(asyncio.run(stuff_entity_with_data(dd_ca[0])))
+    # print(asyncio.run(stuff_entity_with_data(dd_ca[0])))
 
-    # asyncio.run(add_multi_rec(IKPP_DICT))
+    # asyncio.run(add_multi_records(IKPP_DICT))
+    asyncio.run(add_one_ca('5919851303'))
