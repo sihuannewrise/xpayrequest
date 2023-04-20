@@ -38,7 +38,7 @@ async def check_no_bic_duplicate(bic: str, session):
 async def stuff_bank_with_data(
     data: dict, is_archived: bool = False,
     description: str = 'autoloaded',
-):
+) -> dict:
     bank = {
         'name': data['value'],
         'bic': data['data']['bic'],
@@ -107,5 +107,8 @@ async def add_all_banks(bics: set) -> None:
 if __name__ == "__main__":
     # print(asyncio.run(dd_find_bank('007182108')))
     # asyncio.run(get_bank_list('app/services/config/listbic.txt'))
+
+    # bank = asyncio.run(dd_find_by_id('bank', '011806101'))
+    # print(asyncio.run(stuff_bank_with_data(bank[0])))
 
     asyncio.run(add_all_banks(BICS))

@@ -29,7 +29,7 @@ class EntityBase(Base):
     __abstract__ = True
 
     address: Mapped[Optional[str]] = mapped_column(String(200))
-    status: Mapped[Optional[EntityStatus]]
+    status: Mapped[Optional[EntityStatus]] = mapped_column(String(20))
 
     actuality_date: Mapped[Optional[datetime]]
     registration_date: Mapped[Optional[datetime]]

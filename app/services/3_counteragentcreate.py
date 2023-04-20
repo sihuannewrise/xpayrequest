@@ -217,7 +217,6 @@ async def add_multi_records(data: dict) -> None:
             else:
                 for kpp in kpps:
                     await add_to_kpp(KPP, kpp, session)
-
                     try:
                         is_basic = False
                         if kpp == dd_kpp:
@@ -262,5 +261,5 @@ if __name__ == "__main__":
     # print(dd_ca)
     # print(asyncio.run(stuff_entity_with_data(dd_ca[0])))
 
-    # asyncio.run(add_multi_records(IKPP_DICT))
-    asyncio.run(add_one_ca('5919851303'))
+    # asyncio.run(add_one_ca('5919851303'))
+    asyncio.run(add_multi_records(IKPP_DICT))

@@ -19,7 +19,7 @@ class Bank(EntityBase):
     swift: Mapped[Optional[str]] = mapped_column(String(11))
     registration_number: Mapped[Optional[str]] = mapped_column(String(20))
     treasury_accounts: Mapped[Optional[str]] = mapped_column(String(20))
-    opf_type: Mapped[Optional[BankOPFType]]
+    opf_type: Mapped[Optional[BankOPFType]] = mapped_column(String(20))
 
     __table_args__ = (
         Index(

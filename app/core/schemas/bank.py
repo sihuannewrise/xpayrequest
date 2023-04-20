@@ -65,8 +65,8 @@ class BankBase(BaseModel):
     opf_type: Optional[BankOPFType] = Field(None,)
     description: Optional[str] = Field(None,)
 
-    class Config:
-        min_anystr_length = 2
+    # class Config:
+    #     min_anystr_length = 2
 
 
 class BankCreate(BankBase):
