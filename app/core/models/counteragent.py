@@ -19,8 +19,8 @@ class CounterAgent(EntityBase):
     name_full_with_opf: Mapped[Optional[str]] = mapped_column(String(300))
 
     ca_type: Mapped[Optional[CounterAgentType]]
-    group_id: Mapped[Optional[str]] = mapped_column(
-        ForeignKey('counteragentgroup.id'))
+    group_name: Mapped[Optional[str]] = mapped_column(
+        ForeignKey('counteragentgroup.name'))
     branch_type: Mapped[Optional[CounterAgentBranch]]
 
     ogrn: Mapped[Optional[str]] = mapped_column(String(20))

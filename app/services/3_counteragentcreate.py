@@ -16,7 +16,9 @@ from app.core.db import get_async_session
 from app.core.models import CaKppMapping, CounterAgent, KPP
 
 from app.services.config.listca import IKPP_DICT
-from app.services.config.mapping import DATE_FIELDS, DD_SEARCH_SUBJECT
+from app.services.config.mapping import (
+    DATE_FIELDS, DD_SEARCH_SUBJECT, CA_GROUP_MAPPING,
+)
 
 get_async_session_context = asynccontextmanager(get_async_session)
 
@@ -76,6 +78,8 @@ async def stuff_entity_with_data(
         'address': data['data']['address']['value'],
         'address_full': data['data']['address']['data']['source'],
     }
+    if entity['opf_short'] in CA_GROUP_MAPPING:
+        group_name = CA_GROUP_MAPPING[entity['opf_short']]
     extra_fields = {
         'is_archived': is_archived,
         'description': description,

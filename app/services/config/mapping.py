@@ -15,6 +15,7 @@ COMPANIES = {
     '7708405825': 'ЮНП-Инвест',
     '7708414379': 'ИНВЕСТ',
 }
+
 RUBLE_CODE = '810'
 
 # supplementry tables info
@@ -133,6 +134,10 @@ KPP_LIST = {
 CounterAgentGroup = {
     'ЛУКОЙЛ': 'Группа ЛУКОЙЛ',
     'Госорганы': 'Государственные органы',
+}
+
+CA_GROUP_MAPPING = {
+    'ФГКУ': 'Госорганы',
 }
 
 Currency = {
