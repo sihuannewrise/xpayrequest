@@ -104,6 +104,14 @@ async def add_all_banks(bics: set) -> None:
         return None
 
 
+async def get_all_bics() -> None:
+    async with get_async_session_context() as session:
+        bics = await session.scalars(select(Bank.bic))
+        bics = bics.all()
+        for i in range(0, len(bics), 4):
+            print(bics[i:i+4])
+
+
 if __name__ == "__main__":
     # print(asyncio.run(dd_find_bank('007182108')))
     # asyncio.run(get_bank_list('app/services/config/listbic.txt'))
@@ -112,3 +120,4 @@ if __name__ == "__main__":
     # print(asyncio.run(stuff_bank_with_data(bank[0])))
 
     asyncio.run(add_all_banks(BICS))
+    # asyncio.run(get_all_bics())
