@@ -2,17 +2,17 @@
 from typing import Optional
 from pydantic import BaseModel, Field, validator
 
-SUPP_SCHEMAS = [
-    'BankAccountType',
-    'PaymentType',
-    'KFP',
-    'PayerStatus',
-    'KBK',
-    'OKTMO',
-    'Prepayment',
-    'PaymentStatus',
-    'PaymentVerdict',
-]
+# SUPP_SCHEMAS = [
+#     'BankAccountType',
+#     'PaymentType',
+#     'KFP',
+#     'PayerStatus',
+#     'KBK',
+#     'OKTMO',
+#     'Prepayment',
+#     'PaymentStatus',
+#     'PaymentVerdict',
+# ]
 
 
 class SuppBase(BaseModel):

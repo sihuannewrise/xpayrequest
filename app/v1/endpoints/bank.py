@@ -5,6 +5,7 @@ from app.core.crud.bank import bank_crud
 from app.core.db import get_async_session
 from app.core.schemas.bank import (
     BankCreate, BankDB, BankUpdate,
+    # PaginatedBankDB,
 )
 from app.core.user import current_superuser, current_user
 from app.core.models import Bank
