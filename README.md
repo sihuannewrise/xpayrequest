@@ -1,1 +1,1 @@
-# xwick-ecosystem
+# payment requests
