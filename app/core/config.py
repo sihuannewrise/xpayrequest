@@ -1,5 +1,6 @@
 from typing import Optional
-from pydantic import BaseSettings, EmailStr
+from pydantic import EmailStr
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -17,7 +18,7 @@ class Settings(BaseSettings):
     dd_secret: str
 
     class Config:
-        env_file = 'ENV/.env'
+        env_file = 'infra/ENV/.env'
 
 
 settings = Settings()
